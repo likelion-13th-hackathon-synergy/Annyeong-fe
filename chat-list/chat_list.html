@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>ChatList</title>
+
+    <link rel="stylesheet" href="../common/style.css" />
+    <link rel="stylesheet" href="../chat-list/chat_list.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="app-wrapper">
+        <div class="chatli-container">
+          <div class="chatli-header">
+            <div class="header-logo">
+              <button id="main-logo-btn" class="main-logo-btn" type="button" aria-label="메인으로">
+                <img src="../assets/icons/logo.svg" alt="헤더 로고" />
+              </button>
+            </div>
+
+            <div class="header-nav">
+              <div class="header-logo">
+                <button id="myPage-btn" class="myPage-btn" type="button" aria-label="마이페이지">
+                  <img src="../assets/images/profileIcon.png" alt="마이페이지 버튼" />
+                </button>
+              </div>
+
+              <div class="header-logo">
+                <button id="chat-btn" class="chat-btn" type="button" aria-label="채팅">
+                  <img src="../assets/images/chatIcon.png" alt="채팅 버튼" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 리스트 아이템이 들어갈 영역 -->
+          <main class="chatli-wrapper" id="chat-list"></main>
+        </div>
+      </div>
+    </div>
+
+    <!-- 폴더 구조에 맞춰 경로 수정 -->
+    <script type="module" src="../chat-list/chat_list.js"></script>
+  </body>
+</html>
