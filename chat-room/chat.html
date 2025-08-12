@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>Chat</title>
+
+    <link rel="stylesheet" href="../common/style.css" />
+    <link rel="stylesheet" href="../chat-room/chat.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="app-wrapper">
+        <div class="chat-container">
+          <header class="chat-header">
+            <div class="back-icon">
+              <button
+                id="back-btn"
+                class="back-btn"
+                type="button"
+                aria-label="뒤로가기"
+              >
+                <img src="../assets/images/backIcon.png" alt="뒤로가기" />
+              </button>
+            </div>
+
+            <div class="chat-person">
+              <p id="chat-title">Sonya</p>
+            </div>
+
+            <div class="header-logo">
+              <button
+                id="chat-menu-btn"
+                class="chat-btn"
+                type="button"
+                aria-label="메뉴"
+              >
+                <img src="../assets/images/star_btn.png" alt="채팅 메뉴" />
+              </button>
+            </div>
+          </header>
+
+          <!-- 메시지 영역 -->
+          <main class="chat-wrapper" id="chat-wrapper">
+            <ul
+              id="messages"
+              style="list-style: none; padding: 0; margin: 0"
+            ></ul>
+          </main>
+
+          <!-- 입력 영역(나중에 JS로 제어) -->
+          <footer class="chat-input">
+            <div class="inputbar">
+              <button id="attach-btn" type="button" aria-label="첨부">
+                <img src="../assets/images/chat_plus.png" alt="플러스버튼" />
+              </button>
+
+              <input type="text"
+                id="msg-input"
+                placeholder="메시지 입력"
+              ></textarea>
+
+              <button id="send-btn" type="button" aria-label="전송">
+                <img src="../assets/images/chat_send.png" alt="전송버튼" />
+              </button>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../chat-room/chat.js"></script>
+  </body>
+</html>
