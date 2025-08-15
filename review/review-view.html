@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>Review</title>
+
+    <link rel="stylesheet" href="../common/style.css" />
+    <link rel="stylesheet" href="../review/review-view.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="app-wrapper">
+        <div class="review-w-container">
+          <header class="review-w-header">
+            <div class="back-icon">
+              <button
+                id="back-btn"
+                class="back-btn"
+                type="button"
+                aria-label="뒤로가기"
+              >
+                <img src="../assets/images/chat/backIcon.png" alt="뒤로가기" />
+              </button>
+            </div>
+
+            <div class="review-w-title">
+              <p id="review-w-text">리뷰보기</p>
+            </div>
+          </header>
+
+          <!-- 메시지 영역 -->
+          <main class="review-w-wrapper" id="review-w-wrapper">
+            <div class="review-w-title">
+              <p><span class = "strong-text">'Sonya'님</span>의 이런 점이 좋았어요</p>
+            </div>
+
+            <div class="selected-num">
+              <p><span class = "strong-text">✔ 574회</span><span class = "gray-text"> 403회 참여</span></p>
+            </div>
+
+            <ul class="review-view-ul" id="reviewList">
+              <li>👂 "이야기를 잘 들어줘요"</li>
+              <li>🤩 "유머 감각이 뛰어나요"</li>
+              <li>😆 "대화가 재미있어요"</li>
+              <li>🌟 "긍정적인 마인드예요"</li>
+              <li>🤗 "친근하고 따뜻해요"</li>
+              <li>😇 "배려심이 깊어요"</li>
+              <li>🎓 "지식이 풍부해요"</li>
+              <li>🧐 "호기심이 많아요"</li>
+              <li>🤭 "이해심이 많아요"</li>
+              <li>✅ "정직하고 솔직해요"</li>
+              <li>🏃 "적극적이고 활발해요"</li>
+              <li>🔒 "신뢰할 수 있어요"</li>
+              <li>🗂 "계획을 잘 세워요"</li>
+              <li>🔍"분석력이 뛰어나요"</li>
+              <li>🎯 "목표 지향적이에요"</li>
+              <li>💭 "아이디어가 많아요"</li>
+            </ul>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../review/review-view.js"></script>
+  </body>
+</html>

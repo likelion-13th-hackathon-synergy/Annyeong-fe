@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>Review</title>
+
+    <link rel="stylesheet" href="../common/style.css" />
+    <link rel="stylesheet" href="../review/review-write.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="app-wrapper">
+        <div class="review-w-container">
+          <header class="review-w-header">
+            <div class="back-icon">
+              <button
+                id="back-btn"
+                class="back-btn"
+                type="button"
+                aria-label="뒤로가기"
+              >
+                <img src="../assets/images/chat/backIcon.png" alt="뒤로가기" />
+              </button>
+            </div>
+
+            <div class="review-w-title">
+              <p id="review-w-text">리뷰쓰기</p>
+            </div>
+          </header>
+
+          <!-- 메시지 영역 -->
+          <main class="review-w-wrapper" id="review-w-wrapper">
+            <div class="review-w-title">
+              <p>
+                <span class="strong-text">'Sonya'님</span>의 이런 점이 좋았어요
+              </p>
+            </div>
+
+            <div class="selected-num">
+              <p>
+                <span class="strong-text"
+                  >✔ <span class="selCounter">0</span></span
+                >
+                <span class="gray-text">/5 선택</span>
+              </p>
+            </div>
+
+            <!--선택 옵션 목록-->
+            <div class="scroll">
+              <div id="options">
+                <button class="opt" type="button" data-id="1">
+                  <span class="label">👂 "이야기를 잘 들어줘요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="2">
+                  <span class="label">🤩 "유머 감각이 뛰어나요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="3">
+                  <span class="label">😆 "대화가 재미있어요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="4">
+                  <span class="label">🌟 "긍정적인 마인드예요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="5">
+                  <span class="label">🤗 "친근하고 따뜻해요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="6">
+                  <span class="label">😇 "배려심이 깊어요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="7">
+                  <span class="label">🎓 "지식이 풍부해요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="8">
+                  <span class="label">🧐 "호기심이 많아요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="9">
+                  <span class="label">🤭 "이해심이 많아요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="10">
+                  <span class="label">✅ "정직하고 솔직해요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="11">
+                  <span class="label">🏃 "적극적이고 활발해요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="12">
+                  <span class="label">🔒 "신뢰할 수 있어요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="13">
+                  <span class="label">🗂 "계획을 잘 세워요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="14">
+                  <span class="label">🔍"분석력이 뛰어나요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="15">
+                  <span class="label">🎯 "목표 지향적이에요"</span>
+                </button>
+
+                <button class="opt" type="button" data-id="16">
+                  <span class="label">💭 "아이디어가 많아요"</span>
+                </button>
+              </div>
+            </div>
+          </main>
+
+          <footer>
+            <div class="review-send">
+              <button id="review-send-btn" type="submit" aria-label="완료">
+                <img
+                  src="../assets/images/review/review-send-btn.png"
+                  alt="완료버튼"
+                />
+              </button>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../review/review-write.js"></script>
+  </body>
+</html>
