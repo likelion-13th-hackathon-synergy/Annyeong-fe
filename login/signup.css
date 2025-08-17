@@ -1,0 +1,118 @@
+/* ===== 기본 ===== */
+*{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
+:root{
+  --white:#fff; --muted:#A2A2A2; --border:rgba(255,255,255,.12);
+  --primary:#7B4DFF; --primary-600:#5B31E5; --bg2:#0c0a14;
+  --vio1:rgba(134, 68, 255, .45); --vio2:rgba(51, 15, 102, .35);
+}
+body{
+  font-family:"Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,sans-serif;
+  color:#F6F6F8; background:#0b0b12;
+}
+
+/* ===== 캔버스 ===== */
+.phone{
+  position:relative;
+  width:100%; max-width:375px; min-height:812px;
+  margin:0 auto; padding:0 20px 28px;
+  background:
+    radial-gradient(65% 45% at 18% 22%, var(--vio1), transparent 62%),
+    radial-gradient(55% 45% at 88% 68%, var(--vio2), transparent 60%),
+    linear-gradient(180deg, var(--bg2) 0%, #0c0a14 75%, #08070d 100%);
+  border-left:1px solid rgba(255,255,255,.08);
+  border-right:1px solid rgba(255,255,255,.08);
+}
+
+/* ===== 상태바 ===== */
+.statusbar{
+  position:absolute; top: env(safe-area-inset-top, 0px); left:0; right:0; height:44px;
+  display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+}
+.sb-time{ color:#fff; font-size:16px; font-weight:600; }
+.sb-icons{ display:flex; gap:6px; align-items:center; }
+.sb-icons img{ height:12px; }
+
+/* ===== 상단 ===== */
+.top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top: calc(44px + env(safe-area-inset-top,0px) + 12px);
+}
+.brand img{ height:28px; }
+.role-select{
+  display:flex; align-items:center; gap:6px;
+  padding:8px 12px; border:1px solid rgba(255,255,255,.16);
+  border-radius:12px; color:#fff; background:rgba(255,255,255,.06);
+  font-size:13px;
+}
+.role-select svg{ width:16px; height:16px; }
+
+/* ===== 타이틀 ===== */
+.title{
+  text-align:center; font-size:24px; font-weight:700; letter-spacing:-.5px;
+  margin:46px 0 6px;
+}
+.subtitle{
+  text-align:center; font-size:12px; color:#A2A2A2; margin-bottom:16px;
+}
+.subtitle a{ color:#00B7FF; text-decoration:none; }
+.subtitle a:hover{ text-decoration:underline; }
+
+/* ===== 폼 ===== */
+.form{ display:flex; flex-direction:column; gap:14px; align-items:center; }
+
+/* 라벨 + 인풋 그룹 */
+.input-group{ width:100%; max-width:320px; display:flex; flex-direction:column; gap:6px; }
+.input-label{ font-size:14px; font-weight:500; color:#fff; padding-left:2px; }
+
+/* 입력 박스 (고정 320x40) */
+.field{
+  display:flex; align-items:center; gap:10px;
+  width:320px; height:40px; padding:0 12px;
+  border-radius:4px; background:#fff; color:#1a1a1a;
+}
+.field .icon{ flex:0 0 auto; display:flex; align-items:center; color:#9094A6; }
+.field input, .field select{
+  flex:1 1 auto; border:none; outline:none; background:transparent;
+  font-size:14px; color:#000; min-width:0;
+}
+.field input::placeholder{ color:#9DA3AF; opacity:.9; }
+
+
+.field select{
+  -webkit-appearance:none; appearance:none;
+  padding-right:0;
+}
+
+/* 두 칸 라인 */
+.row-2{
+  width:100%; max-width:320px;
+  display:grid; grid-template-columns: 1fr 1fr; gap:12px;
+}
+.row-2 .input-group{ max-width:none; }
+.row-2 .field{ width:100%; }
+
+/* 버튼 */
+.btn-primary{
+  width:320px; height:48px; border:none; border-radius:12px;
+  background:linear-gradient(180deg,var(--primary) 0%,var(--primary-600) 100%);
+  color:#fff; font-weight:700; font-size:16px;
+  box-shadow:0 12px 24px rgba(123,77,255,.35);
+  cursor:pointer;
+}
+.btn-primary:disabled{ background:#8C8C8C; box-shadow:none; cursor:not-allowed; }
+
+/* 구분선 */
+.divider{ display:flex; align-items:center; gap:12px; color:var(--muted); margin:20px 0 10px; }
+.divider::before,.divider::after{ content:""; flex:1; height:1px; background:var(--border); }
+.divider span{ font-size:13px; }
+
+/* 구글 버튼 */
+.btn-google{
+  width:320px; height:48px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  background:#fff; color:#1a1a1a; border:1px solid #E6E6E6; border-radius:12px;
+  font-weight:600; cursor:pointer;
+}
+.btn-google svg{ width:20px; height:20px; flex:0 0 20px; }
+@media(hover:hover){ .btn-google:hover{ background:#fafafa; } }
