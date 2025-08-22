@@ -28,7 +28,8 @@ body {
     background-image: url(../assets/images/BG.svg);
 }
 
-.app-wrapper, .wrap {
+.app-wrapper,
+.wrap {
     width: 100%;
     height: 100%;
     position: relative;
@@ -57,7 +58,8 @@ header {
 }
 
 .dropdown {
-    min-width: 130px; /* padding보다 크게 설정해야 함 */
+    min-width: 130px;
+    /* padding보다 크게 설정해야 함 */
     text-align: center;
     padding: 10px 25px;
     margin-right: 10px;
@@ -67,14 +69,18 @@ header {
     box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.25) inset, -6px -5px 4px 0 rgba(0, 0, 0, 0.25) inset, 2px 2px 1px 0 rgba(255, 255, 255, 0.48) inset, 8px 8px 12px 0 rgba(0, 0, 0, 0.25) inset;
 }
 
-.main-menu > li {
-    position: relative; /* 하위 메뉴의 위치 기준 */
-    display: inline-block; /* 메뉴를 가로로 배치 */
+.main-menu>li {
+    position: relative;
+    /* 하위 메뉴의 위치 기준 */
+    display: inline-block;
+    /* 메뉴를 가로로 배치 */
 }
 
 .sub-menu {
-    display: none; /* 하위 메뉴를 기본적으로 숨김 */
-    position: absolute; /* 상위 메뉴 기준으로 위치 지정 */
+    display: none;
+    /* 하위 메뉴를 기본적으로 숨김 */
+    position: absolute;
+    /* 상위 메뉴 기준으로 위치 지정 */
     list-style: none;
     min-width: 160px;
     margin-top: 20px;
@@ -86,7 +92,7 @@ header {
     box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.25) inset, -6px -5px 4px 0 rgba(0, 0, 0, 0.25) inset, 2px 2px 1px 0 rgba(255, 255, 255, 0.48) inset, 8px 8px 12px 0 rgba(0, 0, 0, 0.25) inset;
 }
 
-.sub-menu > li {
+.sub-menu>li {
     margin: 10px 0;
     text-align: center;
     padding-right: 40px;
@@ -100,12 +106,13 @@ header {
     margin: auto 0;
 }
 
-.main-menu > li:hover .sub-menu {
+.main-menu>li:hover .sub-menu {
     z-index: 1;
 }
 
-.main-menu > li.active .sub-menu {
-    display: block; /* active 클래스가 있을 때 하위 메뉴를 표시 */
+.main-menu>li.active .sub-menu {
+    display: block;
+    /* active 클래스가 있을 때 하위 메뉴를 표시 */
 }
 
 .logo {
@@ -121,7 +128,7 @@ header {
 .badge {
     display: inline-block;
     position: relative;
-    width: 30px; 
+    width: 30px;
     height: 30px;
     margin-left: 3px;
 }
@@ -135,7 +142,8 @@ header {
 }
 
 .chat {
-    margin-left: auto; /* 오른쪽으로 밀어냄 */
+    margin-left: auto;
+    /* 오른쪽으로 밀어냄 */
     margin-right: 10px;
 }
 
@@ -177,7 +185,7 @@ header {
 .card .tag img {
     width: 24px;
     height: 24px;
-} 
+}
 
 .card {
     position: absolute;
@@ -233,15 +241,17 @@ footer {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0; /* 초기 위치를 오른쪽 바깥으로 설정 */
-    width: 70px; /* 불빛의 너비 */
+    right: 0;
+    /* 초기 위치를 오른쪽 바깥으로 설정 */
+    width: 70px;
+    /* 불빛의 너비 */
     background-image: linear-gradient(to right, rgba(0, 255, 0, 0), rgba(0, 255, 0, 0.8));
 
     /* 평소에는 투명하게 숨기고, 마우스 이벤트를 통과시킴 */
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease-in-out; 
-    z-index: 10; 
+    transition: opacity 0.3s ease-in-out;
+    z-index: 10;
 }
 
 .yes-button:hover::before {
@@ -253,14 +263,17 @@ footer {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0px; /* 초기 위치를 쪽 바깥으로 설정 */
-    width: 70px; /* 불빛의 너비 */
+    left: 0px;
+    /* 초기 위치를 쪽 바깥으로 설정 */
+    width: 70px;
+    /* 불빛의 너비 */
     background-image: linear-gradient(to left, rgba(0, 255, 0, 0), rgb(255, 0, 0, 0.8));
 
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease-in-out; 
-    z-index: 10; /* 다른 요소 위에 표시되도록 */
+    transition: opacity 0.3s ease-in-out;
+    z-index: 10;
+    /* 다른 요소 위에 표시되도록 */
 }
 
 .no-button:hover::before {

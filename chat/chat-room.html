@@ -5,7 +5,7 @@
     <title>Chat</title>
 
     <link rel="stylesheet" href="../common/style.css" />
-    <link rel="stylesheet" href="../chat-room/chat.css" />
+    <link rel="stylesheet" href="../chat/chat-room.css" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
@@ -42,6 +42,23 @@
             </div>
           </header>
 
+          <!-- 메시지 리스트 위에 배너 -->
+          <div id="invite-banner" class="invite-banner" hidden>
+            <div class="invite-text">
+              새로운 호감이 도착했어요!<br />
+              '<span id="invite-name">상대</span>'님의 대화요청을 수락할까요?
+            </div>
+            <div class="invite-actions">
+              <button id="btn-decline" class="btn-decline" type="button">
+                거절 ✕
+              </button>
+              <button id="btn-accept" class="btn-accept" type="button">
+                수락 ✔
+                <span class="dot-on"></span>
+              </button>
+            </div>
+          </div>
+
           <!-- 메시지 영역 -->
           <main class="chat-wrapper" id="chat-wrapper">
             <ul
@@ -53,16 +70,18 @@
           <!-- 입력 영역(나중에 JS로 제어) -->
           <footer class="chat-input">
             <div class="inputbar">
-              <button id="attach-btn" type="button" aria-label="첨부">
-                <img src="../assets/images/chat/chat_plus.png" alt="플러스버튼" />
+              <button id="attach-btn" type="button" aria-label="첨부"disabled>
+                <img
+                  src="../assets/images/chat/chat_plus.png"
+                  alt="플러스버튼"
+                />
               </button>
+                  <input id="file-input" type="file" accept="image/*" hidden />
 
-              <input type="text"
-                id="msg-input"
-                placeholder="메시지 입력"
-              ></textarea>
 
-              <button id="send-btn" type="submit" aria-label="전송">
+              <input type="text" id="msg-input" placeholder="메시지 입력" disabled/>
+
+              <button id="send-btn" type="button" aria-label="전송" disabled>
                 <img src="../assets/images/chat/chat_send.png" alt="전송버튼" />
               </button>
             </div>
@@ -71,6 +90,7 @@
       </div>
     </div>
 
-    <script type="module" src="../chat-room/chat.js"></script>
+    <script src="https://unpkg.com/mock-socket@9.3.0/dist/mock-socket.js"></script>
+    <script type="module" src="../chat/chat-room.js"></script>
   </body>
 </html>

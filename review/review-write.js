@@ -1,3 +1,5 @@
+const before = document.referrer;
+
 const MAX = 5; //최대 다섯개 선택 가능
 const selected = new Set();
 const $options = document.querySelectorAll('#options .opt');
@@ -48,3 +50,11 @@ $options.forEach(btn => {
 });
 */
 updateCounter();
+
+//뒤로 가기 버튼
+document.addEventListener('DOMContentLoaded', ()=>{
+  const backBtn = document.querySelector('.back-btn');
+  backBtn.addEventListener('click', ()=>{
+    window.location.href = before;
+  })
+});
