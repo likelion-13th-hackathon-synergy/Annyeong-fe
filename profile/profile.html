@@ -49,7 +49,7 @@
               <p class="vb-sub">구글 계정 연동하면 인증뱃지를 받을 수 있어요!</p>
             </div>
           </div>
-          <button type="button" class="btn-ghost">소셜 로그인 연결하기</button>
+          <button type="button" class="btn-ghost" id="googleConnectBtn">소셜 로그인 연결하기</button>
         </div>
 
         <!-- 아바타 -->
@@ -73,9 +73,11 @@
         <!-- 입력 섹션 -->
         <div class="card-body">
           <!-- 이름(표시) -->
-          <div class="display-row">
-            <span class="display-label">이름</span>
-            <span class="display-value">김멋사</span>
+          <div class="input-group">
+            <label for="real_name" class="input-label">이름</label>
+            <div class="field">
+              <input id="real_name" type="text" placeholder="이름을 입력해주세요." />
+            </div>
           </div>
 
           <!-- 나이 -->
@@ -171,11 +173,33 @@
         </div>
       </section>
     </form>
-    <script>
+    <script type="module">
+    const BASE = "http://127.0.0.1:8000";   // 장고 서버 주소
+    const PROFILE_URL = `${BASE}/users/profile/`;
+    const CSRF_URL    = `${BASE}/users/csrf/`;
+    const GOOGLE_LOGIN_URL = `${BASE}/users/google/login/`;
 
-        const BASE = "http://127.0.0.1:8000";   // 장고 서버 주소
-  const PROFILE_URL = `${BASE}/users/profile/`;
-  const CSRF_URL    = `${BASE}/users/csrf/`;
+    document.getElementById("googleConnectBtn").addEventListener("click", async () => {
+  try {
+    await ensureCsrf();
+    const res = await fetch(GOOGLE_LOGIN_URL, { credentials: "include" });
+    if (res.status === 401) {
+      alert("로그인이 필요합니다. 먼저 로그인해 주세요.");
+      // window.location.href = "../login/login.html";
+      return;
+    }
+    const data = await res.json();
+    console.log("google login api:", data); // 디버깅
+    if (res.ok && data.redirect_url) {
+      window.location.href = data.redirect_url; // 구글 동의화면으로 이동
+    } else {
+      alert(data.detail || "구글 인증 URL 생성에 실패했습니다.");
+    }
+  } catch (e) {
+    console.error(e);
+    alert("구글 인증 처리 중 오류가 발생했습니다.");
+  }
+});
 
   function getCookie(name) {
     const v = `; ${document.cookie}`;
@@ -198,6 +222,7 @@
     }
     const me = await res.json();
 
+    document.getElementById("real_name").value = me.real_name || "";
     document.getElementById("age").value       = me.age || "";
     document.getElementById("country").value   = me.nationality || "";
     document.getElementById("sido").value      = me.city || "";
@@ -205,14 +230,17 @@
     document.getElementById("trans").value     = me.translation_category || "";
     document.getElementById("bio").value       = me.introduction || "";
 
-    const nameSpan = document.querySelector(".display-value");
-    if (nameSpan && me.real_name) nameSpan.textContent = me.real_name;
+    document.querySelector(".badge-img").style.display = me.google_verified ? "block" : "none";
+
+    const nameSpan = document.getElementById("real_name");
+    if (nameSpan) nameSpan.textContent = me.real_name;
   }
 
   // --- 저장하기 ---
   async function saveProfile() {
     await ensureCsrf();
     const body = {
+      real_name: document.getElementById("real_name").value || "",
       age: String(document.getElementById("age").value || ""),
       nationality: document.getElementById("country").value || null,
       city: document.getElementById("sido").value || "",
@@ -244,20 +272,45 @@
   document.getElementById("previewBtn").addEventListener("click", () => {
     window.location.href = "pre.html";
   });
+
   document.getElementById("submitBtn").addEventListener("click", async () => {
-  await saveProfile();                         // ✅ 백엔드에 PUT 요청 (DB 저장)
-  window.location.href = "../home/home.html";  // ✅ 저장 후 홈으로 이동
+  await saveProfile();                        
+  window.location.href = "../home/home.html";  
 });
 
+// 구글 연결 버튼
+document.getElementById("googleConnectBtn").addEventListener("click", async () => {
+    try {
+      await ensureCsrf();
+      const res = await fetch(GOOGLE_LOGIN_URL, { credentials: "include" });
+      if (res.status === 401) {
+        alert("로그인이 필요합니다. 먼저 로그인해 주세요.");
+        // 필요시 로그인 페이지로 이동
+        // window.location.href = "../login/login.html";
+        return;
+      }
+      const data = await res.json();
+      if (res.ok && data.redirect_url) {
+        // 구글 동의화면으로 이동
+        window.location.href = data.redirect_url;
+      } else {
+        alert(data.detail || "구글 인증 URL 생성에 실패했습니다.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("구글 인증 처리 중 오류가 발생했습니다.");
+    }
+  });
 
-  // 페이지 진입 시 초기 데이터 불러오기
+
+  // 페이지 진입 시 초기 데이터 불러오기, 초기화
   await ensureCsrf();
   await loadProfile();
 
     
         
 
-      </script>
+    </script>
       
   </main>
   
