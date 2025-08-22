@@ -14,9 +14,9 @@
     <header class="statusbar" role="banner">
     <span class="sb-time">9:41</span>
     <div class="sb-icons" aria-hidden="true">
-      <img src="../assets/images/cellular.png" alt="" class="sb-cell">
-      <img src="../assets/images/wifi.png"     alt="" class="sb-wifi">
-      <img src="../assets/images/battery.png"  alt="" class="sb-batt">
+      <img src="../assets/images/cellular.svg" alt="" class="sb-cell">
+      <img src="../assets/images/wifi.svg"     alt="" class="sb-wifi">
+      <img src="../assets/images/battery.svg"  alt="" class="sb-batt">
     </div>
     </header>
 
@@ -34,11 +34,11 @@
     <h1 class="title">로그인</h1>
     <p class="subtitle">
       신규 사용자이신가요?
-      <a href="#" class="link">계정 만들기</a>
+      <a href="signup.html" class="link">계정 만들기</a>
     </p>
 
     <!-- 로그인 폼 -->
-    <form class="form" action="#" method="post">
+    <form class="form" action="../home/home.html" method="get">
         <!-- 이메일 -->
         <div class="input-group">
           <label for="email" class="input-label">이메일</label>
@@ -76,7 +76,10 @@
           <a href="#" class="muted">비밀번호 찾기</a>
         </div>
       
-        <button type="submit" class="btn-primary">로그인</button>
+        <button type="button" class="btn-primary" onclick="location.href='../home/home.html'">
+            로그인
+          </button>
+          
       </form>
       
 
@@ -96,5 +99,9 @@
       Google 계정으로 로그인
     </button>
   </main>
+
+  <script src="../config.js"></script>
+
+
 </body>
 </html>
