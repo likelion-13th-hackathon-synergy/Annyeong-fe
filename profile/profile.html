@@ -20,16 +20,24 @@
 
     <!-- 상단 로고 / 역할 -->
     <div class="top">
-      <div class="brand">
-        <img src="../assets/icons/logo.svg" alt="안녕 로고">
+        <div class="brand">
+          <img src="../assets/icons/logo.svg" alt="안녕 로고">
+        </div>
+      
+        <div class="top-actions">
+          <button type="button" class="icon-btn" id="btnLang" aria-label="언어 설정">
+            <img src="../assets/icons/lang.svg" alt="" aria-hidden="true">
+          </button>
+          <button type="button" class="icon-btn" id="btnNotify" aria-label="알림">
+            <img src="../assets/icons/user.svg" alt="" aria-hidden="true">
+            <!-- 필요하면 알림 점 -->
+            <!-- <span class="dot" aria-hidden="true"></span> -->
+          </button>
+          <button type="button" class="icon-btn" id="btnProfile" aria-label="내 프로필">
+            <img src="../assets/icons/message.svg" alt="" aria-hidden="true">
+          </button>
+        </div>
       </div>
-      <button type="button" class="role-select" aria-label="역할 선택">
-        서포터즈
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
 
     <!-- 전체 카드 -->
     <form class="profile-form" action="#" method="post" novalidate>
