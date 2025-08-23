@@ -210,6 +210,7 @@
     const BASE = "http://127.0.0.1:8000";   // 장고 서버 주소
     const PROFILE_URL = `${BASE}/users/profile/`;
     const CSRF_URL    = `${BASE}/users/csrf/`;
+    const optText = (sel) => (sel.options[sel.selectedIndex] || {}).text || '';
     const GOOGLE_LOGIN_URL = `${BASE}/users/google/login/`;
 
     document.getElementById("googleConnectBtn").addEventListener("click", async () => {
@@ -239,6 +240,34 @@
     const p = v.split(`; ${name}=`);
     if (p.length === 2) return p.pop().split(";").shift();
   }
+
+  function collectPreviewData() {
+  const countrySel = document.getElementById('country');
+  const langSel    = document.getElementById('lang');
+  const transSel   = document.getElementById('trans');
+
+  return {
+    real_name: document.getElementById('real_name').value.trim(),
+    age: document.getElementById('age').value.trim(),
+    nationality: countrySel.value,
+    nationality_label: optText(countrySel),
+    city: document.getElementById('sido').value.trim(),
+    service_language: langSel.value,
+    service_language_label: optText(langSel),
+    translation_category: transSel.value,
+    translation_category_label: optText(transSel),
+    introduction: document.getElementById('bio').value.trim(),
+    google_verified:
+      (document.querySelector('.badge-img')?.style.display || '') !== 'none'
+  };
+}
+
+// ✅ 미리보기 버튼: 값 저장 → pre.html로 이동
+document.getElementById("previewBtn").addEventListener("click", () => {
+  const draft = collectPreviewData();
+  sessionStorage.setItem("preview_profile", JSON.stringify(draft));
+  window.location.href = "pre.html";
+});
 
   async function ensureCsrf() {
     if (!getCookie("csrftoken")) {

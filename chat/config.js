@@ -1,6 +1,18 @@
-// 배포/로컬 전환은 여기서만 바꾸면 됩니다.
-//export const API_BASE = "https://annyeong-be.onrender.com";
-export const API_BASE = "http://127.0.0.1:8000"; // 로컬용
+export const BASE_HTTP = "http://127.0.0.1:8000";      // REST API 베이스
+export function buildWsUrl(roomId, token) {
+  const http = new URL(BASE_HTTP);
+  const proto = http.protocol === "https:" ? "wss:" : "ws:";
+  const qs = token ? `?token=${encodeURIComponent(token)}` : "";
+  return `${proto}//${http.host}/ws/chat/${encodeURIComponent(roomId)}/${qs}`;
+}
 
-// 리뷰 보기 페이지에서 기본으로 사용할 테스트 유저 ID
-export const DEFAULT_USER_ID = 3;
+// 편의 REST 엔드포인트
+export const API = {
+  chatrooms:      (q="") => `/chatrooms/${q}`,
+  messages:       (q="") => `/messages/${q}`,
+  translate:            `/translate/`,
+  accept:   (chatId) => `/chatrooms/${chatId}/accept/`,
+  decline:  (chatId) => `/chatrooms/${chatId}/decline/`,
+  markRead: (chatId) => `/chatrooms/${chatId}/mark_read/`,
+  upload:          `/upload-image/`,
+};
