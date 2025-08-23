@@ -91,26 +91,28 @@ button {
     line-height: normal;
 }
 
-.opt:active{
-    background:#854CCE;
+.opt:active {
+    background: #854CCE;
 }
 
 .opt .check {
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  border: 1.5px solid rgba(255,255,255,0.45);
-  display: grid;
-  place-items: center;
-  font-size: 12px;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
 }
+
 .opt[data-checked="true"] {
-  background: #854CCE;
-  box-shadow: 0 0 0 2px rgba(154,87,255,.35);
+    background: #854CCE;
+    box-shadow: 0 0 0 2px rgba(154, 87, 255, .35);
 }
+
 .opt[data-checked="true"] .check {
-  background: #33cc73;
-  color: #03240f;
+    background: #33cc73;
+    color: #03240f;
 }
 
 #options {
@@ -124,21 +126,30 @@ button {
     display: none;
 }
 
-#review-send-btn img {
+#review-send-btn {
     position: absolute;
     z-index: 1000;
     bottom: 31px;
     left: 16px;
     right: 15px;
     width: 344px;
-    height: auto;
+    display: flex;
+    width: 344px;
+    height: 40px;
+    padding: 12px 18px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: #9953F5;
 }
 
 .review-w-title .strong-text {
     font-weight: 700 !important;
 }
 
-.selected-num .strong-text, .selCounter {
+.selected-num .strong-text,
+.selCounter {
     color: #BC89FF;
 }
 
