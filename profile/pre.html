@@ -40,24 +40,24 @@
         />
 
         <!-- 하단 정보 오버레이 (텍스트/아이콘 실제 요소) -->
-        <div class="info">
-          <div class="name-row">
-            <img class="flag" src="../assets/icons/flag-kr.svg" alt="대한민국 국기">
-            <h3 class="name">김멋사 <span class="grade">13</span></h3>
-            <img class="verified" src="../assets/images/verified-badge.svg" alt="인증됨">
-          </div>
+        <!-- 이름/나이/인증/국기 -->
+         <div class="info">
+         <div class="panel">
+<div class="name-row">
+  <img class="flag" id="pvFlag" src="../assets/icons/flag-kr.svg" alt="국기">
+  <h3 class="name" id="pvName">이름</h3>
+  <span class="grade" id="pvAge">13</span>
+  <img class="verified" id="pvVerified" src="../assets/images/verified-badge.svg" alt="인증됨">
+</div>
 
-          <p class="meta">
-            서울특별시 <span class="sep">|</span> 한국어 • 러시아어
-          </p>
-
-          <p class="quote">"친구들과 언어교환하며 공부하고 싶어요! 📚"</p>
-
-          <a href="#" class="more">더보기</a>
-        </div>
+<p class="meta" id="pvMeta"></p>
+<p class="quote" id="pvQuote"></p>
+<a href="#" class="more">더보기</a>
+</div>
+</div>
 
         <!-- 즐겨찾기 버튼 -->
-        <button type="button" class="fav-btn">
+        <button type="button" class="fav-btn" id="favBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
@@ -71,18 +71,52 @@
         <button type="button" class="btn-primary" id="finishBtn">완료</button>
       </div>
 
-      <script>
+      <script type="module">
+        const flagFile = {
+          kr:'flag-kr.svg', jp:'flag-jp.svg', us:'flag-us.svg', cn:'flag-cn.svg',
+          vn:'flag-vn.svg', th:'flag-th.svg', ru:'flag-ru.svg', tw:'flag-tw.svg'
+        };
+      
+        function render(d) {
+          const nameEl = document.getElementById('pvName');
+          const ageEl  = document.getElementById('pvAge');
+          const metaEl = document.getElementById('pvMeta');
+          const quoteEl= document.getElementById('pvQuote');
+          const flagEl = document.getElementById('pvFlag');
+          const verEl  = document.getElementById('pvVerified');
+      
+          nameEl.textContent = d.real_name || '이름 미입력';
+          ageEl.textContent  = d.age || ''; // 원하면 LikeLion "13" 고정으로 두어도 됨
+          metaEl.textContent = [
+            d.city || '',
+            [d.service_language_label, d.translation_category_label].filter(Boolean).join(' • ')
+          ].filter(Boolean).join(' | ');
+      
+          quoteEl.textContent = d.introduction ? `"${d.introduction}"` : '';
+      
+          if (d.nationality && flagFile[d.nationality]) {
+            flagEl.src = `../assets/icons/${flagFile[d.nationality]}`;
+          }
+          verEl.style.display = d.google_verified ? 'block' : 'none';
+        }
+      
+        // 1순위: profile에서 방금 저장한 draft 사용
+        let draft = null;
+        try { draft = JSON.parse(sessionStorage.getItem('preview_profile') || 'null'); } catch {}
+        if (draft) render(draft);
+      
+        // 즐겨찾기 토글 (버튼 id 고침)
+        const favBtn = document.getElementById('favBtn');
+        if (favBtn) favBtn.addEventListener('click', () => favBtn.classList.toggle('active'));
+      
+        // 완료 버튼
         document.getElementById('finishBtn').addEventListener('click', () => {
+          // 필요하면 sessionStorage 지워도 됨
+          // sessionStorage.removeItem('preview_profile');
           window.location.href = "../home/home.html";
         });
-
-        const favBtn = document.getElementById('favBtn');
-    favBtn.addEventListener('click', () => {
-      favBtn.classList.toggle('active');
-    });
-
-    
       </script>
+      
 
 
       
