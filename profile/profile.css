@@ -166,3 +166,71 @@ body{
 
 /* 접근성 */
 .sr-only{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+/* ==== 밑줄 스타일 (라벨 왼쪽, 입력 오른쪽) ==== */
+.card-body .input-group{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  
+  /* 라벨 고정 폭 */
+  .card-body .input-group .input-label{
+    flex:0 0 64px;
+    margin:0;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  
+  /* 박스 배경/높이 제거 + 행 배치로 전환 */
+  .card-body .input-group .field,
+  .card-body .input-group .select-field{
+    background:transparent;
+    border-radius:0;
+    height:auto;
+    padding:0;
+    display:flex;
+    align-items:center;
+    flex:1 1 auto;
+  }
+  
+  /* 실제 인풋/셀렉트 공통 */
+  .card-body .input-group input,
+  .card-body .input-group select{
+    flex:1 1 auto;
+    border:0;
+    outline:none;
+    background:transparent;
+    font-size:14px;
+    padding:6px 0;
+    color:var(--ink);
+  }
+  
+  /* placeholder 색 */
+  .card-body .input-group input::placeholder{ color:#9DA3AF; }
+  
+  /* 커스텀 caret 숨김(네이티브 화살표만 사용) */
+  .card-body .input-group .caret{ display:none; }
+  
+  /* 숫자 인풋 스피너 제거 */
+  .card-body .input-group input[type="number"]::-webkit-outer-spin-button,
+  .card-body .input-group input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .card-body .input-group input[type="number"]{ -moz-appearance:textfield; }
+  
+  /* 텍스트에어리어도 밑줄형으로 */
+  .textarea-field{ background:transparent; border-radius:0; padding:0; }
+  .textarea-field textarea{
+    width:100%;
+    padding:8px 0;
+    border:none;
+    border-bottom:1px solid var(--line);
+    background:transparent;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .textarea-field textarea::placeholder{ color:#9DA3AF; }
+  
