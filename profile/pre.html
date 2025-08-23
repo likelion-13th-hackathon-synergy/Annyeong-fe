@@ -44,7 +44,7 @@
          <div class="info">
          <div class="panel">
 <div class="name-row">
-  <img class="flag" id="pvFlag" src="../assets/icons/flag-kr.svg" alt="국기">
+  <span class="flag-emoji" id="pvFlag" role="img" aria-label="국기"></span>
   <h3 class="name" id="pvName">이름</h3>
   <span class="grade" id="pvAge">13</span>
   <img class="verified" id="pvVerified" src="../assets/images/verified-badge.svg" alt="인증됨">
@@ -72,53 +72,88 @@
       </div>
 
       <script type="module">
-        const flagFile = {
-          kr:'flag-kr.svg', jp:'flag-jp.svg', us:'flag-us.svg', cn:'flag-cn.svg',
-          vn:'flag-vn.svg', th:'flag-th.svg', ru:'flag-ru.svg', tw:'flag-tw.svg'
-        };
+        const BASE = "http://127.0.0.1:8000";
+        const PROFILE_URL = `${BASE}/users/profile/`;
+        const LANG_LABEL = { ko:'한국어', en:'영어', ja:'일본어', zh:'중국어', vi:'베트남어', th:'태국어', ru:'러시아어' };
+      
+        // ISO 2글자 국가코드 → 국기 이모지
+        function countryToEmoji(cc) {
+          if (!cc) return '';
+          const code = cc.toUpperCase();            // 'kr' -> 'KR'
+          if (code.length !== 2) return '';
+          const BASE_CODE = 127397;                 // Regional Indicator base
+          return String.fromCodePoint(...[...code].map(c => BASE_CODE + c.charCodeAt(0)));
+        }
+      
+        // 백엔드/임시데이터를 미리보기용 형태로 정규화
+        const toPreviewShape = (d) => ({
+          real_name: d.real_name ?? '',
+          age: d.age ? String(d.age) : '',
+          nationality: d.nationality ?? '',
+          city: d.city ?? '',
+          service_language: d.service_language ?? '',
+          translation_category: d.translation_category ?? '',
+          service_language_label: d.service_language_label ?? LANG_LABEL[d.service_language] ?? '',
+          translation_category_label: d.translation_category_label ?? LANG_LABEL[d.translation_category] ?? '',
+          introduction: d.introduction ?? '',
+          google_verified: !!d.google_verified,
+        });
       
         function render(d) {
+          const flagEl = document.getElementById('pvFlag');     // span.flag-emoji
           const nameEl = document.getElementById('pvName');
           const ageEl  = document.getElementById('pvAge');
           const metaEl = document.getElementById('pvMeta');
           const quoteEl= document.getElementById('pvQuote');
-          const flagEl = document.getElementById('pvFlag');
           const verEl  = document.getElementById('pvVerified');
       
           nameEl.textContent = d.real_name || '이름 미입력';
-          ageEl.textContent  = d.age || ''; // 원하면 LikeLion "13" 고정으로 두어도 됨
-          metaEl.textContent = [
-            d.city || '',
-            [d.service_language_label, d.translation_category_label].filter(Boolean).join(' • ')
-          ].filter(Boolean).join(' | ');
+          ageEl.textContent  = d.age || '';
+      
+          const pair = [d.service_language_label, d.translation_category_label].filter(Boolean).join(' • ');
+          metaEl.textContent = [d.city || '', pair].filter(Boolean).join(' | ');
       
           quoteEl.textContent = d.introduction ? `"${d.introduction}"` : '';
       
-          if (d.nationality && flagFile[d.nationality]) {
-            flagEl.src = `../assets/icons/${flagFile[d.nationality]}`;
-          }
+          // ✅ 국기 이모지 적용 (이미지 src 아님!)
+          flagEl.textContent = countryToEmoji(d.nationality);
+      
+          // 인증 뱃지 표시
           verEl.style.display = d.google_verified ? 'block' : 'none';
         }
       
-        // 1순위: profile에서 방금 저장한 draft 사용
-        let draft = null;
-        try { draft = JSON.parse(sessionStorage.getItem('preview_profile') || 'null'); } catch {}
-        if (draft) render(draft);
+        const cacheSet = (d) => localStorage.setItem('profile_cache', JSON.stringify(d));
+        const cacheGet = (k) => { try { return JSON.parse(k || 'null'); } catch { return null; } };
       
-        // 즐겨찾기 토글 (버튼 id 고침)
+        // 초기 로드 순서: 세션(방금 값) → 로컬캐시 → 백엔드 최신화
+        (async function init() {
+          let d = cacheGet(sessionStorage.getItem('preview_profile'));
+          if (d) { d = toPreviewShape(d); render(d); cacheSet(d); return; }
+      
+          d = cacheGet(localStorage.getItem('profile_cache'));
+          if (d) render(d);
+      
+          try {
+            const res = await fetch(PROFILE_URL, { credentials: 'include' });
+            if (res.ok) {
+              const raw = await res.json();
+              const shaped = toPreviewShape(raw);
+              render(shaped);
+              cacheSet(shaped);
+            }
+          } catch (e) {
+            console.warn('profile fetch failed', e);
+          }
+        })();
+      
+        // 즐겨찾기/완료 버튼
         const favBtn = document.getElementById('favBtn');
         if (favBtn) favBtn.addEventListener('click', () => favBtn.classList.toggle('active'));
-      
-        // 완료 버튼
         document.getElementById('finishBtn').addEventListener('click', () => {
-          // 필요하면 sessionStorage 지워도 됨
-          // sessionStorage.removeItem('preview_profile');
           window.location.href = "../home/home.html";
         });
       </script>
       
-
-
       
       
   </main>
