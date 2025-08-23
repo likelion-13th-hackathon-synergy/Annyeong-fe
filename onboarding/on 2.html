@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Onboarding</title>
+  <link rel="stylesheet" href="on.css" />
+</head>
+<body>
+  <main class="phone">
+    <!-- 상태바 -->
+    <header class="statusbar" role="banner">
+      <span class="sb-time">9:41</span>
+      <div class="sb-icons" aria-hidden="true">
+        <img src="../assets/images/cellular.svg" alt="">
+        <img src="../assets/images/wifi.svg" alt="">
+        <img src="../assets/images/battery.svg" alt="">
+      </div>
+    </header>
+
+    <!-- 상단 로고 / 역할 -->
+    <div class="top">
+      <div class="brand">
+        <img src="../assets/icons/logo.svg" alt="안녕 로고">
+      </div>
+      <button type="button" class="role-select" aria-label="역할 선택">
+        서포터즈
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 온보딩 슬라이드 -->
+    <section id="carousel" class="carousel drag-zone" aria-label="온보딩 슬라이드">
+      <!-- Slide 1 -->
+      <article class="slide" data-index="0">
+        <h2 class="headline-ko">한국과 세계를 연결하는 특별한 만남</h2>
+        <p class="headline-en">"Connect Korea with the World"</p>
+        <div class="hero-media">
+          <img src="../assets/images/on-hero.png" alt="세 명의 청년이 손을 들고 있는 일러스트" />
+        </div>
+      </article>
+
+      <!-- Slide 2 -->
+      <article class="slide" data-index="1">
+        <h2 class="headline-ko">언어 교환부터 친구, 연애까지!</h2>
+        <p class="headline-en">"From language exchange to</br>friendship and romance!"</p>
+        <div class="hero-media">
+          <img src="../assets/images/on-2.png" alt="현지 문화 체험 일러스트" />
+        </div>
+      </article>
+
+      <!-- Slide 3 -->
+      <article class="slide" data-index="2">
+        <h2 class="headline-ko">게임처럼 쉽고 즐거운 매칭 방식</h2>
+        <p class="headline-en">"Easy and fun matching method"</p>
+        <div class="hero-media">
+          <img src="../assets/images/on-3.png" alt="네트워킹 일러스트" />
+        </div>
+      </article>
+
+      <!-- Slide 4 -->
+      <article class="slide" data-index="3">
+        <h2 class="headline-ko">AI로 손쉬운 대화의 흐름</h2>
+        <p class="headline-en">"Easy conversation flow with AI"</p>
+        <div class="hero-media">
+          <img src="../assets/images/on-4.png" alt="시작을 알리는 일러스트" />
+        </div>
+      </article>
+    </section>
+
+    <!-- 페이지 인디케이터 -->
+    <nav class="dots" aria-label="온보딩 단계">
+      <button class="dot" aria-label="1번째 슬라이드" aria-current="true"></button>
+      <button class="dot" aria-label="2번째 슬라이드"></button>
+      <button class="dot" aria-label="3번째 슬라이드"></button>
+      <button class="dot" aria-label="4번째 슬라이드"></button>
+    </nav>
+
+    <!-- CTA -->
+    <div class="cta">
+      <button class="btn-primary" type="button" id="startBtn">지금 시작하기</button>
+    </div>
+  </main>
+
+  <!-- JS: 스와이프/도트/드래그 -->
+  <script>
+    const carousel = document.getElementById('carousel');
+    const slides   = [...carousel.querySelectorAll('.slide')];
+    const dots     = [...document.querySelectorAll('.dot')];
+
+    // 현재 인덱스 계산(스냅 기준)
+    const currentIndex = () => Math.round(carousel.scrollLeft / carousel.clientWidth);
+
+    // 도트 상태 갱신
+    function setActiveDot(idx) {
+      dots.forEach((d, i) => d.setAttribute('aria-current', String(i === idx)));
+    }
+
+    // 도트 클릭 이동
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        carousel.scrollTo({ left: i * carousel.clientWidth, behavior: 'smooth' });
+      });
+    });
+
+    // 스크롤 시 도트 동기화(스로틀)
+    let ticking = false;
+    carousel.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setActiveDot(currentIndex());
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // 데스크탑 드래그(모바일은 기본 스와이프)
+    let isDown=false, startX=0, startLeft=0;
+    const startDrag = x => { isDown = true; startX = x; startLeft = carousel.scrollLeft; };
+    const moveDrag  = x => { if (isDown) carousel.scrollLeft = startLeft - (x - startX); };
+    const endDrag   = () => {
+      if (!isDown) return;
+      isDown = false;
+      const idx = currentIndex();
+      carousel.scrollTo({ left: idx * carousel.clientWidth, behavior: 'smooth' });
+    };
+
+    carousel.addEventListener('mousedown', e => startDrag(e.clientX));
+    window.addEventListener('mousemove',  e => moveDrag(e.clientX));
+    window.addEventListener('mouseup',    endDrag);
+
+    carousel.addEventListener('touchstart', e => startDrag(e.touches[0].clientX), {passive:true});
+    carousel.addEventListener('touchmove',  e => moveDrag(e.touches[0].clientX),  {passive:true});
+    carousel.addEventListener('touchend',   endDrag);
+
+    // 이미지 드래그 방지
+    slides.forEach(s => s.querySelectorAll('img').forEach(img =>
+      img.addEventListener('dragstart', e => e.preventDefault())
+    ));
+
+    // 리사이즈 시 현재 인덱스 유지
+    window.addEventListener('resize', () => {
+      const idx = currentIndex();
+      carousel.scrollTo({ left: idx * carousel.clientWidth });
+    });
+
+    // CTA 예시
+    document.getElementById('startBtn').addEventListener('click', () => {
+      window.location.href = "../login/login.html";
+    });
+
+    // 초기
+    setActiveDot(0);
+  </script>
+</body>
+</html>

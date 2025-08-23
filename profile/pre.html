@@ -40,24 +40,24 @@
         />
 
         <!-- 하단 정보 오버레이 (텍스트/아이콘 실제 요소) -->
-        <div class="info">
-          <div class="name-row">
-            <img class="flag" src="../assets/icons/flag-kr.svg" alt="대한민국 국기">
-            <h3 class="name">김멋사 <span class="grade">13</span></h3>
-            <img class="verified" src="../assets/images/verified-badge.svg" alt="인증됨">
-          </div>
+        <!-- 이름/나이/인증/국기 -->
+         <div class="info">
+         <div class="panel">
+<div class="name-row">
+  <span class="flag-emoji" id="pvFlag" role="img" aria-label="국기"></span>
+  <h3 class="name" id="pvName">이름</h3>
+  <span class="grade" id="pvAge">13</span>
+  <img class="verified" id="pvVerified" src="../assets/images/verified-badge.svg" alt="인증됨">
+</div>
 
-          <p class="meta">
-            서울특별시 <span class="sep">|</span> 한국어 • 러시아어
-          </p>
-
-          <p class="quote">"친구들과 언어교환하며 공부하고 싶어요! 📚"</p>
-
-          <a href="#" class="more">더보기</a>
-        </div>
+<p class="meta" id="pvMeta"></p>
+<p class="quote" id="pvQuote"></p>
+<a href="#" class="more">더보기</a>
+</div>
+</div>
 
         <!-- 즐겨찾기 버튼 -->
-        <button type="button" class="fav-btn">
+        <button type="button" class="fav-btn" id="favBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
@@ -71,20 +71,89 @@
         <button type="button" class="btn-primary" id="finishBtn">완료</button>
       </div>
 
-      <script>
+      <script type="module">
+        const BASE = "http://127.0.0.1:8000";
+        const PROFILE_URL = `${BASE}/users/profile/`;
+        const LANG_LABEL = { ko:'한국어', en:'영어', ja:'일본어', zh:'중국어', vi:'베트남어', th:'태국어', ru:'러시아어' };
+      
+        // ISO 2글자 국가코드 → 국기 이모지
+        function countryToEmoji(cc) {
+          if (!cc) return '';
+          const code = cc.toUpperCase();            // 'kr' -> 'KR'
+          if (code.length !== 2) return '';
+          const BASE_CODE = 127397;                 // Regional Indicator base
+          return String.fromCodePoint(...[...code].map(c => BASE_CODE + c.charCodeAt(0)));
+        }
+      
+        // 백엔드/임시데이터를 미리보기용 형태로 정규화
+        const toPreviewShape = (d) => ({
+          real_name: d.real_name ?? '',
+          age: d.age ? String(d.age) : '',
+          nationality: d.nationality ?? '',
+          city: d.city ?? '',
+          service_language: d.service_language ?? '',
+          translation_category: d.translation_category ?? '',
+          service_language_label: d.service_language_label ?? LANG_LABEL[d.service_language] ?? '',
+          translation_category_label: d.translation_category_label ?? LANG_LABEL[d.translation_category] ?? '',
+          introduction: d.introduction ?? '',
+          google_verified: !!d.google_verified,
+        });
+      
+        function render(d) {
+          const flagEl = document.getElementById('pvFlag');     // span.flag-emoji
+          const nameEl = document.getElementById('pvName');
+          const ageEl  = document.getElementById('pvAge');
+          const metaEl = document.getElementById('pvMeta');
+          const quoteEl= document.getElementById('pvQuote');
+          const verEl  = document.getElementById('pvVerified');
+      
+          nameEl.textContent = d.real_name || '이름 미입력';
+          ageEl.textContent  = d.age || '';
+      
+          const pair = [d.service_language_label, d.translation_category_label].filter(Boolean).join(' • ');
+          metaEl.textContent = [d.city || '', pair].filter(Boolean).join(' | ');
+      
+          quoteEl.textContent = d.introduction ? `"${d.introduction}"` : '';
+      
+          // ✅ 국기 이모지 적용 (이미지 src 아님!)
+          flagEl.textContent = countryToEmoji(d.nationality);
+      
+          // 인증 뱃지 표시
+          verEl.style.display = d.google_verified ? 'block' : 'none';
+        }
+      
+        const cacheSet = (d) => localStorage.setItem('profile_cache', JSON.stringify(d));
+        const cacheGet = (k) => { try { return JSON.parse(k || 'null'); } catch { return null; } };
+      
+        // 초기 로드 순서: 세션(방금 값) → 로컬캐시 → 백엔드 최신화
+        (async function init() {
+          let d = cacheGet(sessionStorage.getItem('preview_profile'));
+          if (d) { d = toPreviewShape(d); render(d); cacheSet(d); return; }
+      
+          d = cacheGet(localStorage.getItem('profile_cache'));
+          if (d) render(d);
+      
+          try {
+            const res = await fetch(PROFILE_URL, { credentials: 'include' });
+            if (res.ok) {
+              const raw = await res.json();
+              const shaped = toPreviewShape(raw);
+              render(shaped);
+              cacheSet(shaped);
+            }
+          } catch (e) {
+            console.warn('profile fetch failed', e);
+          }
+        })();
+      
+        // 즐겨찾기/완료 버튼
+        const favBtn = document.getElementById('favBtn');
+        if (favBtn) favBtn.addEventListener('click', () => favBtn.classList.toggle('active'));
         document.getElementById('finishBtn').addEventListener('click', () => {
           window.location.href = "../home/home.html";
         });
-
-        const favBtn = document.getElementById('favBtn');
-    favBtn.addEventListener('click', () => {
-      favBtn.classList.toggle('active');
-    });
-
-    
       </script>
-
-
+      
       
       
   </main>
