@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>회원가입</title>
+  <link rel="stylesheet" href="signup.css" />
+</head>
+<body>
+  <main class="phone">
+    <!-- 상태바 -->
+    <header class="statusbar" role="banner">
+      <span class="sb-time">9:41</span>
+      <div class="sb-icons" aria-hidden="true">
+        <img src="../assets/images/cellular.svg" alt="">
+        <img src="../assets/images/wifi.svg" alt="">
+        <img src="../assets/images/battery.svg" alt="">
+      </div>
+    </header>
+
+    <!-- 상단 로고 / 역할 -->
+    <div class="top">
+      <div class="brand">
+        <img src="../assets/icons/logo.svg" alt="안녕 로고">
+      </div>
+      <button type="button" class="role-select" aria-label="역할 선택">
+        서포터즈
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 타이틀 -->
+    <h1 class="title">회원가입</h1>
+    <p class="subtitle">
+      이미 회원이신가요?
+      <a href="login.html" class="link">로그인하러가기</a>
+    </p>
+
+    <!-- 폼 -->
+    <form class="form" action="#" method="get" novalidate>
+      <!-- 이름 / 국적 -->
+      <div class="row-2">
+        <div class="input-group">
+          <label for="name" class="input-label">이름</label>
+          <div class="field">
+            <span class="icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input id="name" type="text" placeholder="실명" required />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="nation" class="input-label">내국인</label>
+          <div class="field select-field">
+            <select id="nation" aria-label="국적 선택">
+              <option value="kr" selected>내국인</option>
+              <option value="foreigner">외국인</option>
+            </select>
+            <span class="caret" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 이메일 -->
+      <div class="input-group">
+        <label for="email" class="input-label">이메일</label>
+        <div class="field">
+          <span class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zm0 0 8 6 8-6"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <input id="email" type="email" placeholder="example@gmail.com" required />
+        </div>
+      </div>
+
+      <!-- 비밀번호 -->
+      <div class="input-group">
+        <label for="pw" class="input-label">비밀번호</label>
+        <div class="field">
+          <span class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="11" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <!-- 특수문자 1개 이상 + 6자 이상 -->
+          <input id="pw" type="password"
+                 placeholder="특수문자 포함 6자리"
+                 autocomplete="new-password"
+                 required />
+        </div>
+        <p class="form-hint ok" id="pw-hint-ok">😊 사용할 수 있는 비밀번호 입니다.</p>
+      </div>
+
+      <!-- 비밀번호 확인 -->
+      <div class="input-group">
+        <label for="pw2" class="input-label">비밀번호 확인</label>
+        <div class="field">
+          <span class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="11" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <input id="pw2" type="password"
+                 placeholder="비밀번호를 다시 입력해주세요"
+                 autocomplete="new-password"
+                 required />
+        </div>
+        <p class="form-hint err" id="pw2-hint-err">🙅‍♀️ 비밀번호가 틀립니다.</p>
+      </div>
+
+      <!-- 회원가입 -->
+      <button
+        id="submitBtn"
+        type="submit"
+        class="btn-primary"
+        formaction="../profile/profile.html"
+        formmethod="get"
+        disabled
+      >회원가입</button>
+
+      <!-- 구분선 -->
+      <div class="divider" role="separator" aria-label="소셜 회원가입 구분선">
+        <span>소셜 회원가입</span>
+      </div>
+
+      <!-- Google 버튼 -->
+      <button class="btn-google" type="button" aria-label="Google 계정으로 가입">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.676 31.91 29.223 35 24 35c-7.18 0-13-5.82-13-13s5.82-13 13-13c3.312 0 6.322 1.244 8.594 3.27l5.657-5.657C34.65 3.042 29.59 1 24 1 11.85 1 2 10.85 2 23s9.85 22 22 22 22-9.85 22-22c0-1.466-.152-2.897-.389-4.917z"/>
+          <path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.479 16.255 18.906 13 24 13c3.312 0 6.322 1.244 8.594 3.27l5.657-5.657C34.65 3.042 29.59 1 24 1 16.318 1 9.679 5.084 6.306 14.691z"/>
+          <path fill="#4CAF50" d="M24 45c5.162 0 9.86-1.977 13.39-5.197l-6.178-5.227C29.055 36.488 26.668 37 24 37c-5.192 0-9.62-3.098-11.326-7.452l-6.56 5.048C9.44 41.807 16.19 45 24 45z"/>
+          <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-1.05 3.081-3.313 5.311-6.091 6.577.003-.001 13.788-9.987 14.399-14.494z"/>
+        </svg>
+        Google 계정으로 가입
+      </button>
+    </form>
+  </main>
+
+  <!-- ✅ 실시간 유효성 검사 스크립트 -->
+  <script>
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const pwInput = document.getElementById('pw');
+    const pw2Input = document.getElementById('pw2');
+    const submitBtn = document.getElementById('submitBtn');
+
+    const pwOkHint = document.getElementById('pw-hint-ok');
+    const pw2ErrHint = document.getElementById('pw2-hint-err');
+
+    const pwRule = /^(?=.*[~`!@#$%^&*()_\-+={}\[\]|\\:;"'<>,.?/]).{6,}$/;
+
+    function mark(el, state) {
+      const field = el.closest('.field');
+      field.classList.remove('valid', 'invalid');
+      if (state === 'valid') field.classList.add('valid');
+      if (state === 'invalid') field.classList.add('invalid');
+    }
+
+    function validate() {
+      const nameOk  = nameInput.value.trim().length > 0;
+      const emailOk = emailInput.value.trim().length > 0 && emailInput.checkValidity();
+      const pwOk    = pwRule.test(pwInput.value || '');
+      const pw2Ok   = pwInput.value.length > 0 && pw2Input.value === pwInput.value;
+
+      // 테두리 색
+      mark(nameInput,  nameInput.value ? (nameOk ? 'valid' : 'invalid') : null);
+      mark(emailInput, emailInput.value ? (emailOk ? 'valid' : 'invalid') : null);
+      mark(pwInput,    pwInput.value ? (pwOk ? 'valid' : 'invalid') : null);
+      mark(pw2Input,   pw2Input.value ? (pw2Ok ? 'valid' : 'invalid') : null);
+
+      // 힌트 표시
+      pwOkHint.style.display  = pwOk && pwInput.value ? 'block' : 'none';
+      pw2ErrHint.style.display = (!pw2Ok && pw2Input.value) ? 'block' : 'none';
+
+      // 버튼 활성화
+      const allOk = nameOk && emailOk && pwOk && pw2Ok;
+      submitBtn.disabled = !allOk;
+    }
+
+    // 이벤트
+    [nameInput, emailInput, pwInput, pw2Input].forEach(el => {
+      el.addEventListener('input', validate);
+      el.addEventListener('blur', validate);
+    });
+
+    // 초기 상태
+    validate();
+  </script>
+</body>
+</html>

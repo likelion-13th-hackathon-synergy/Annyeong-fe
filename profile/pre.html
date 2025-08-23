@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>미리보기</title>
+  <link rel="stylesheet" href="pre.css" />
+</head>
+<body>
+  <main class="phone">
+    <!-- 상태바 -->
+    <header class="statusbar" role="banner">
+      <span class="sb-time">9:41</span>
+      <div class="sb-icons" aria-hidden="true">
+        <img src="../assets/images/cellular.svg" alt="">
+        <img src="../assets/images/wifi.svg" alt="">
+        <img src="../assets/images/battery.svg" alt="">
+      </div>
+    </header>
+
+    <!-- 상단 타이틀/뒤로가기 -->
+    <div class="topbar">
+      <button class="back-btn" type="button" aria-label="뒤로가기" onclick="window.location.href='../profile/profile.html'">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="page-title">미리보기</h1>
+      <span class="spacer" aria-hidden="true"></span>
+    </div>
+
+    <!-- 프로필 카드 -->
+    <section class="preview">
+      <figure class="card">
+        <!-- 포스터/배경 이미지는 자유롭게 교체 -->
+        <img
+          src="../assets/images/profile-card-bg.png"
+          alt="프로필 카드 배경"
+          class="card-img"
+        />
+
+        <!-- 하단 정보 오버레이 (텍스트/아이콘 실제 요소) -->
+        <div class="info">
+          <div class="name-row">
+            <img class="flag" src="../assets/icons/flag-kr.svg" alt="대한민국 국기">
+            <h3 class="name">김멋사 <span class="grade">13</span></h3>
+            <img class="verified" src="../assets/images/verified-badge.svg" alt="인증됨">
+          </div>
+
+          <p class="meta">
+            서울특별시 <span class="sep">|</span> 한국어 • 러시아어
+          </p>
+
+          <p class="quote">"친구들과 언어교환하며 공부하고 싶어요! 📚"</p>
+
+          <a href="#" class="more">더보기</a>
+        </div>
+
+        <!-- 즐겨찾기 버튼 -->
+        <button type="button" class="fav-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+          </button>
+      </figure>
+    </section>
+
+    <!-- 하단 CTA -->
+    <div class="cta">
+        <button type="button" class="btn-primary" id="finishBtn">완료</button>
+      </div>
+
+      <script>
+        document.getElementById('finishBtn').addEventListener('click', () => {
+          window.location.href = "../home/home.html";
+        });
+
+        const favBtn = document.getElementById('favBtn');
+    favBtn.addEventListener('click', () => {
+      favBtn.classList.toggle('active');
+    });
+
+    
+      </script>
+
+
+      
+      
+  </main>
+</body>
+</html>

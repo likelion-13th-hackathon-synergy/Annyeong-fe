@@ -1,0 +1,191 @@
+/* 기본 */
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; }
+:root{
+  --white:#fff;
+  --muted:#A2A2A2;
+  --border:rgba(255,255,255,.12);
+  --primary:#7B4DFF;
+  --primary-600:#5B31E5;
+  --bg2:#0c0a14;
+  --vio1:rgba(134, 68, 255, .45); 
+  --vio2:rgba(51, 15, 102, .35);  
+}
+
+body{
+    font-family: "Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,sans-serif;
+    color:#F6F6F8;
+    background:#0b0b12;
+  }
+
+/* 휴대폰 캔버스(390 기준) */
+.phone{
+    position: relative;
+    width:100%;
+    max-width: 375px;
+    min-height:812px;              /* 화면 높이 꽉 채우기 */
+    margin:0 auto;
+    padding: 0 20px 32px;
+  
+    background:
+      radial-gradient(65% 45% at 18% 22%, var(--vio1), transparent 62%),
+      radial-gradient(55% 45% at 88% 68%, var(--vio2), transparent 60%),
+      linear-gradient(180deg, var(--bg2) 0%, #0c0a14 75%, #08070d 100%);
+  
+    border-left:1px solid rgba(255,255,255,.08);
+    border-right:1px solid rgba(255,255,255,.08);
+  }
+
+/* ===== iOS 상태바 ===== */
+.statusbar{
+    position: absolute;
+    top: env(safe-area-inset-top, 0px);
+    left: 0; right: 0;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0 16px;
+  }
+
+  
+  /* 타임 텍스트 스타일 */
+  .sb-time{
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    line-height:20px;
+  }
+  
+  .sb-icons{ display:flex; align-items:center; gap:6px; }
+  .sb-icons img{ display:block; height:12px; }
+
+  .sb-cell{width: 17.838px;
+    height: 11.359px;
+
+  }
+  .sb-wifi { width: 15.926px;
+    height: 11.454px;}
+  .sb-batt{
+    width: 25.389px;
+height: 12.078px;}
+
+.brand-mark{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    padding-top: calc(44px + env(safe-area-inset-top, 0px) + 12px);
+  }
+  .brand-mark .loginlogo{ height:28px; }
+
+  
+
+  .center{
+    display:flex; justify-content:center; align-items:center;
+    margin: 72px auto 16px;
+  }
+  .center img{ width:164px; height:164px; object-fit:contain; }
+
+
+/* 타이틀/부제 */
+.title{
+    color:#fff; text-align:center;
+    font-size:24px; font-weight:600; line-height:140%;
+    letter-spacing:-1px;
+    margin: 4px 0 8px;
+  }
+  .subtitle{
+    color:#A2A2A2; text-align:center;
+    font-size:12px; line-height:140%;
+    margin: 0 0 12px;
+  }
+  .link{ color:#00B7FF; text-decoration:none; }
+  .link:hover{ text-decoration:underline; }
+
+
+/* 폼 */
+.form{ margin-top: 8px; display:grid; gap:12px; }
+.field{
+    display:flex; 
+    flex-direction: row;
+    align-items:center; 
+    justify-content: flex-start;
+    gap:10px;
+    width:100%; 
+    height:48px;
+    padding: 0 12px;
+    border-radius:4px;
+    background:#fff;             
+    color:#1a1a1a;
+    margin-top: 6px;
+  }
+
+  .field .icon{
+    flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  color: #9094A6;
+
+  }
+  .field input{
+    flex: 1 1 auto;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #000;
+  line-height: 16px;
+  }
+  .field input::placeholder{ color:#9DA3AF; opacity:.9; }
+
+/* 도움 링크 */
+.help-links{
+    display:flex; justify-content:flex-end; align-items:center; gap:10px;
+    margin: -4px 2px 4px;        
+    font-size:12px; color:var(--muted);
+  }
+  .help-links a{ color:var(--muted); text-decoration:none; }
+  .help-links a:hover{ color:#E5E2F4; }
+
+/* 버튼 */
+.btn-primary{
+    width:100%; height:48px;
+    border:none; border-radius:4px;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-600) 100%);
+    color:var(--white); font-weight:700; font-size:16px;
+    box-shadow:0 12px 24px rgba(123,77,255,.35);
+    cursor:pointer;
+    margin-bottom: 40px;
+  }
+  .btn-primary:active{ transform: translateY(1px); }
+
+/* 구분선 */
+.divider{
+  display:flex; align-items:center; gap:12px;
+  color: var(--muted);
+  margin: 24px 0 12px;
+}
+.divider::before,.divider::after{
+  content:""; flex:1; height:1px; background: var(--border);
+}
+.divider span{ font-size: 13px; }
+
+/* Google 버튼 */
+.btn-google{
+    width: 100%;
+    height: 48px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    background:#fff; color:#1a1a1a;
+    border: 1px solid #E6E6E6;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-google .gmark{ flex: 0 0 20px; }
+  
+  @media (hover:hover){
+    .btn-google:hover{ background:#fafafa; }
+  }
