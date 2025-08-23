@@ -1,12 +1,9 @@
-// common/auth.js
-import { API_BASE, TEST_USER } from "./config.js";
+import { API_BASE, TEST_USER } from "../common/config.js";
 
 // 브라우저 쿠키에서 csrftoken 읽기
 function getCookie(name) {
-  return document.cookie
-    .split("; ")
-    .find((row) => row.startsWith(name + "="))
-    ?.split("=")[1];
+  const m = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+  return m ? decodeURIComponent(m[2]) : null;
 }
 
 // CSRF 쿠키를 브라우저에 심기 (서버는 ensure_csrf_cookie로 설정)
@@ -52,21 +49,30 @@ export async function loginWithSession(
 }
 
 // 인증 포함 fetch (unsafe 메서드면 CSRF 헤더 자동 추가)
-export async function authedFetch(path, options = {}, baseUrl = API_BASE) {
-  const method = (options.method || "GET").toUpperCase();
-  const opts = {
-    credentials: "include",
-    ...options,
-    headers: { ...(options.headers || {}) },
-  };
+export async function authedFetch(path, init = {}, base) {
+  const url = path.startsWith("http") ? path : `${base}${path}`;
+  const method = (init.method || "GET").toUpperCase();
+  const needsCsrf = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
 
-  // POST/PUT/PATCH/DELETE 등에는 CSRF 헤더 필요
-  const unsafe = !["GET", "HEAD", "OPTIONS", "TRACE"].includes(method);
-  if (unsafe) {
-    let token = getCookie("csrftoken");
-    if (!token) token = await seedCsrf(baseUrl);
-    opts.headers["X-CSRFToken"] = token;
+  const headers = new Headers(init.headers || {});
+  if (needsCsrf && !headers.has("X-CSRFToken")) {
+    const token = getCookie("csrftoken") || "";
+    headers.set("X-CSRFToken", token);
+  }
+  if (!headers.has("Content-Type") && !(init.body instanceof FormData)) {
+    // JSON이 아니라면 굳이 Content-Type 안 넣습니다 (FormData면 자동)
+    // headers.set("Content-Type", "application/json");
   }
 
-  return fetch(`${baseUrl}${path}`, opts);
+  console.log("[authedFetch] →", method, url); //최종 URL/메서드 확인용
+
+  const res = await fetch(url, {
+    ...init,
+    headers,
+    credentials: "include",
+  });
+
+  // 응답 로깅
+  console.log("[authedFetch] ←", res.status, res.statusText, url);
+  return res;
 }

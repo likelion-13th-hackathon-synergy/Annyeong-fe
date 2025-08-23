@@ -9,6 +9,22 @@ import { loginWithSession, authedFetch } from "../common/auth.js";
 window.__REVIEW_RAW__ = null;   // 원본 JSON
 window.__REVIEW_ITEMS__ = [];   // {label, count} 정규화 배열
 
+// personality → 이모지 매핑
+const PERSONALITY_EMOJIS = {
+  "personalities_1": "👂",
+  "personalities_2": "🤩",
+  "personalities_3": "😆",
+  "personalities_4": "🌟",
+  "personalities_5": "🤗",
+  "personalities_6": "😇",
+  "personalities_7": "🎓",
+  "personalities_8": "🧐",
+  "personalities_9": "🤭",
+  "personalities_10": "✅",
+  "personalities_11": "🏃",
+  "personalities_12": "🔒",
+};
+
 // 뒤로가기
 document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.querySelector(".back-btn");
@@ -24,13 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
 function normalizeReviews(apiData) {
   const arr = Array.isArray(apiData?.reviews) ? apiData.reviews : [];
   return arr.map((row) => {
-    // personalities_* 키 찾기
-    const labelKey = Object.keys(row).find((k) => k !== "count");
-    const label = row[labelKey] ?? "";
+    // personality_X 키만 추출
+    const key = Object.keys(row).find((k) => k.startsWith("personalities"));
+    const label = row[key] ?? "";
+    const emoji = PERSONALITY_EMOJIS[key] || "✨"; // key별 다른 이모지
     const count = Number(row.count ?? 0);
-    return { label: String(label), count: Number.isFinite(count) ? count : 0 };
+
+    return { 
+      label: `${emoji} "${label}"`, 
+      count: Number.isFinite(count) ? count : 0 
+    };
   });
 }
+
 
 // 리스트 렌더
 function renderList(items) {

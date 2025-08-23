@@ -61,6 +61,7 @@ button {
     overflow-x: hidden;
     -ms-overflow-style: none;
 }
+
 #chat-wrapper::-webkit-scrollbar {
     display: none;
 }
@@ -253,7 +254,6 @@ body {
     display: flex;
     width: 48px;
     height: 48px;
-    padding: 16px;
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-start;
@@ -265,7 +265,7 @@ body {
 .msg .bubble {
     position: relative;
     display: flex;
-    max-width: 200px;
+    max-width: 220px;
     width: auto;
     min-width: 20px;
     background: #fff;
@@ -279,9 +279,10 @@ body {
 
 /* 말풍선 꼬리 */
 .msg.other .bubble .tail {
-  left: -7px;
-  right: auto;
-  transform: rotate(-7.36deg); /* 그대로 */
+    left: -7px;
+    right: auto;
+    transform: rotate(-7.36deg);
+    /* 그대로 */
 }
 
 .bubble .tail {
@@ -291,7 +292,7 @@ body {
     width: 10.473px;
     height: 13.239px;
     transform: rotate(-7.36deg);
-      pointer-events: none;
+    pointer-events: none;
 
 }
 
@@ -306,14 +307,15 @@ body {
 .msg.me .bubble {
     background: #FCF5FF;
     color: #111;
-      stroke: #FCF5FF;
+    stroke: #FCF5FF;
 
 }
 
 .msg.me .bubble .tail {
-  right: -6px;
-  left: auto;                  /* ★ left 초기화로 충돌 방지 */
-  transform: scaleX(-1) rotate(-7.36deg);
+    right: -6px;
+    left: auto;
+    /* ★ left 초기화로 충돌 방지 */
+    transform: scaleX(-1) rotate(-7.36deg);
 }
 
 .msg.me .bubble::before {
@@ -337,7 +339,7 @@ body {
     font-size: 10px;
     color: #cfcfd3;
     align-self: flex-end;
-    padding-bottom:20px;
+    padding-bottom: 20px;
     /* 말풍선 하단 기준 */
 }
 
@@ -357,6 +359,7 @@ body {
 .msg .translate {
     cursor: pointer;
     color: #A2A2A2;
+    font-size: 10px;
 }
 
 .msg .translate:hover {
@@ -399,18 +402,66 @@ body {
     flex: 1;
     padding: 8px;
 }
+
 .msg .bubble img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-  object-fit: cover;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
 }
+
 .msg .bubble img.img-msg {
-  display: block;
-  height: auto;
-  border-radius: 12px;
-  object-fit: cover;
+    display: block;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
 }
-.msg .bubble .actions { margin-top: 4px; }
-.msg .bubble .actions .translate { display: inline-block; cursor: pointer; }
-.msg.me .bubble .actions .translate { display: none; } /* 내 이미지엔 번역 버튼 숨김 */
+
+.msg .bubble .actions {
+    margin-top: 4px;
+    display: flex;
+    /* 숨김 방지 */
+}
+.msg.me .bubble .actions { 
+  display: flex !important; 
+}
+.msg .bubble .actions .translate {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.msg.me .bubble .actions {
+    display: flex;
+    justify-content: flex-start;
+    left: 0;
+    margin-left: 10px;
+}
+
+/* 내 이미지엔 번역 버튼 숨김 */
+
+/* 날짜 디바이더 */
+.date-divider {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0;
+}
+
+.date-divider .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.14);      /* 다크 배경에서 은은하게 */
+  color: #d7d7d7;
+  font-size: 12px;
+  line-height: 1;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.date-divider .pill .cal {
+  width: 16px; height: 16px;
+  display: inline-block;
+  opacity: .9;
+}
