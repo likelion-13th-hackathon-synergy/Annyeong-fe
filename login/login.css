@@ -70,6 +70,47 @@ body{
     width: 25.389px;
 height: 12.078px;}
 
+.lang-menu{
+  position: absolute;
+  top: 55px;          /* 상태바 바로 아래(아이콘 높이와 맞춤) */
+  right: 12px;        /* 우측 아이콘 아래에 붙이기 */
+  z-index: 300;
+  min-width: 120px;
+  padding: 6px;
+  border-radius: 12px;
+  background: rgba(22,22,28,.9);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow:
+    0 12px 22px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* 메뉴 아이템 */
+.lang-item{
+  all: unset;             /* 버튼 기본 리셋 */
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 8px;
+  line-height: 1.2;
+}
+.lang-item:hover{ background: rgba(255,255,255,.12); }
+
+/* 현재 선택된 언어 표시(체크 느낌) */
+.lang-item[aria-current="true"]{
+  background: rgba(255,255,255,.16);
+  position: relative;
+}
+.lang-item[aria-current="true"]::after{
+  content: "✓";
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  opacity: .9;
+}
+
 /* 우상단 동그란 버튼 */
 .top-right-icon{
   position:absolute;

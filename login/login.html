@@ -20,10 +20,11 @@
     </div>
     </header>
 
-    <!-- 우상단 아이콘 -->
     <button class="top-right-icon" type="button" aria-label="언어 설정">
-    <img src="../assets/icons/lang.svg" alt="">
+      <img src="../assets/icons/lang.svg" alt="">
     </button>
+    
+
   
 
   
@@ -43,7 +44,7 @@
     </p>
 
     <!-- 로그인 폼 -->
-    <form class="form" action="../home/home.html" method="get">
+    <form class="form" action="#" method="post" novalidate>
         <!-- 이메일 -->
         <div class="input-group">
           <label for="email" class="input-label" data-i18n-key="email">이메일</label>
@@ -81,9 +82,9 @@
           <a href="#" class="muted" data-i18n-key="find_password">비밀번호 찾기</a>
         </div>
       
-        <button type="button" class="btn-primary" data-i18n-key="login_button" onclick="location.href='../home/home.html'">
-            로그인
-          </button>
+        <button type="submit" class="btn-primary" data-i18n-key="login_button">
+          로그인
+        </button>
           
       </form>
       
@@ -91,8 +92,24 @@
     
   </main>
 
+  <script type="module">
+    import { initI18n, cycleLang, getLang } from "../assets/js/i18n.js";
+  
+    // 현재 언어 적용
+    await initI18n();
+  
+    // 아이콘 클릭 → ko/en 토글
+    const langBtn = document.querySelector(".top-right-icon");
+    langBtn?.addEventListener("click", () => {
+      cycleLang(["ko", "en"]);
+      // (선택) 보조 접근성: 라벨도 현재 언어로 업데이트
+      const cur = getLang();
+      langBtn.setAttribute("aria-label", cur === "ko" ? "언어 설정: 한국어" : "Language: English");
+    });
+  </script>
+
   <script type="module" src="./login.api.js"></script>
-  <script type="module" src="../assets/js/i18n.js"></script>
+  
 
 </body>
 </html>
