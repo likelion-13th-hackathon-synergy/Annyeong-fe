@@ -3,7 +3,7 @@
 // - 이미지 업로드: 낙관 렌더 1개만 그리고 응답 오면 같은 말풍선의 src/href 교체(중복 방지)
 // - 엔드포인트: accept/decline/mark_read/translate/upload-image 백엔드 urls.py에 맞춤
 
-import { API_BASE, TEST_USER } from "../common/config.js";
+import { API_BASE, TEST_USER, TEST_AS, DEFAULT_PROFILE_IMG } from "../common/config.js";
 import { loginWithSession, authedFetch } from "../common/auth.js";
 import { $, onReady, escapeHTML, toTime, scrollToBottom } from "./dom.js";
 
@@ -12,7 +12,11 @@ const params = new URL(location.href).searchParams;
 const chatId = Number(params.get("roomId"));              // 채팅방 ID
 const otherName = decodeURIComponent(params.get("name") || "상대");
 let isAccepted = params.get("accepted") === "1";            // 쿼리로 수락 상태 받은 경우만 true
-
+let __roomPollTimer__ = null;
+const SEEN_MSG_KEYS = new Set();   // 중복 방지
+let LAST_SEEN_AT = null;           // ISO string
+let LAST_SEEN_ID = null;           // 백엔드가 id 제공 시
+let __OTHER_USER__ = null;
 /* ------------------ DOM ------------------ */
 const listEl = $("#messages");
 const inputEl = $("#msg-input");
@@ -25,13 +29,42 @@ const btnDecline = $("#btn-decline");
 const wrapperEl = $("#chat-wrapper");
 const titleEl = $("#chat-title");
 const inviteName = $("#invite-name");
+const menuBtn = document.getElementById("chat-menu-btn");
 
 const CURRENT_USER = TEST_USER.username;
 const ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
-
+// --- 내 메시지 중복 방지(텍스트) ---
+const PENDING_TEXTS = []; // [{content: string, at: number}]
+const PENDING_WINDOW_MS = 5000; // 5초 안에 같은 내용이 재도착하면 중복으로 간주
+function prunePending() {
+  const now = Date.now();
+  while (PENDING_TEXTS.length && now - PENDING_TEXTS[0].at > PENDING_WINDOW_MS) {
+    PENDING_TEXTS.shift();
+  }
+}
+function isPendingText(content) {
+  prunePending();
+  const norm = (content || "").trim();
+  return PENDING_TEXTS.some(p => p.content === norm);
+}
+function addPendingText(content) {
+  prunePending();
+  PENDING_TEXTS.push({ content: (content || "").trim(), at: Date.now() });
+}
+if (menuBtn) {
+  menuBtn.addEventListener("click", () => {
+    // 프론트 정적 페이지로 이동 (이 페이지에서 실제 POST는 백엔드 /reviews/create/<chat_room_id>/ 로 보냄)
+    const q = new URLSearchParams({
+      roomId: String(chatId),
+      userId: String(__OTHER_USER__?.id || ""),
+      name: __OTHER_USER__?.name || otherName
+    }).toString();
+    location.href = `../review/review-write.html?${q}`;
+  });
+}
 /* ------------------ 유틸 ------------------ */
 function resolveAvatar(url) {
-  if (!url) return "../assets/images/chat/profile_default.png";
+  if (!url) return DEFAULT_PROFILE_IMG;
   if (/^https?:\/\//i.test(url)) return url;
   if (url.startsWith("/")) return `${API_BASE}${url}`;
   return url;
@@ -61,6 +94,20 @@ function dataURLtoBlob(dataURL) {
   for (let i = 0; i < len; i++) buf[i] = bin.charCodeAt(i);
   return new Blob([buf], { type: mime });
 }
+function notifyListUpdate(payload) {
+  try {
+    window.dispatchEvent(new CustomEvent("chat:room-updated", {
+      detail: {
+        roomId: chatId,
+        content: payload.content || "",
+        created_at: payload.created_at || new Date().toISOString(),
+        // 리스트에서 비교할 때 username을 쓰고 있어서 username을 확실히 넣어줌
+        sender: { username: (window.__ME__?.username || CURRENT_USER) }
+      }
+    }));
+  } catch { }
+}
+
 async function compressImage(file, { maxDim = 1280, quality = 0.8 } = {}) {
   const img = await new Promise((res, rej) => {
     const i = new Image();
@@ -79,6 +126,7 @@ async function compressImage(file, { maxDim = 1280, quality = 0.8 } = {}) {
   const dataUrl = canvas.toDataURL('image/jpeg', quality);
   return { dataUrl, width: dw, height: dh, mime: 'image/jpeg' };
 }
+
 // 텍스트 메시지 영속 저장(REST)
 async function createTextMessage(chatroomId, content) {
   const form = new FormData();
@@ -272,6 +320,10 @@ async function loadMessages() {
 
     listEl.innerHTML = "";
     msgs.forEach(m => {
+      // 중복방지 키(가능하면 메시지 id가 가장 좋음)
+      const key = String(m.id ?? `${m.created_at}|${m.sender?.username}|${m.content || ""}|${m.image || ""}`);
+      SEEN_MSG_KEYS.add(key);
+
       renderMessage({
         message: m.content,
         sender: m.sender?.username || "unknown",
@@ -281,7 +333,12 @@ async function loadMessages() {
         imageUrl: m.image ? resolveMedia(m.image) : null,
       });
     });
-
+    // 마지막 기준점 기록
+    if (msgs.length) {
+      const last = msgs[msgs.length - 1];
+      LAST_SEEN_AT = last.created_at || new Date().toISOString();
+      LAST_SEEN_ID = last.id ?? null;
+    }
     // 읽음 처리
     await authedFetch(
       `/api/chat/chatrooms/${chatId}/mark_read/`,
@@ -370,7 +427,11 @@ async function sendImageFile(file) {
     // 2) 서버 업로드
     const msg = await sendImageOrTextViaREST({ fileOrBlob: blob, filename: file.name });
     const real = resolveMedia(msg.image);
-
+    // ... img/src 교체 코드 ...
+    notifyListUpdate({
+      content: "",          // 이미지는 미리보기 문구로 대체되므로 빈 문자열
+      created_at: msg?.created_at || new Date().toISOString()
+    });
     // 3) 같은 말풍선의 img/src/href만 교체 → 중복 렌더 방지
     const img = li.querySelector("img.img-msg");
     const a = li.querySelector("a.img-link");
@@ -383,15 +444,28 @@ async function sendImageFile(file) {
 
 /* ------------------ 번역/전송/WS ------------------ */
 async function sendText(text) {
+
+  const payload = {
+    // 서버 Consumer가 기대하는 키 이름
+    message: text,
+    sender_id: window.__ME__?.id,   // 아래 3) 참고. 로그인 후 내 id 보관
+    translated_content: null
+  };
   // 1) 실시간 전파(WS가 열려 있으면)
   if (ws && wsReady && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: "message", chatroom: chatId, content: text }));
+    ws.send(JSON.stringify(payload));
+  } else {
+    await sendImageOrTextViaREST({ text });
   }
 
   // 2) 영속 저장(항상 시도)  ← 핵심!
   //    실패해도 UI는 유지하지만 콘솔에 오류 출력
   try {
     const saved = await createTextMessage(chatId, text);
+    notifyListUpdate({
+      content: text,
+      created_at: saved?.created_at || new Date().toISOString()
+    });
     // 원하면 낙관렌더 말풍선의 meta를 서버 시간으로 업데이트 가능:
     // 마지막 말풍선 찾아 시간 교체 등 (선택)
   } catch (e) {
@@ -406,14 +480,17 @@ function sendCurrentInput() {
     renderSystem("대화를 수락하면 메시지를 보낼 수 있어요.");
     return;
   }
-
+  // 방금 보낸 텍스트 기억 (중복 렌더 억제용)
+  addPendingText(text);
   // 낙관 렌더: 바로 말풍선 그리기 (내 메시지도 번역 토글됨)
-  renderMessage({
+  const li = renderMessage({
     message: text,
     sender: CURRENT_USER,
     timestamp: new Date().toISOString(),
   });
-
+  // 중복 방지 키 선등록 (id는 아직 없으니 time+sender+content 사용)
+  const key = `${new Date().toISOString()}|${CURRENT_USER}|${text}`;
+  SEEN_MSG_KEYS.add(key);
   // 실시간 전송 + DB 저장
   sendText(text);
 
@@ -439,23 +516,38 @@ function connectWS() {
     if (!evt.data) return;
     let data; try { data = JSON.parse(evt.data); } catch { return; }
 
-    if (data.type === "message" || data.type === "chat.message") {
+    if (data.type === "message" || data.type === "chat.message" || data.type === "chat.image") {
+      // 내가 보낸 텍스트인지 검사 → 중복 차단
+      const mine = (data.sender?.username && data.sender.username === (window.__ME__?.username || CURRENT_USER));
+      if (mine && typeof data.content === "string" && isPendingText(data.content)) {
+        // 중복으로 보고 스킵 (원하면 마지막 말풍선 meta만 갱신 가능)
+        return;
+      }
       renderMessage({
         message: data.content,
         sender: data.sender?.username || "unknown",
         timestamp: data.created_at || new Date().toISOString(),
         avatar: data.sender?.profile_image,
         translatedHint: data.translated_content || "",
+        imageUrl: data.image || null
       });
       return;
     }
 
-    if (data.type === "chat.image" && data.image) {
+    // ② 당신의 Consumer 형태(type 없음, sender=숫자, message/timestamp)
+    if (typeof data.message !== "undefined" || typeof data.image !== "undefined") {
+      const isImage = !!data.image;
+      const mine = String(data.sender) === String(window.__ME__?.id);
+      if (mine && !isImage && typeof data.message === "string" && isPendingText(data.message)) {
+        return; // 중복 스킵
+      }
       renderMessage({
-        sender: data.sender?.username || "unknown",
-        timestamp: data.created_at || new Date().toISOString(),
-        avatar: data.sender?.profile_image,
-        imageUrl: data.image, // 서버가 절대/상대 경로 중 뭐든 오면 renderMessage에서 보정
+        message: isImage ? "" : (data.message || ""),
+        sender: (String(data.sender) === String(window.__ME__?.id)) ? window.__ME__?.username : "other",
+        timestamp: data.timestamp,
+        avatar: null, // 필요하면 캐시해둔 상대 프로필 URL 주입
+        translatedHint: data.translated_content || "",
+        imageUrl: isImage ? data.image : null,
       });
       return;
     }
@@ -503,7 +595,8 @@ async function declineRoom() {
       ids.add(Number(chatId));
       localStorage.setItem(key, JSON.stringify([...ids]));
     } catch { }
-    location.href = `../chat/chat-list.html?ts=${Date.now()}`;
+    const reviewUrl = `../review/review-write.html?roomId=${roomId}&name=${encodeURIComponent(otherName)}`;
+    location.href = reviewUrl;
   }
 }
 
@@ -511,10 +604,20 @@ async function declineRoom() {
 onReady(async () => {
   setTitleAndBannerName();
   await loginWithSession(TEST_USER.username, TEST_USER.password, API_BASE);
-
+  try {
+    window.__ME__ = await fetchMe(API_BASE);   // { id, username, ...}
+  } catch { window.__ME__ = { id: null, username: TEST_USER.username }; }
   // 방 상태
   let state = { exists: false, is_active: false, iAmRequester: false, iAmReceiver: false };
-  try { state = await fetchRoomState(chatId); } catch { }
+  try {
+    state = await fetchRoomState(chatId);
+    if (state?.room?.other_participant) {
+      __OTHER_USER__ = {
+        id: state.room.other_participant.id,
+        name: state.room.other_participant.username || state.room.other_participant.real_name || "상대"
+      };
+    }
+  } catch { }
 
   // 메시지 로드
   let msgCount = 0;
@@ -584,7 +687,76 @@ onReady(async () => {
 
   // WebSocket 연결
   connectWS();
+  // --- Polling start (채팅방) ---
+  if (!__roomPollTimer__) {
+    __roomPollTimer__ = setInterval(pollRoomMessages, 500);
+  }
 });
 
 /* ------------------ 시스템 메시지 도우미 ------------------ */
 function renderSystem(text) { renderMessage({ message: text, sender: "system", timestamp: Date.now() }); }
+// 페이지 떠날 때 폴링 정지
+window.addEventListener("beforeunload", () => {
+  if (__roomPollTimer__) { clearInterval(__roomPollTimer__); __roomPollTimer__ = null; }
+});
+
+// 탭 가시성에 따라 일시정지/재개
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    if (__roomPollTimer__) { clearInterval(__roomPollTimer__); __roomPollTimer__ = null; }
+  } else {
+    if (!__roomPollTimer__) __roomPollTimer__ = setInterval(pollRoomMessages, 1500);
+  }
+});
+async function pollRoomMessages() {
+  try {
+    const res = await authedFetch(
+      `/api/chat/messages/?chatroom=${chatId}`,
+      { method: "GET" },
+      API_BASE
+    );
+    if (!res.ok) return; // 조용히 패스
+    const msgs = await res.json();
+    if (!Array.isArray(msgs) || msgs.length === 0) return;
+
+    // 기준점 이후만 뽑기
+    const newer = msgs.filter(m => {
+      // 1) id 비교가 가능하면 id 우선
+      if (LAST_SEEN_ID != null && m.id != null) return Number(m.id) > Number(LAST_SEEN_ID);
+      // 2) 아니면 created_at 비교
+      if (LAST_SEEN_AT) return new Date(m.created_at) > new Date(LAST_SEEN_AT);
+      return true;
+    });
+
+    if (!newer.length) return;
+
+    // 시간 순서대로 오래된 것부터 렌더
+    newer.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    for (const m of newer) {
+      const key = String(m.id ?? `${m.created_at}|${m.sender?.username}|${m.content || ""}|${m.image || ""}`);
+      if (SEEN_MSG_KEYS.has(key)) continue; // 이미 렌더한 건 스킵(WS/낙관렌더 중복 방지)
+      SEEN_MSG_KEYS.add(key);
+      // 내가 보낸 텍스트면 중복 스킵
+      const mine = (m.sender?.username && m.sender.username === (window.__ME__?.username || CURRENT_USER));
+      if (mine && typeof m.content === "string" && isPendingText(m.content)) {
+        continue;
+      }
+      renderMessage({
+        message: m.content,
+        sender: m.sender?.username || "unknown",
+        timestamp: m.created_at,
+        avatar: m.sender?.profile_image,
+        translatedHint: m.translated_content || "",
+        imageUrl: m.image ? resolveMedia(m.image) : null,
+      });
+
+      // 기준점 업데이트
+      LAST_SEEN_AT = m.created_at || LAST_SEEN_AT;
+      LAST_SEEN_ID = m.id ?? LAST_SEEN_ID;
+    }
+  } catch (_) {
+    // 네트워크 에러는 조용히 무시
+  }
+}
+
