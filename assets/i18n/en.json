@@ -13,7 +13,7 @@
 
   "_comment2": "✅ 로그인/회원가입에서 회원가입 번역 ✅",
   "join": "Sign up",
-  "first_join": "Already a member?",
+  "first_join_q": "Already have an account?",
   "go_login": "Go to login",
   "name": "Name",
   "real_name": "Full name",

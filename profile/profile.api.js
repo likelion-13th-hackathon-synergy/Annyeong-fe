@@ -1,6 +1,6 @@
 import { BASE_URL } from "../common/config.js";
-import { httpJWT } from "../common/http-jwt.js"; // 앞서 만든 로그인용 유틸 재사용
-import { startStatusbarClock } from "../assets/js/statusbar-time.js";
+import { httpJWT } from "../common/http-jwt.js";
+import { startStatusbarClock } from "/Annyeong-fe/assets/js/statusbar-time.js";
 
 // 상태바 시계 시작(있을 때만)
 if (typeof startStatusbarClock === "function") startStatusbarClock();
@@ -127,12 +127,18 @@ $submitBtn?.addEventListener("click", async () => {
 });
 
 // Google 계정 연결 (allauth 기준 예시)
-$googleBtn?.addEventListener("click", () => {
-  // 로그인 후 돌아올 곳(프론트 경로)은 서비스에 맞게 변경
-  const next = encodeURIComponent("/home/home.html");
-  // 백엔드가 /accounts/google/login/ 열려 있어야 함
-  location.href = `${BASE_URL}/accounts/google/login/?process=connect&next=${next}`;
+const googleBtn = document.getElementById("googleConnectBtn");
+googleBtn?.addEventListener("click", () => {
+  // 로그인 완료 후 백엔드의 성공 페이지에서 FE로 다시 보내기
+  // (백엔드에 /oauth/success/ 뷰를 만들었거나 LOGIN_REDIRECT_URL로 설정했다는 가정)
+  const next = encodeURIComponent("/oauth/success/");
+  // 세션 로그인 여부와 무관하게 가장 안전한 건 'login'
+  const process = "login"; // (세션이 이미 있다면 'connect'도 가능)
+  window.location.assign(
+    `${BASE_URL}/accounts/google/login/?process=${process}&next=${next}`
+  );
 });
 
 // --- 초기화 ---
 loadProfile();
+
