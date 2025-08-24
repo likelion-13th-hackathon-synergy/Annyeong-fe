@@ -1,48 +1,65 @@
-// i18n.js
-export async function setLanguage(lang) {
-    try {
-        const response = await fetch(`../assets/i18n/${lang}.json`);
-        if (!response.ok) throw new Error(`Failed to load ${lang}.json`);
+// assets/js/i18n.js
+const STORE_KEY = "preferredLang";
+const SUPPORTED = ["ko", "en"];
+// 사전 폴더를 모듈 기준으로 안전하게 계산 (페이지 경로와 무관)
+const DICT_BASE = new URL("../i18n/", import.meta.url).href;
 
-        const langData = await response.json();
-        document.querySelectorAll('[data-i18n-key]').forEach(el => {
-            const key = el.getAttribute('data-i18n-key');
-            const text = langData[key];
-            if (text) {
-                if (el.tagName === 'IMG') {
-                    el.alt = text;
-                } else if (el.placeholder !== undefined) {
-                    el.placeholder = text;
-                } else {
-                    el.textContent = text;
-                }
-            }
-        });
-    } catch (err) {
-        console.error("다국어 파일 로딩 오류:", err);
+let current = null;
+const cache = {};  // 언어별 JSON 캐시
+
+function detect() {
+  const nav = (navigator.language || "en").slice(0, 2);
+  return SUPPORTED.includes(nav) ? nav : "en";
+}
+
+export function getLang() {
+  return current || localStorage.getItem(STORE_KEY) || detect();
+}
+
+export async function initI18n() {
+  const saved = localStorage.getItem(STORE_KEY);
+  const initial = saved && SUPPORTED.includes(saved) ? saved : detect();
+  await setLanguage(initial, { persist: false });
+}
+
+export async function toggleLang() {
+  const next = getLang() === "ko" ? "en" : "ko";
+  await setLanguage(next);
+  return next;
+}
+
+export async function setLanguage(lang, { persist = true } = {}) {
+  if (!SUPPORTED.includes(lang)) lang = "en";
+  if (persist) localStorage.setItem(STORE_KEY, lang);
+  current = lang;
+
+  if (!cache[lang]) {
+    const res = await fetch(`${DICT_BASE}${lang}.json`, { cache: "no-store" });
+    cache[lang] = res.ok ? await res.json() : {};
+  }
+  document.documentElement.lang = lang;
+  applyTranslations(cache[lang]);
+}
+
+export function applyTranslations(dict, root = document) {
+  root.querySelectorAll("[data-i18n-key]").forEach(el => {
+    const key = el.getAttribute("data-i18n-key");
+    const val = dict[key];
+    if (val == null) return;
+
+    // 특정 속성에 넣고 싶으면 data-i18n-attr="placeholder|title|aria-label" 등
+    const targetAttr = el.getAttribute("data-i18n-attr");
+    if (targetAttr) {
+      el.setAttribute(targetAttr, val);
+      return;
     }
+
+    if ((el.tagName === "INPUT" || el.tagName === "TEXTAREA") && "placeholder" in el) {
+      el.placeholder = val;
+    } else if (el.tagName === "IMG") {
+      el.alt = val;
+    } else {
+      el.textContent = val;
+    }
+  });
 }
-
-// 드롭다운 연결 및 초기 언어 적용까지 통합
-export function initI18n() {
-    const supportedLangs = ['ko', 'en'];
-    const savedLang = localStorage.getItem('preferredLang');
-    const initialLang = (savedLang && supportedLangs.includes(savedLang)) 
-                        ? savedLang 
-                        : (navigator.language.slice(0,2) || 'en');
-
-    setLanguage(initialLang);
-
-    const langSelect = document.getElementById('lang-select');
-    if (!langSelect) return; // 드롭다운 없는 페이지는 그냥 종료
-
-    langSelect.value = initialLang;
-    langSelect.addEventListener('change', () => {
-        const selectedLang = langSelect.value;
-        setLanguage(selectedLang);
-        localStorage.setItem('preferredLang', selectedLang);
-    });
-}
-
-// DOMContentLoaded까지 포함
-document.addEventListener('DOMContentLoaded', initI18n);

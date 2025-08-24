@@ -93,20 +93,20 @@
   </main>
 
   <script type="module">
-    import { initI18n, cycleLang, getLang } from "../assets/js/i18n.js";
+    import { initI18n, toggleLang, getLang } from "../assets/js/i18n.js";
   
-    // 현재 언어 적용
     await initI18n();
   
-    // 아이콘 클릭 → ko/en 토글
     const langBtn = document.querySelector(".top-right-icon");
-    langBtn?.addEventListener("click", () => {
-      cycleLang(["ko", "en"]);
-      // (선택) 보조 접근성: 라벨도 현재 언어로 업데이트
-      const cur = getLang();
-      langBtn.setAttribute("aria-label", cur === "ko" ? "언어 설정: 한국어" : "Language: English");
+    langBtn?.addEventListener("click", async () => {
+      const cur = await toggleLang();  // ko ↔ en
+      langBtn.setAttribute(
+        "aria-label",
+        cur === "ko" ? "언어 설정: 한국어" : "Language: English"
+      );
     });
   </script>
+  
 
   <script type="module" src="./login.api.js"></script>
   
