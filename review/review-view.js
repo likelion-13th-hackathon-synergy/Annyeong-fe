@@ -1,46 +1,45 @@
-// review-view.js
 // - 자동 로그인 → /reviews/user/:id 로드
 // - 상단 이름: 응답 username, 없으면 쿼리 name, 없으면 숫자 user_id
 // - strong-text = total_personality_selections, gray-text = total_reviews
 
 import { API_BASE, TEST_USER } from "../common/config.js";
 import { loginWithSession, authedFetch } from "../common/auth.js";
+import { getLang, setLanguage } from "/assets/js/i18n.js";
 
 const qs = new URLSearchParams(location.search);
 const TARGET_USER_ID = Number(qs.get("user_id"));     // 필수
 const ROOM_ID = qs.get("roomId");                     // 선택(되돌아가기 등에 사용)
 const PRESET_NAME = decodeURIComponent(qs.get("name") || "");
 
-const EMOJI = {
-  personalities_1: "👂",
-  personalities_2: "🤩",
-  personalities_3: "😆",
-  personalities_4: "🌟",
-  personalities_5: "🤗",
-  personalities_6: "😇",
-  personalities_7: "🎓",
-  personalities_8: "🧐",
-  personalities_9: "🤭",
-  personalities_10: "✅",
-  personalities_11: "🏃",
-  personalities_12: "🔒",
-};
 
+const KEY_TO_I18N = {
+  personalities_1: "good_listener",
+  personalities_2: "good_humor",
+  personalities_3: "fun_talk",
+  personalities_4: "positive_mindset",
+  personalities_5: "friendly_warm",
+  personalities_6: "thoughtful_caring",
+  personalities_7: "knowledgeable",
+  personalities_8: "curious",
+  personalities_9: "understanding",
+  personalities_10:"honest_sincere",
+  personalities_11:"active_energetic",
+  personalities_12:"trustworthy",
+};
 function setName(usernameLike) {
   const nameSlot =
-    document.querySelector(".review-w-title .who-name") ||
-    document.querySelector(".review-w-title .strong-text-name") ||
-    document.querySelector(".review-w-title .strong-text");
-  if (nameSlot) nameSlot.textContent = `‘ ${usernameLike} ’님`;
+    document.querySelector(".review-w-title #strong-text") ||
+    document.querySelector(".review-w-title .strong-text-name");
+  if (nameSlot) nameSlot.textContent = `‘ ${usernameLike} ’`;
 }
 
 function renderHeaderCounts({ total_reviews = 0, total_personality_selections = 0 }) {
-  const strongs = document.querySelectorAll(".strong-text");
+  const strongs = document.querySelectorAll("selected-num .strong-text");
   const strongCount = strongs[1] || strongs[0]; // 안전장치
-  const gray = document.querySelector(".gray-text");
+  const gray = document.querySelector(".selected-num .gray-text");
 
-  if (strongCount) strongCount.textContent = `✔ ${Number(total_personality_selections)}회`;
-  if (gray) gray.textContent = ` ${Number(total_reviews)}회 참여`;
+  if (strongCount) strongCount.textContent = `✔ ${Number(total_personality_selections)}`;
+  if (gray) gray.textContent = ` ${Number(total_reviews)}`;
 }
 
 function normalizeItems(data) {
@@ -49,7 +48,7 @@ function normalizeItems(data) {
     const key = Object.keys(row).find((k) => k.startsWith("personalities_"));
     const label = key ? row[key] : "";
     const count = Number(row.count || 0);
-    return { key, label, count, emoji: EMOJI[key] || "✨" };
+    return { key, label, count};
   });
 }
 
@@ -69,9 +68,21 @@ function renderList(items) {
 
   items.forEach((it) => {
     const li = document.createElement("li");
+
+    
+
+    // 번역 텍스트
     const labelSpan = document.createElement("span");
     labelSpan.className = "review-label";
-    labelSpan.textContent = `${it.emoji} "${it.label}"`;
+    const i18nKey = KEY_TO_I18N[it.key] || null;
+    if (i18nKey) {
+      labelSpan.setAttribute("data-i18n-key", i18nKey);
+      // 기본 텍스트(한국어)를 넣어두고, 아래에서 언어 재적용 시 교체됨
+      labelSpan.textContent = `"${it.label}"`;
+    } else {
+      // 키 없으면 그대로 출력
+      labelSpan.textContent = `"${it.label}"`;
+    }
 
     const countSpan = document.createElement("span");
     countSpan.className = "review-count";
@@ -80,10 +91,14 @@ function renderList(items) {
     const pct = (it.count / max) * 85;
     li.style.setProperty("--w", pct + "%");
 
+    li.appendChild(document.createTextNode(" "));
     li.appendChild(labelSpan);
     li.appendChild(countSpan);
     listEl.appendChild(li);
   });
+
+  // 동적 DOM에 번역 다시 적용
+  setLanguage(getLang(), { persist: false });
 }
 
 async function init() {

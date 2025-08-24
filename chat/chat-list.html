@@ -15,6 +15,10 @@
       <div class="app-wrapper">
         <div class="chatli-container">
           <div class="chatli-header">
+            <select id="lang-select">
+              <option value="ko">한국어</option>
+              <option value="en">English</option>
+            </select>
             <div class="header-logo">
               <button
                 id="main-logo-btn"
@@ -90,22 +94,14 @@
     <!-- 폴더 구조에 맞춰 경로 수정 -->
     <script type="module" src="../chat/chat-list.js"></script>
     <script type="module">
-      import {
-        initI18n,
-        getLang,
-        setLanguage,
-        startStatusbarClock,
-      } from "/assets/js/i18n.js";
+      import { initI18n, getLang, setLanguage } from "/assets/js/i18n.js";
 
+      // 1) 페이지 로드 시 현재 선택 언어로 번역 적용
       initI18n();
 
-      startStatusbarClock({
-        selector: ".sb-time",
-        hour12: false,
-        locale: "ko-KR",
-      });
       window.addEventListener("storage", (e) => {
         if (e.key === "preferredLang" && e.newValue) {
+          // 이미 캐시에 사전이 있으니 빠르게 재적용됨
           setLanguage(e.newValue, { persist: false });
         }
       });
