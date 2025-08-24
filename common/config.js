@@ -13,6 +13,10 @@ export const TEST_USERS = {
   a: { username: "testuser3", password: "testpassword" },
   b: { username: "testuser4", password: "testpassword" },
 };
+export const TEST_ACCOUNTS = {
+  a: { username: "testuser3", password: "testpassword" },
+  b: { username: "testuser4", password: "testpassword" },
+};
 
 // 현재 페이지 URL에서 ?as=a 또는 ?as=b 읽기 (기본값 a)
 const as = new URLSearchParams(location.search).get("as") || "a";

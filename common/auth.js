@@ -77,3 +77,24 @@ export async function authedFetch(path, init = {}, base) {
   console.log("[authedFetch] ←", res.status, res.statusText, url);
   return res;
 }
+
+export async function fetchMe(apiBase) {
+  const res = await fetch(`${apiBase}/users/profile/`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("not authed");
+  return await res.json(); // { id, username, ... }
+}
+
+// 이미 로그인되어 있으면 그 세션을 사용, 아니면 TEST_USER로 로그인
+export async function ensureAuth(testUser, apiBase) {
+  try {
+    const me = await fetchMe(apiBase);
+    return me; // 기존 세션 유지
+  } catch {
+    // 세션 없을 때만 테스트 계정 로그인
+    await loginWithSession(testUser.username, testUser.password, apiBase);
+    return await fetchMe(apiBase);
+  }
+}
