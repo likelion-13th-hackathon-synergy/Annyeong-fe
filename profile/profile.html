@@ -10,7 +10,7 @@
   <main class="phone">
     <!-- 상태바 -->
     <header class="statusbar" role="banner">
-      <span class="sb-time">9:41</span>
+      <span class="sb-time" aria-label="현재 시각"></span>
       <div class="sb-icons" aria-hidden="true">
         <img src="../assets/images/cellular.svg" alt="">
         <img src="../assets/images/wifi.svg" alt="">
@@ -33,9 +33,9 @@
             <!-- 필요하면 알림 점 -->
             <!-- <span class="dot" aria-hidden="true"></span> -->
           </button>
-          <button type="button" class="icon-btn" id="btnProfile" aria-label="내 프로필">
+          <a href="../chat/chat-list.html" class="icon-btn" id="btnProfile" aria-label="내 프로필">
             <img src="../assets/icons/message.svg" alt="" aria-hidden="true">
-          </button>
+          </a>
         </div>
       </div>
 
@@ -216,167 +216,8 @@
     </form>
 
 
-    <script type="module">
-  const BASE = "http://127.0.0.1:8000";   // 장고 서버 주소
-  const PROFILE_URL = `${BASE}/users/profile/`;
-  const CSRF_URL    = `${BASE}/users/csrf/`;
-  const GOOGLE_LOGIN_URL = `${BASE}/users/google/login/`;
+<script type="module" src="./profile.api.js"></script>
 
-  // select의 라벨 텍스트 얻기
-  const optText = (sel) => (sel.options[sel.selectedIndex] || {}).text || '';
-
-  // --- CSRF 유틸 ---
-  let CSRF_TOKEN = null;
-
-  function getCookie(name) {
-    const v = `; ${document.cookie}`;
-    const p = v.split(`; ${name}=`);
-    if (p.length === 2) return p.pop().split(";").shift();
-  }
-
-  // CSRF 토큰을 JSON({csrfToken})로 받되, 실패하면 쿠키로 폴백
-  async function ensureCsrf() {
-    if (CSRF_TOKEN) return CSRF_TOKEN;
-    try {
-      const res = await fetch(CSRF_URL, { credentials: "include" });
-      let token = "";
-      try {
-        const data = await res.json();
-        token = data?.csrfToken || "";
-      } catch {
-        // JSON 아닐 수 있음 → 쿠키 폴백
-      }
-      CSRF_TOKEN = token || getCookie("csrftoken") || "";
-    } catch (e) {
-      console.warn("CSRF fetch failed:", e);
-      CSRF_TOKEN = getCookie("csrftoken") || "";
-    }
-    return CSRF_TOKEN;
-  }
-
-  // --- 미리보기용 데이터 수집 ---
-  function collectPreviewData() {
-    const countrySel = document.getElementById('country');
-    const langSel    = document.getElementById('lang');
-    const transSel   = document.getElementById('trans');
-
-    return {
-      real_name: document.getElementById('real_name').value.trim(),
-      age: document.getElementById('age').value.trim(),
-      nationality: countrySel.value,
-      nationality_label: optText(countrySel),
-      city: document.getElementById('sido').value.trim(),
-      service_language: langSel.value,
-      service_language_label: optText(langSel),
-      translation_category: transSel.value,
-      translation_category_label: optText(transSel),
-      introduction: document.getElementById('bio').value.trim(),
-      google_verified: (document.querySelector('.badge-img')?.style.display || '') !== 'none'
-    };
-  }
-
-  // --- 프로필 불러오기 ---
-  async function loadProfile() {
-    const res = await fetch(PROFILE_URL, { credentials: "include" });
-    if (!res.ok) {
-      console.warn("프로필 불러오기 실패:", await res.text());
-      return;
-    }
-    const me = await res.json();
-
-    document.getElementById("real_name").value = me.real_name || "";
-    document.getElementById("age").value       = me.age || "";
-    document.getElementById("country").value   = me.nationality || "";
-    document.getElementById("sido").value      = me.city || "";
-    document.getElementById("lang").value      = me.service_language || "";
-    document.getElementById("trans").value     = me.translation_category || "";
-    document.getElementById("bio").value       = me.introduction || "";
-
-    document.querySelector(".badge-img").style.display = me.google_verified ? "block" : "none";
-  }
-
-  // --- 저장하기(성공=true/실패=false 반환만) ---
-  async function saveProfile() {
-    await ensureCsrf();
-    const body = {
-      real_name: document.getElementById("real_name").value || "",
-      age: String(document.getElementById("age").value || ""),
-      nationality: document.getElementById("country").value || null,
-      city: document.getElementById("sido").value || "",
-      service_language: document.getElementById("lang").value || null,
-      translation_category: document.getElementById("trans").value || null,
-      introduction: document.getElementById("bio").value || "",
-    };
-
-    try {
-      const res = await fetch(PROFILE_URL, {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": CSRF_TOKEN || "",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!res.ok) {
-        const msg = await res.text();
-        alert("저장 실패: " + msg);
-        return false;
-      }
-
-      // (선택) 캐시 갱신
-      const draft = collectPreviewData();
-      sessionStorage.setItem("preview_profile", JSON.stringify(draft));
-      localStorage.setItem("profile_cache", JSON.stringify(draft));
-
-      return true;
-    } catch (e) {
-      console.error(e);
-      alert("네트워크 오류로 저장에 실패했습니다.");
-      return false;
-    }
-  }
-
-  // --- 이벤트 바인딩 ---
-  // 미리보기: 값 저장 → 이동
-  document.getElementById("previewBtn").addEventListener("click", () => {
-    const draft = collectPreviewData();
-    sessionStorage.setItem("preview_profile", JSON.stringify(draft));
-    window.location.href = "pre.html";
-  });
-
-  // 완료: 저장 성공 시 홈으로 이동
-  document.getElementById("submitBtn").addEventListener("click", async () => {
-    const ok = await saveProfile();
-    if (ok) window.location.href = "../home/home.html";
-  });
-
-  // 구글 연결
-  document.getElementById("googleConnectBtn").addEventListener("click", async () => {
-    try {
-      await ensureCsrf();
-      const res = await fetch(GOOGLE_LOGIN_URL, { credentials: "include" });
-      if (res.status === 401) {
-        alert("로그인이 필요합니다. 먼저 로그인해 주세요.");
-        return;
-      }
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && data.redirect_url) {
-        window.location.href = data.redirect_url;
-      } else {
-        alert(data.detail || "구글 인증 URL 생성에 실패했습니다.");
-      }
-    } catch (e) {
-      console.error(e);
-      alert("구글 인증 처리 중 오류가 발생했습니다.");
-    }
-  });
-
-  // --- 초기화 ---
-  await ensureCsrf();
-  await loadProfile();
-</script>
 
       
   </main>
