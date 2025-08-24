@@ -10,7 +10,7 @@
   <main class="phone">
     <!-- 상태바 -->
     <header class="statusbar" role="banner">
-      <span class="sb-time">9:41</span>
+      <span class="sb-time"></span>
       <div class="sb-icons" aria-hidden="true">
         <img src="../assets/images/cellular.svg" alt="">
         <img src="../assets/images/wifi.svg" alt="">
@@ -23,12 +23,7 @@
       <div class="brand">
         <img src="../assets/icons/logo.svg" alt="안녕 로고">
       </div>
-      <button type="button" class="role-select" aria-label="역할 선택">
-        서포터즈
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+      
     </div>
 
     <!-- 온보딩 슬라이드 -->
@@ -85,7 +80,11 @@
   </main>
 
   <!-- JS: 스와이프/도트/드래그 -->
-  <script>
+  <script type="module">
+
+  import { startStatusbarClock } from "../assets/js/statusbar-time.js";
+  startStatusbarClock({ hour12: false, locale: "ko-KR" });
+
     const carousel = document.getElementById('carousel');
     const slides   = [...carousel.querySelectorAll('.slide')];
     const dots     = [...document.querySelectorAll('.dot')];
