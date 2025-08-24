@@ -220,7 +220,11 @@
       </section>
     </form>
 
-
+    <script>
+        if (location.hostname === '127.0.0.1') {
+          const u = new URL(location.href); u.hostname = 'localhost'; location.replace(u);
+        }
+      </script>
 <script type="module" src="./profile.api.js"></script>
 <script type="module">
     import { initI18n, toggleLang, getLang } from "../assets/js/i18n.js";

@@ -1,6 +1,7 @@
 // ===== 환경 =====
 const BASE_URL = "http://localhost:8000"; // 둘 다 localhost 또는 둘 다 127.0.0.1로 맞추기!
 
+<<<<<<< HEAD
 // ===== 공통 유틸 =====
 function getCookie(name) {
   const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
@@ -15,6 +16,15 @@ async function ensureCsrf() {
   if (!t) {
     await fetch(`${BASE_URL}/users/csrf/`, { method: "GET", credentials: "include" });
     t = getCookie("csrftoken");
+=======
+function getCookie(name){ const m=document.cookie.match(new RegExp("(^|; )"+name+"=([^;]*)")); return m?decodeURIComponent(m[2]):null; }
+function setMetaCsrf(v){ const meta=document.querySelector('meta[name="csrf-token"]'); if(meta) meta.setAttribute("content", v||""); }
+async function ensureCsrf(){
+  let t=getCookie("csrftoken");
+  if(!t){
+    await fetch(`${BASE_URL}/users/csrf/`, { method:"GET", credentials:"include" }); // ★
+    t=getCookie("csrftoken");
+>>>>>>> 2ade0fe (회원가입 수정)
   }
   setMetaCsrf(t);
   return t;
@@ -83,6 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+<<<<<<< HEAD
     try {
       // 1) 회원가입 (명세 준수)
       const signedUp = await httpSession("/users/signup/", {
@@ -97,6 +108,21 @@ document.addEventListener("DOMContentLoaded", async () => {
           // email,
         }),
       });
+=======
+    try{
+  
+        await httpSession("/users/signup/", {
+            method: "POST",
+            body: JSON.stringify({
+                username: email,                                  
+                real_name: name,
+                user_type: nation === "kr" ? "korean" : "foreigner",
+                password1: password,
+                password2: password2
+                
+            }),
+          });
+>>>>>>> 2ade0fe (회원가입 수정)
 
       // 2) 필요 시 로그인 (백엔드가 자동로그인 미지원일 때)
       // await httpSession("/users/login/", {
@@ -104,12 +130,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       //   body: JSON.stringify({ username: email, password: password1 }),
       // });
 
+<<<<<<< HEAD
       // 3) (옵션) 세션 확인용
       // await httpSession("/users/profile/");
 
       // 4) 이동
       window.location.href = "../profile/profile.html";
     } catch (err) {
+=======
+          const qs = new URLSearchParams(location.search);
+          const next = qs.get("next") || "/Annyeong-fe/profile/profile.html";
+          window.location.replace(next);
+    }catch(err){
+>>>>>>> 2ade0fe (회원가입 수정)
       console.error(err);
       alert(`회원가입 실패:\n${err.message}`);
     }
