@@ -53,11 +53,11 @@
           <div class="vb-head">
             <img class="g-logo" src="../assets/icons/google-g.svg" alt="">
             <div class="vb-texts">
-              <p class="vb-title">프로필 인증뱃지 <span class="badge" aria-label="인증됨">✔︎</span></p>
-              <p class="vb-sub">구글 계정 연동하면 인증뱃지를 받을 수 있어요!</p>
+              <p class="vb-title" data-i18n-key="badge">프로필 인증뱃지 <span class="badge" aria-label="인증됨">✔︎</span></p>
+              <p class="vb-sub" data-i18n-key="google_badge">구글 계정 연동하면 인증뱃지를 받을 수 있어요!</p>
             </div>
           </div>
-          <button type="button" class="btn-ghost" id="googleConnectBtn">소셜 로그인 연결하기</button>
+          <button type="button" class="btn-ghost" id="googleConnectBtn" data-i18n-key="google_connect">소셜 로그인 연결하기</button>
         </div>
 
         <!-- 아바타 -->
@@ -69,7 +69,7 @@
                 <img class="badge-img" src="../assets/images/verified-badge.svg" alt="인증됨">
               </span>
           </div>
-          <a href="#" class="edit-photo">사진 수정하기
+          <a href="#" class="edit-photo" data-i18n-key="image">사진 수정하기
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M3 21h6l12-12-6-6L3 15v6zM14 6l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -82,34 +82,34 @@
         <div class="card-body">
           <!-- 이름(표시) -->
           <div class="input-group">
-            <label for="real_name" class="input-label">이름</label>
+            <label for="real_name" class="input-label" data-i18n-key="name_profile">이름</label>
             <div class="field">
-              <input id="real_name" type="text" placeholder="이름을 입력해주세요." />
+              <input id="real_name" type="text" data-i18n-key="name_form" placeholder="이름을 입력해주세요." />
             </div>
           </div>
 
           <!-- 나이 -->
           <div class="input-group">
-            <label for="age" class="input-label">나이</label>
+            <label for="age" class="input-label" data-i18n-key="age">나이</label>
             <div class="field">
-              <input id="age" type="number" inputmode="numeric" placeholder="나이를 입력해주세요." min="1" />
+              <input id="age" type="number" inputmode="numeric" data-i18n-key="age_form" placeholder="나이를 입력해주세요." min="1" />
             </div>
           </div>
 
           <!-- 국가 -->
           <div class="input-group">
-            <label for="country" class="input-label">국가</label>
+            <label for="country" class="input-label" data-i18n-key="nation">국가</label>
             <div class="field select-field">
               <select id="country">
-                <option value="" selected>국가선택하기</option>
-                <option value="kr">대한민국</option>
-                <option value="jp">일본</option>
-                <option value="us">미국</option>
-                <option value="cn">중국</option>
-                <option value="vn">베트남</option>
-                <option value="th">태국</option>
-                <option value="ru">러시아</option>
-                <option value="tw">대만</option>
+                <option value="" data-i18n-key="nation_form" selected>국가선택하기</option>
+                <option value="kr" data-i18n-key="korea">대한민국</option>
+                <option value="jp" data-i18n-key="japan">일본</option>
+                <option value="us" data-i18n-key="usa">미국</option>
+                <option value="cn" data-i18n-key="china">중국</option>
+                <option value="vn" data-i18n-key="vietnam">베트남</option>
+                <option value="th" data-i18n-key="thailand">태국</option>
+                <option value="ru" data-i18n-key="russia">러시아</option>
+                <option value="tw" data-i18n-key="taiwan">대만</option>
               </select>
               <span class="caret" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -121,27 +121,27 @@
 
           <!-- 시/도 -->
 <div class="input-group">
-    <label for="sido" class="input-label">시/도</label>
+    <label for="sido" class="input-label" data-i18n-key="province">시/도</label>
     <div class="field select-field">
       <select id="sido">
-        <option value="" selected>시/도 선택하기</option>
-        <option value="서울특별시">서울특별시</option>
-        <option value="부산광역시">부산광역시</option>
-        <option value="대구광역시">대구광역시</option>
-        <option value="인천광역시">인천광역시</option>
-        <option value="광주광역시">광주광역시</option>
-        <option value="대전광역시">대전광역시</option>
-        <option value="울산광역시">울산광역시</option>
-        <option value="세종특별자치시">세종특별자치시</option>
-        <option value="경기도">경기도</option>
-        <option value="강원특별자치도">강원특별자치도</option>
-        <option value="충청북도">충청북도</option>
-        <option value="충청남도">충청남도</option>
-        <option value="전북특별자치도">전북특별자치도</option>
-        <option value="전라남도">전라남도</option>
-        <option value="경상북도">경상북도</option>
-        <option value="경상남도">경상남도</option>
-        <option value="제주특별자치도">제주특별자치도</option>
+        <option value="" data-i18n-key="select_province" selected>시/도 선택하기</option>
+        <option value="서울특별시" data-i18n-key="seoul">서울특별시</option>
+        <option value="부산광역시" data-i18n-key="busan">부산광역시</option>
+        <option value="대구광역시" data-i18n-key="daegu">대구광역시</option>
+        <option value="인천광역시" data-i18n-key="incheon">인천광역시</option>
+        <option value="광주광역시" data-i18n-key="gwangju">광주광역시</option>
+        <option value="대전광역시" data-i18n-key="daejeon">대전광역시</option>
+        <option value="울산광역시" data-i18n-key="ulsan">울산광역시</option>
+        <option value="세종특별자치시" data-i18n-key="sejong">세종특별자치시</option>
+        <option value="경기도" data-i18n-key="gyeonggi_do">경기도</option>
+        <option value="강원특별자치도" data-i18n-key="gangwon_special_autonomous_province">강원특별자치도</option>
+        <option value="충청북도" data-i18n-key="chungcheongbuk_do">충청북도</option>
+        <option value="충청남도" data-i18n-key="chungcheongnam_do">충청남도</option>
+        <option value="전북특별자치도" data-i18n-key="jeonbuk_special_autonomous_province">전북특별자치도</option>
+        <option value="전라남도" data-i18n-key="jeollanam_do">전라남도</option>
+        <option value="경상북도" data-i18n-key="gyeongsangbuk_do">경상북도</option>
+        <option value="경상남도" data-i18n-key="gyeongsangnam_do">경상남도</option>
+        <option value="제주특별자치도" data-i18n-key="jeju_special_autonomous_province">제주특별자치도</option>
       </select>
       <span class="caret" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
@@ -155,17 +155,17 @@
  
           <!-- 언어 -->
           <div class="input-group">
-            <label for="lang" class="input-label">언어</label>
+            <label for="lang" class="input-label" data-i18n-key="language">언어</label>
             <div class="field select-field">
               <select id="lang">
-                <option value="" selected>언어선택하기</option>
-                <option value="ko">한국어</option>
-                <option value="en">영어</option>
-                <option value="ja">일본어</option>
-                <option value="zh">중국어</option>
-                <option value="vi">베트남어</option>
-                <option value="th">태국어</option>
-                <option value="ru">러시아어</option>
+                <option value="" data-i18n-key="choice_language" selected>언어선택하기</option>
+                <option value="ko" data-i18n-key="korean">한국어</option>
+                <option value="en" data-i18n-key="english">영어</option>
+                <option value="ja" data-i18n-key="japanese">일본어</option>
+                <option value="zh" data-i18n-key="chinese">중국어</option>
+                <option value="vi" data-i18n-key="vietnamese">베트남어</option>
+                <option value="th" data-i18n-key="thai">태국어</option>
+                <option value="ru" data-i18n-key="russian">러시아어</option>
               </select>
               <span class="caret" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -177,17 +177,17 @@
 
           <!-- 번역 -->
           <div class="input-group">
-            <label for="trans" class="input-label">번역</label>
+            <label for="trans" class="input-label" data-i18n-key="translation">번역</label>
             <div class="field select-field">
               <select id="trans">
-                <option value="" selected>언어선택하기</option>
-                <option value="ko">한국어</option>
-                <option value="en">영어</option>
-                <option value="ja">일본어</option>
-                <option value="zh">중국어</option>
-                <option value="vi">베트남어</option>
-                <option value="th">태국어</option>
-                <option value="ru">러시아어</option>
+                <option value="" data-i18n-key="choice_language" selected>언어선택하기</option>
+                <option value="ko" data-i18n-key="korean">한국어</option>
+                <option value="en" data-i18n-key="english">영어</option>
+                <option value="ja" data-i18n-key="japanese">일본어</option>
+                <option value="zh" data-i18n-key="chinese">중국어</option>
+                <option value="vi" data-i18n-key="vietnamese">베트남어</option>
+                <option value="th" data-i18n-key="thai">태국어</option>
+                <option value="ru" data-i18n-key="russian">러시아어</option>
               </select>
               <span class="caret" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -199,16 +199,16 @@
 
           <!-- 소개글 -->
           <div class="input-group">
-            <label for="bio" class="input-label">소개글</label>
+            <label for="bio" class="input-label" data-i18n-key="introduce">소개글</label>
             <div class="textarea-field">
-              <textarea id="bio" rows="3" placeholder='"13기 아기사자예요. 친구들과 언어교환하며 공부하고 싶어요! 📚"'></textarea>
+              <textarea id="bio" rows="3" data-i18n-key="likelion" placeholder='"13기 아기사자예요. 친구들과 언어교환하며 공부하고 싶어요! 📚"'></textarea>
             </div>
           </div>
 
           <!-- 버튼 -->
           <div class="btn-row">
-            <button type="button" class="btn-primary" id="previewBtn">미리보기</button>
-            <button type="button" class="btn-primary" id="submitBtn">완료</button>
+            <button type="button" class="btn-primary" id="previewBtn" data-i18n-key="preview_profile">미리보기</button>
+            <button type="button" class="btn-primary" id="submitBtn" data-i18n-key="end_profile">완료</button>
           </div>
           
         </div>
@@ -217,6 +217,7 @@
 
 
 <script type="module" src="./profile.api.js"></script>
+<script type="module" src="../assets/js/i18n.js"></script>
 
 
       

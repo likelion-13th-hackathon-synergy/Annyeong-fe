@@ -32,10 +32,10 @@
     </div>
 
     <!-- 타이틀 -->
-    <h1 class="title">회원가입</h1>
-    <p class="subtitle">
+    <h1 class="title" data-i18n-key="join">회원가입</h1>
+    <p class="subtitle" data-i18n-key="first_join">
       이미 회원이신가요?
-      <a href="login.html" class="link">로그인하러가기</a>
+      <a href="login.html" class="link" data-i18n-key="go_login">로그인하러가기</a>
     </p>
 
     <!-- 폼 -->
@@ -43,7 +43,7 @@
       <!-- 이름 / 국적 -->
       <div class="row-2">
         <div class="input-group">
-          <label for="name" class="input-label">이름</label>
+          <label for="name" class="input-label" data-i18n-key="name">이름</label>
           <div class="field">
             <span class="icon" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -51,16 +51,16 @@
                 <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input id="name" type="text" placeholder="실명" required />
+            <input id="name" type="text" data-i18n-key="real_name" placeholder="실명" required />
           </div>
         </div>
 
         <div class="input-group">
-          <label for="nation" class="input-label">내국인</label>
+          <label for="nation" class="input-label" data-i18n-key="local">내국인</label>
           <div class="field select-field">
             <select id="nation" aria-label="국적 선택">
-              <option value="kr" selected>내국인</option>
-              <option value="foreigner">외국인</option>
+              <option value="kr" data-i18n-key="local" selected>내국인</option>
+              <option value="foreigner" data-i18n-key="foreigner">외국인</option>
             </select>
             <span class="caret" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -73,7 +73,7 @@
 
       <!-- 이메일 -->
       <div class="input-group">
-        <label for="email" class="input-label">이메일</label>
+        <label for="email" class="input-label" data-i18n-key="your_email">이메일</label>
         <div class="field">
           <span class="icon" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -87,7 +87,7 @@
 
       <!-- 비밀번호 -->
       <div class="input-group">
-        <label for="pw" class="input-label">비밀번호</label>
+        <label for="pw" class="input-label" data-i18n-key="your_password">비밀번호</label>
         <div class="field">
           <span class="icon" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -96,17 +96,17 @@
             </svg>
           </span>
           <!-- 특수문자 1개 이상 + 6자 이상 -->
-          <input id="pw" type="password"
+          <input id="pw" type="password" data-i18n-key="six"
                  placeholder="특수문자 포함 6자리"
                  autocomplete="new-password"
                  required />
         </div>
-        <p class="form-hint ok" id="pw-hint-ok">😊 사용할 수 있는 비밀번호 입니다.</p>
+        <p class="form-hint ok" id="pw-hint-ok" data-i18n-key="password_ok">😊 사용할 수 있는 비밀번호 입니다.</p>
       </div>
 
       <!-- 비밀번호 확인 -->
       <div class="input-group">
-        <label for="pw2" class="input-label">비밀번호 확인</label>
+        <label for="pw2" class="input-label" data-i18n-key="password_check">비밀번호 확인</label>
         <div class="field">
           <span class="icon" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -114,12 +114,12 @@
               <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
           </span>
-          <input id="pw2" type="password"
+          <input id="pw2" type="password" data-i18n-key="password_again"
                  placeholder="비밀번호를 다시 입력해주세요"
                  autocomplete="new-password"
                  required />
         </div>
-        <p class="form-hint err" id="pw2-hint-err">🙅‍♀️ 비밀번호가 틀립니다.</p>
+        <p class="form-hint err" id="pw2-hint-err" data-i18n-key="password_no">🙅‍♀️ 비밀번호가 틀립니다.</p>
       </div>
 
       <!-- 회원가입 -->
@@ -129,6 +129,7 @@
         class="btn-primary"
         formaction="../profile/profile.html"
         formmethod="get"
+        data-i18n-key="join_button"
         disabled
       >회원가입</button>
 
@@ -205,5 +206,6 @@
   startStatusbarClock();
   </script>
   <script type="module" src="./signup.api.js"></script>
+  <script type="module" src="../assets/js/i18n.js"></script>
 </body>
 </html>
