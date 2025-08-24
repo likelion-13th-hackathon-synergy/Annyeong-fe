@@ -103,7 +103,7 @@
   "_comment7": "✅ 후기 평가: 리뷰 쓰기 번역 ✅",
   "review_write": "Write a Review",
   "what_do_you_like": "What did you like about them?",
-  "select": "Select",
+  "select": "/ Select",
   "good_listener": "👂 \"A good listener\"",
   "good_humor": "🤩 \"Has a great sense of humor\"",
   "fun_talk": "😆 \"Fun to talk to\"",
@@ -123,6 +123,7 @@
   "end_review": "Complete",
 
   "_comment8": "✅ 후기 평가: 리뷰 보기 번역 ✅",
+  "times": "times",
   "review_view": "View Reviews",
   "i_liked_these_things": "I liked these things about them!",
   "participate": "Participate"

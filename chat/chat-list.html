@@ -86,10 +86,29 @@
         </div>
       </div>
     </div>
-    
 
     <!-- 폴더 구조에 맞춰 경로 수정 -->
     <script type="module" src="../chat/chat-list.js"></script>
-    <script type="module" src="../assets/js/i18n.js"></script>
+    <script type="module">
+      import {
+        initI18n,
+        getLang,
+        setLanguage,
+        startStatusbarClock,
+      } from "/assets/js/i18n.js";
+
+      initI18n();
+
+      startStatusbarClock({
+        selector: ".sb-time",
+        hour12: false,
+        locale: "ko-KR",
+      });
+      window.addEventListener("storage", (e) => {
+        if (e.key === "preferredLang" && e.newValue) {
+          setLanguage(e.newValue, { persist: false });
+        }
+      });
+    </script>
   </body>
 </html>

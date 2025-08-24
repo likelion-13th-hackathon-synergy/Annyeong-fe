@@ -66,7 +66,10 @@ button {
     font-style: normal;
     font-weight: 400;
     line-height: 140%;
-    margin-left: 114px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
     letter-spacing: -1px;
     text-transform: capitalize;
 }

@@ -31,7 +31,7 @@ function setName(usernameLike) {
     document.querySelector(".review-w-title .who-name") ||
     document.querySelector(".review-w-title .strong-text-name") ||
     document.querySelector(".review-w-title .strong-text");
-  if (nameSlot) nameSlot.textContent = `'${usernameLike}'님`;
+  if (nameSlot) nameSlot.textContent = `‘ ${usernameLike} ’님`;
 }
 
 function renderHeaderCounts({ total_reviews = 0, total_personality_selections = 0 }) {

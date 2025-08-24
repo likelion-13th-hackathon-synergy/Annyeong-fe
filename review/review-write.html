@@ -30,12 +30,19 @@
               <p id="review-w-text" data-i18n-key="review_write">리뷰쓰기</p>
             </div>
           </header>
-
+          <select id="lang-select">
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+          </select>
           <!-- 메시지 영역 -->
           <main class="review-w-wrapper" id="review-w-wrapper">
-            <div class="review-w-title" id = "review-w-title">
-              <p data-i18n-key="what_do_you_like"> <!--‼️ 사용자 이름 부분도 번역이 되어버림 (수정 필요)-->
-                <span class="strong-text">'Sonya'님</span>의 이런 점이 좋았어요
+            <div class="review-w-title" id="review-w-title">
+              <p>
+                <!--‼️ 사용자 이름 부분도 번역이 되어버림 (수정 필요)-->
+                <span class="strong-text">상대방</span>
+                <span data-i18n-key="what_do_you_like"
+                  >의 이런 점이 좋았나요?</span
+                >
               </p>
             </div>
 
@@ -44,74 +51,155 @@
                 <span class="strong-text"
                   >✔ <span class="selCounter">0</span></span
                 >
-                <span class="gray-text" data-i18n-key="select">/5 선택</span> <!--‼️ '선택' 부분만 번역 안됨 (수정 필요)-->
+                <span class="gray-text" data-i18n-key="select">/5 선택</span>
+                <!--‼️ '선택' 부분만 번역 안됨 (수정 필요)-->
               </p>
             </div>
 
             <!--선택 옵션 목록-->
             <div class="scroll">
               <div id="options">
-                <button class="opt" type="button" data-id="1" data-i18n-key="good_listener">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="1"
+                  data-i18n-key="good_listener"
+                >
                   <span class="label">👂 "이야기를 잘 들어줘요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="2" data-i18n-key="good_humor">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="2"
+                  data-i18n-key="good_humor"
+                >
                   <span class="label">🤩 "유머 감각이 뛰어나요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="3" data-i18n-key="fun_talk">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="3"
+                  data-i18n-key="fun_talk"
+                >
                   <span class="label">😆 "대화가 재미있어요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="4" data-i18n-key="positive_mindset">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="4"
+                  data-i18n-key="positive_mindset"
+                >
                   <span class="label">🌟 "긍정적인 마인드예요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="5" data-i18n-key="friendly_warm">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="5"
+                  data-i18n-key="friendly_warm"
+                >
                   <span class="label">🤗 "친근하고 따뜻해요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="6" data-i18n-key="thoughtful_caring">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="6"
+                  data-i18n-key="thoughtful_caring"
+                >
                   <span class="label">😇 "배려심이 깊어요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="7" data-i18n-key="knowledgeable">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="7"
+                  data-i18n-key="knowledgeable"
+                >
                   <span class="label">🎓 "지식이 풍부해요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="8" data-i18n-key="curious">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="8"
+                  data-i18n-key="curious"
+                >
                   <span class="label">🧐 "호기심이 많아요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="9" data-i18n-key="understanding">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="9"
+                  data-i18n-key="understanding"
+                >
                   <span class="label">🤭 "이해심이 많아요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="10" data-i18n-key="honest_sincere">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="10"
+                  data-i18n-key="honest_sincere"
+                >
                   <span class="label">✅ "정직하고 솔직해요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="11" data-i18n-key="active_energetic">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="11"
+                  data-i18n-key="active_energetic"
+                >
                   <span class="label">🏃 "적극적이고 활발해요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="12" data-i18n-key="trustworthy">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="12"
+                  data-i18n-key="trustworthy"
+                >
                   <span class="label">🔒 "신뢰할 수 있어요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="13" data-i18n-key="good_planner">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="13"
+                  data-i18n-key="good_planner"
+                >
                   <span class="label">🗂 "계획을 잘 세워요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="14" data-i18n-key="analytical_skill">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="14"
+                  data-i18n-key="analytical_skill"
+                >
                   <span class="label">🔍"분석력이 뛰어나요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="15" data-i18n-key="goal_oriented">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="15"
+                  data-i18n-key="goal_oriented"
+                >
                   <span class="label">🎯 "목표 지향적이에요"</span>
                 </button>
 
-                <button class="opt" type="button" data-id="16" data-i18n-key="full_ideas">
+                <button
+                  class="opt"
+                  type="button"
+                  data-id="16"
+                  data-i18n-key="full_ideas"
+                >
                   <span class="label">💭 "아이디어가 많아요"</span>
                 </button>
               </div>
@@ -120,7 +208,12 @@
 
           <footer>
             <div class="review-send">
-              <button id="review-send-btn" type="submit" aria-label="완료" data-i18n-key="end_review">
+              <button
+                id="review-send-btn"
+                type="submit"
+                aria-label="완료"
+                data-i18n-key="end_review"
+              >
                 완료
               </button>
             </div>
@@ -130,6 +223,16 @@
     </div>
 
     <script type="module" src="../review/review-write.js"></script>
-    <script type="module" src="../assets/js/i18n.js"></script>
+    <script type="module">
+      import { initI18n, getLang, setLanguage } from "/assets/js/i18n.js";
+
+      initI18n();
+
+      window.addEventListener("storage", (e) => {
+        if (e.key === "preferredLang" && e.newValue) {
+          setLanguage(e.newValue, { persist: false });
+        }
+      });
+    </script>
   </body>
 </html>
