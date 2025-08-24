@@ -53,7 +53,10 @@
           <div class="vb-head">
             <img class="g-logo" src="../assets/icons/google-g.svg" alt="">
             <div class="vb-texts">
-              <p class="vb-title" data-i18n-key="badge">프로필 인증뱃지 <span class="badge" aria-label="인증됨">✔︎</span></p>
+                <p class="vb-title">
+                    <span data-i18n-key="badge">프로필 인증뱃지</span>
+                    <span class="badge" aria-label="인증됨">✔︎</span>
+                  </p>
               <p class="vb-sub" data-i18n-key="google_badge">구글 계정 연동하면 인증뱃지를 받을 수 있어요!</p>
             </div>
           </div>
@@ -69,7 +72,8 @@
                 <img class="badge-img" src="../assets/images/verified-badge.svg" alt="인증됨">
               </span>
           </div>
-          <a href="#" class="edit-photo" data-i18n-key="image">사진 수정하기
+          <a href="#" class="edit-photo">
+            <span data-i18n-key="image">사진 수정하기</span>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M3 21h6l12-12-6-6L3 15v6zM14 6l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -217,7 +221,23 @@
 
 
 <script type="module" src="./profile.api.js"></script>
-<script type="module" src="../assets/js/i18n.js"></script>
+<script type="module">
+    import { initI18n, toggleLang, getLang } from "../assets/js/i18n.js";
+  
+    // 저장된 언어로 번역 적용
+    await initI18n();
+  
+    // 우상단 언어 아이콘 클릭 → ko/en 토글
+    const langBtn = document.getElementById("btnLang");
+    langBtn?.addEventListener("click", async () => {
+      const cur = await toggleLang();  // "ko" <-> "en"
+      langBtn.setAttribute(
+        "aria-label",
+        cur === "ko" ? "언어 설정: 한국어" : "Language: English"
+      );
+    });
+  </script>
+  
 
 
       

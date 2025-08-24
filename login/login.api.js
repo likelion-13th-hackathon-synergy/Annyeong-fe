@@ -90,4 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     location.href = `${BASE_URL}/accounts/google/login/?process=login&next=${next}`;
     // 만약 REST 기반 소셜(OAuth Proxy)라면 백엔드 문서의 시작 URL로 교체해야 함
   });
+
+  
 });
