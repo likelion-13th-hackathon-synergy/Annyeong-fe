@@ -1,5 +1,5 @@
 import { BASE_URL } from "../common/config.js";
-import { httpJWT } from "/Annyeong-fe/common/http-jwt.js"; // 앞서 만든 로그인용 유틸 재사용
+import { httpJWT } from "../common/http-jwt.js";
 import { startStatusbarClock } from "/Annyeong-fe/assets/js/statusbar-time.js";
 
 // 상태바 시계 시작(있을 때만)
@@ -127,23 +127,18 @@ $submitBtn?.addEventListener("click", async () => {
 });
 
 // Google 계정 연결 (allauth 기준 예시)
-$googleBtn?.addEventListener("click", async () => {
-    console.log("[google] connect click");
-    try {
-      // httpJWT는 Authorization: Bearer <access> 붙여 줌
-      const { redirect_url } = await api("/users/auth/google/", { method: "GET" });
-      console.log("[google] redirect to:", redirect_url);
-      window.location.href = redirect_url; // 구글 인증 페이지로 이동
-    } catch (e) {
-      console.error("[google] error:", e);
-      if (String(e).includes("401")) {
-        alert("로그인이 필요합니다. 먼저 로그인해 주세요.");
-        location.href = "../login/login.html";
-      } else {
-        alert("구글 연결 실패: " + (e.message || e));
-      }
-    }
-  });
+const googleBtn = document.getElementById("googleConnectBtn");
+googleBtn?.addEventListener("click", () => {
+  // 로그인 완료 후 백엔드의 성공 페이지에서 FE로 다시 보내기
+  // (백엔드에 /oauth/success/ 뷰를 만들었거나 LOGIN_REDIRECT_URL로 설정했다는 가정)
+  const next = encodeURIComponent("/oauth/success/");
+  // 세션 로그인 여부와 무관하게 가장 안전한 건 'login'
+  const process = "login"; // (세션이 이미 있다면 'connect'도 가능)
+  window.location.assign(
+    `${BASE_URL}/accounts/google/login/?process=${process}&next=${next}`
+  );
+});
 
 // --- 초기화 ---
 loadProfile();
+
