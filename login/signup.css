@@ -115,8 +115,27 @@ body{
   text-align:center; font-size:24px; font-weight:700; letter-spacing:-.5px;
   margin-top: 100px;
 }
+.title::after {
+  content: "";
+  position: absolute;
+  top: .45em;         /* 필요시 살짝 조정 */
+  right: -12px;       /* 필요시 살짝 조정 */
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffd58a 0%, #ff9f2f 55%, #ff7a00 100%);
+  box-shadow: 0 0 0 2px rgba(255,153,0,.25), 0 0 8px rgba(255,153,0,.48);
+}
 .subtitle{
-  text-align:center; font-size:12px; color:#A2A2A2; margin-bottom:16px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(255,255,255,.66); /* 회색(사진처럼) */
+  text-align: center;
 }
 .subtitle .link{ color:#00B7FF; text-decoration:none; }
 .subtitle .link:hover{ text-decoration:underline; }
