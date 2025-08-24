@@ -36,17 +36,17 @@
         <img src="../assets/icons/loginlogo.png">
     </div>
 
-    <h1 class="title">로그인</h1>
-    <p class="subtitle">
+    <h1 class="title" data-i18n-key="login_logo">로그인</h1>
+    <p class="subtitle" data-i18n-key="first_user">
       신규 사용자이신가요?
-      <a href="signup.html" class="link">계정 만들기</a>
+      <a href="signup.html" class="link" data-i18n-key="make_account">계정 만들기</a>
     </p>
 
     <!-- 로그인 폼 -->
     <form class="form" action="../home/home.html" method="get">
         <!-- 이메일 -->
         <div class="input-group">
-          <label for="email" class="input-label">이메일</label>
+          <label for="email" class="input-label" data-i18n-key="email">이메일</label>
           <label class="field">
             <span class="icon" aria-hidden="true">
               <!-- envelope -->
@@ -55,13 +55,13 @@
                   stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
-            <input id="email" type="email" placeholder="이메일을 입력해주세요" required />
+            <input id="email" type="email" data-i18n-key="email_form" placeholder="이메일을 입력해주세요" required />
           </label>
         </div>
       
         <!-- 비밀번호 -->
         <div class="input-group">
-          <label for="password" class="input-label">비밀번호</label>
+          <label for="password" class="input-label" data-i18n-key="password">비밀번호</label>
           <label class="field">
             <span class="icon" aria-hidden="true">
               <!-- lock -->
@@ -71,17 +71,17 @@
                   stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input id="password" type="password" placeholder="비밀번호를 입력해주세요" required />
+            <input id="password" type="password" data-i18n-key="password_form" placeholder="비밀번호를 입력해주세요" required />
           </label>
         </div>
       
         <div class="help-links">
-          <a href="#" class="muted">아이디 찾기</a>
+          <a href="#" class="muted" data-i18n-key="find_id">아이디 찾기</a>
           <span aria-hidden="true">|</span>
-          <a href="#" class="muted">비밀번호 찾기</a>
+          <a href="#" class="muted" data-i18n-key="find_password">비밀번호 찾기</a>
         </div>
       
-        <button type="button" class="btn-primary" onclick="location.href='../home/home.html'">
+        <button type="button" class="btn-primary" data-i18n-key="login_button" onclick="location.href='../home/home.html'">
             로그인
           </button>
           
@@ -106,7 +106,7 @@
   </main>
 
   <script type="module" src="./login.api.js"></script>
-
+  <script type="module" src="../assets/js/i18n.js"></script>
 
 </body>
 </html>

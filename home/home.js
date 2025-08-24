@@ -273,7 +273,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const MODE_TEXT = Object.fromEntries(Object.entries(MODE_MAP).map(([text,value])=>[value,text]));
 
     function toggleArrow(){ 
-        dropdownArrow.src = dropdownMenu.classList.contains('active') ? '../assets/images/home/dropdown-after.svg' : '../assets/images/home/dropdown-before.svg'; 
+        dropdownArrow.src = dropdownMenu.classList.contains('active') 
+        ? '../assets/images/home/dropdown-after.svg' 
+        : '../assets/images/home/dropdown-before.svg'; 
     }
 
     async function initDropdown(){
@@ -283,11 +285,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const modeText = MODE_TEXT[data.mode];
                 if(modeText){
                     selectedText.textContent = modeText;
-                    subMenuLinks.forEach(subLink => { if(subLink.textContent === modeText) subLink.parentElement.style.display = 'none'; });
+                    subMenuLinks.forEach(subLink => { 
+                        if(subLink.textContent === modeText) subLink.parentElement.style.display = 'none'; 
+                    });
                 }
             } else {
                 selectedText.textContent = "서포터즈";
-                subMenuLinks.forEach(subLink => { if(subLink.textContent === "서포터즈") subLink.parentElement.style.display = 'none'; });
+                subMenuLinks.forEach(subLink => { 
+                    if(subLink.textContent === "서포터즈") subLink.parentElement.style.display = 'none'; 
+                });
             }
         } catch(err){ console.error(err); }
     }
@@ -299,6 +305,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             toggleArrow(); 
         }
     });
+
+    // 드롭다운 외부 클릭 시 닫기
+    document.addEventListener('click', e => {
+        if (!dropdownMenu.contains(e.target)) {
+            if (dropdownMenu.classList.contains('active')) {
+                dropdownMenu.classList.remove('active');
+                toggleArrow();
+            }
+        }
+    });
+
     subMenuLinks.forEach(link => {
         link.addEventListener('click', async e => {
             e.preventDefault();
@@ -309,9 +326,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(`✅ 서버 저장 성공: ${mode}`); 
 
             selectedText.textContent = newText;
-            subMenuLinks.forEach(subLink => { if(subLink.textContent === oldText) subLink.parentElement.style.display = 'block'; });
+            subMenuLinks.forEach(subLink => { 
+                if(subLink.textContent === oldText) subLink.parentElement.style.display = 'block'; 
+            });
             link.parentElement.style.display = 'none';
-            dropdownMenu.classList.remove('active'); toggleArrow();
+            dropdownMenu.classList.remove('active'); 
+            toggleArrow();
         });
     });
 

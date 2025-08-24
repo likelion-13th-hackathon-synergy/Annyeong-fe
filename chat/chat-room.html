@@ -44,15 +44,15 @@
 
           <!-- 메시지 리스트 위에 배너 -->
           <div id="invite-banner" class="invite-banner" hidden>
-            <div class="invite-text">
+            <div class="invite-text" data-i18n-key="new_interest">
               새로운 호감이 도착했어요!<br />
-              '<span id="invite-name">상대</span>'님의 대화요청을 수락할까요?
+              '<span id="invite-name" data-i18n-key="accept_chat_request">상대</span>'님의 대화요청을 수락할까요?
             </div>
             <div class="invite-actions">
-              <button id="btn-decline" class="btn-decline" type="button">
+              <button id="btn-decline" class="btn-decline" type="button" data-i18n-key="reject">
                 거절 ✕
               </button>
-              <button id="btn-accept" class="btn-accept" type="button">
+              <button id="btn-accept" class="btn-accept" type="button" data-i18n-key="accept">
                 수락 ✔
                 <span class="dot-on"></span>
               </button>
@@ -79,7 +79,7 @@
                   <input id="file-input" type="file" accept="image/*" hidden />
 
 
-              <input type="text" id="msg-input" placeholder="메시지 입력" disabled/>
+              <input type="text" id="msg-input" data-i18n-key="enter_message" placeholder="메시지 입력" disabled/>
 
               <button id="send-btn" type="button" aria-label="전송" disabled>
                 <img src="../assets/images/chat/chat_send.png" alt="전송버튼" />
@@ -92,5 +92,6 @@
 
     <script src="https://unpkg.com/mock-socket@9.3.0/dist/mock-socket.js"></script>
     <script type="module" src="../chat/chat-room.js"></script>
+    <script type="module" src="../assets/js/i18n.js"></script>
   </body>
 </html>

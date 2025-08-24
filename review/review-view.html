@@ -27,33 +27,33 @@
             </div>
 
             <div class="review-w-title">
-              <p id="review-w-text">리뷰보기</p>
+              <p id="review-w-text" data-i18n-key="review_view">리뷰보기</p>
             </div>
           </header>
 
           <!-- 메시지 영역 -->
           <main class="review-w-wrapper" id="review-w-wrapper">
-            <div class="review-w-title">
-              <p><span class = "strong-text">'Sonya'님</span>의 이런 점이 좋았어요</p>
+            <div class="review-w-title"> <!--‼️ 사용자 이름 부분도 번역이 되어버림 (수정 필요)-->
+              <p data-i18n-key="i_liked_these_things"><span class = "strong-text">'Sonya'님</span>의 이런 점이 좋았어요</p>
             </div>
 
-            <div class="selected-num">
-              <p><span class = "strong-text">✔ 574회</span><span class = "gray-text"> 403회 참여</span></p>
+            <div class="selected-num"> <!--‼️ '선택' 부분만 번역 안됨 (수정 필요)-->
+              <p><span class = "strong-text">✔ 574회</span><span class = "gray-text" data-i18n-key="participate"> 403회 참여</span></p>
             </div>
 
             <ul class="review-view-ul" id="reviewList">
-              <li>👂 "이야기를 잘 들어줘요"</li>
-              <li>🤩 "유머 감각이 뛰어나요"</li>
-              <li>😆 "대화가 재미있어요"</li>
-              <li>🌟 "긍정적인 마인드예요"</li>
-              <li>🤗 "친근하고 따뜻해요"</li>
-              <li>😇 "배려심이 깊어요"</li>
-              <li>🎓 "지식이 풍부해요"</li>
-              <li>🧐 "호기심이 많아요"</li>
-              <li>🤭 "이해심이 많아요"</li>
-              <li>✅ "정직하고 솔직해요"</li>
-              <li>🏃 "적극적이고 활발해요"</li>
-              <li>🔒 "신뢰할 수 있어요"</li>
+              <li data-i18n-key="good_listener">👂 "이야기를 잘 들어줘요"</li>
+              <li data-i18n-key="good_humor">🤩 "유머 감각이 뛰어나요"</li>
+              <li data-i18n-key="fun_talk">😆 "대화가 재미있어요"</li>
+              <li data-i18n-key="positive_mindset">🌟 "긍정적인 마인드예요"</li>
+              <li data-i18n-key="friendly_warm">🤗 "친근하고 따뜻해요"</li>
+              <li data-i18n-key="thoughtful_caring">😇 "배려심이 깊어요"</li>
+              <li data-i18n-key="knowledgeable">🎓 "지식이 풍부해요"</li>
+              <li data-i18n-key="curious">🧐 "호기심이 많아요"</li>
+              <li data-i18n-key="understanding">🤭 "이해심이 많아요"</li>
+              <li data-i18n-key="honest_sincere">✅ "정직하고 솔직해요"</li>
+              <li data-i18n-key="active_energetic">🏃 "적극적이고 활발해요"</li>
+              <li data-i18n-key="trustworthy">🔒 "신뢰할 수 있어요"</li>
             </ul>
           </main>
         </div>
@@ -61,5 +61,6 @@
     </div>
 
     <script type="module" src="../review/review-view.js"></script>
+    <script type="module" src="../assets/js/i18n.js"></script>
   </body>
 </html>
