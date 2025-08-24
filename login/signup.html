@@ -190,6 +190,22 @@
 startStatusbarClock({ hour12: false, locale: "ko-KR" });
   </script>
   <script type="module" src="./signup.api.js"></script>
-  <script type="module" src="../assets/js/i18n.js"></script>
+  <script type="module">
+    import { initI18n, toggleLang, getLang } from "../assets/js/i18n.js";
+  
+    // 페이지 진입 시 저장된 언어 적용
+    await initI18n();
+  
+    // 우상단 아이콘 클릭 → ko/en 토글
+    const langBtn = document.querySelector(".top-right-icon");
+    langBtn?.addEventListener("click", async () => {
+      const cur = await toggleLang(); // ko ↔ en
+      langBtn.setAttribute(
+        "aria-label",
+        cur === "ko" ? "언어 설정: 한국어" : "Language: English"
+      );
+    });
+  </script>
+  
 </body>
 </html>
