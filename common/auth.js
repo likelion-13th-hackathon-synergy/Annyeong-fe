@@ -1,3 +1,4 @@
+// common/auth.js
 import { API_BASE, TEST_USER } from "../common/config.js";
 
 // 브라우저 쿠키에서 csrftoken 읽기

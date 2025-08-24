@@ -1,157 +1,146 @@
 // review/review-view.js
-// - 페이지 진입 시 자동 로그인(TEST_USER) → /reviews/user/:id 호출 → 화면 반영
-// - 명세: { user_id, total_reviews, total_personality_selections, reviews: [{ personalities_X: "라벨", count }] }
+// - roomId는 전혀 사용하지 않음 (user_id만 필요)
+// - /reviews/user/:id 로 집계 조회
+// - 상단 이름: 서버 user_name 우선, 없으면 /api/users/:id 등으로 username 보조 조회
 
-import { API_BASE, DEFAULT_USER_ID, TEST_USER } from "../common/config.js";
+import { API_BASE, TEST_USER } from "../common/config.js";
 import { loginWithSession, authedFetch } from "../common/auth.js";
 
-// 공개 디버그용
-window.__REVIEW_RAW__ = null;   // 원본 JSON
-window.__REVIEW_ITEMS__ = [];   // {label, count} 정규화 배열
-
-// personality → 이모지 매핑
-const PERSONALITY_EMOJIS = {
-  "personalities_1": "👂",
-  "personalities_2": "🤩",
-  "personalities_3": "😆",
-  "personalities_4": "🌟",
-  "personalities_5": "🤗",
-  "personalities_6": "😇",
-  "personalities_7": "🎓",
-  "personalities_8": "🧐",
-  "personalities_9": "🤭",
-  "personalities_10": "✅",
-  "personalities_11": "🏃",
-  "personalities_12": "🔒",
+const EMO = {
+  "personalities_1":"👂","personalities_2":"🤩","personalities_3":"😆",
+  "personalities_4":"🌟","personalities_5":"🤗","personalities_6":"😇",
+  "personalities_7":"🎓","personalities_8":"🧐","personalities_9":"🤭",
+  "personalities_10":"✅","personalities_11":"🏃","personalities_12":"🔒"
 };
 
-// 뒤로가기
+const qs = new URLSearchParams(location.search);
+const TARGET_USER_ID = Number(qs.get("user_id"));
+
+function toast(m){ alert(m); }
+function num(v){ const n = Number(v); return Number.isFinite(n) ? n : null; }
+
 document.addEventListener("DOMContentLoaded", () => {
-  const backBtn = document.querySelector(".back-btn");
-  const before = document.referrer;
-  if (backBtn) {
-    backBtn.addEventListener("click", () => {
-      window.location.href = before || "/";
-    });
-  }
+  document.querySelector(".back-btn")?.addEventListener("click", () => {
+    const ref = document.referrer || "../chat/chat-list.html";
+    location.href = ref;
+  });
 });
 
-// API 응답 → {label, count} 배열로 변환
-function normalizeReviews(apiData) {
-  const arr = Array.isArray(apiData?.reviews) ? apiData.reviews : [];
-  return arr.map((row) => {
-    // personality_X 키만 추출
-    const key = Object.keys(row).find((k) => k.startsWith("personalities"));
-    const label = row[key] ?? "";
-    const emoji = PERSONALITY_EMOJIS[key] || "✨"; // key별 다른 이모지
-    const count = Number(row.count ?? 0);
-
-    return { 
-      label: `${emoji} "${label}"`, 
-      count: Number.isFinite(count) ? count : 0 
-    };
+function normalizeItems(api){
+  const rows = Array.isArray(api?.reviews) ? api.reviews : [];
+  return rows.map(row => {
+    const key = Object.keys(row).find(k=>k.startsWith("personalities_"));
+    const label = key ? row[key] : "";
+    const count = Number(row.count || 0);
+    return { key, label: `${EMO[key] || "✨"} "${label}"`, count };
   });
 }
 
+function renderHeader({displayName,total_reviews,total_personality_selections}){
+  const strongs = document.querySelectorAll(".strong-text");
+  if (strongs[0]) strongs[0].textContent = `'${displayName}'님`;
+  if (strongs[1]) strongs[1].textContent = `✔ ${Number(total_personality_selections||0)}회`;
+  const gray = document.querySelector(".gray-text");
+  if (gray) gray.textContent = ` ${Number(total_reviews||0)}회 참여`;
+}
 
-// 리스트 렌더
-function renderList(items) {
-  const listEl = document.getElementById("reviewList");
-  if (!listEl) return;
+function renderList(items){
+  const ul = document.getElementById("reviewList");
+  if (!ul) return;
+  ul.innerHTML = "";
 
-  listEl.innerHTML = "";
-
-  if (!items.length) {
+  if (!items.length){
     const li = document.createElement("li");
     li.textContent = "표시할 리뷰가 없습니다.";
-    listEl.appendChild(li);
+    ul.appendChild(li);
+    return;
+  }
+  const max = Math.max(...items.map(i=>i.count), 1);
+  items.forEach(it=>{
+    const li = document.createElement("li");
+    const label = document.createElement("span");
+    label.className = "review-label";
+    label.textContent = it.label;
+    const cnt = document.createElement("span");
+    cnt.className = "review-count";
+    cnt.textContent = it.count;
+    li.appendChild(label); li.appendChild(cnt);
+    li.style.setProperty("--w", `${(it.count/max)*85}%`);
+    ul.appendChild(li);
+  });
+}
+
+// 보조 이름 조회 (username 선호)
+async function fetchDisplayName(userId){
+  const paths = [
+    `/api/users/${encodeURIComponent(userId)}/`,
+    `/users/profile/?id=${encodeURIComponent(userId)}`
+  ];
+  for (const p of paths){
+    try{
+      const r = await authedFetch(p, {method:"GET"}, API_BASE);
+      if (!r.ok) continue;
+      const u = await r.json();
+      const name =
+        u?.username ||
+        u?.real_name ||
+        u?.nickname ||
+        u?.name ||
+        u?.profile?.username ||
+        u?.profile?.nickname;
+      if (name) return String(name);
+    }catch{}
+  }
+  return String(userId);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!num(TARGET_USER_ID)){
+    toast("유효하지 않은 접근입니다. (user_id 누락)");
+    const ref = document.referrer || "../chat/chat-list.html";
+    location.replace(ref);
     return;
   }
 
-  const max = Math.max(...items.map((i) => i.count), 1);
-
-  items.forEach((it) => {
-    const li = document.createElement("li");
-
-    const labelSpan = document.createElement("span");
-    labelSpan.className = "review-label";
-    labelSpan.textContent = it.label;
-
-    const countSpan = document.createElement("span");
-    countSpan.className = "review-count";
-    countSpan.textContent = it.count;
-
-    li.appendChild(labelSpan);
-    li.appendChild(countSpan);
-
-    // CSS 막대 폭 (최대 85%)
-    const pct = (it.count / max) * 85;
-    li.style.setProperty("--w", pct + "%");
-
-    listEl.appendChild(li);
-  });
-}
-
-// 상단 타이틀/합계 반영
-function renderHeaderCounts({ user_id, total_reviews, total_personality_selections }) {
-  // HTML 구조상 .strong-text가 2개 있음: [ "'Sonya'님", "✔ 574회" ]
-  const strongs = document.querySelectorAll(".strong-text");
-  const nameStrong = strongs[0];   // "'Sonya'님" 위치
-  const totalSelStrong = strongs[1]; // "✔ 574회" 위치
-  const gray = document.querySelector(".gray-text"); // "403회 참여"
-
-  if (nameStrong) {
-    nameStrong.textContent = `'${user_id}'님`;
-  }
-  if (totalSelStrong) {
-    totalSelStrong.textContent = `✔ ${Number(total_personality_selections || 0)}회`;
-  }
-  if (gray) {
-    gray.textContent = ` ${Number(total_reviews || 0)}회 참여`;
-  }
-}
-
-// 페이지 진입: 자동 로그인 → 데이터 로드 → 렌더
-document.addEventListener("DOMContentLoaded", async () => {
+  // 로그인
   try {
-    // 1) 자동 로그인
     await loginWithSession(TEST_USER.username, TEST_USER.password, API_BASE);
+  } catch (e) {
+    console.error("[auto login failed]", e);
+    toast("로그인 실패");
+  }
 
-    // 2) 데이터 GET
-    const userId = DEFAULT_USER_ID; // 필요 시 쿼리스트링 등으로 교체
-    const res = await authedFetch(`/reviews/user/${encodeURIComponent(userId)}/`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }, API_BASE);
-
-    if (res.status === 404) {
-      const msg = (await res.json().catch(() => null))?.detail || "해당 사용자를 찾을 수 없습니다.";
+  try{
+    const res = await authedFetch(
+      `/reviews/user/${encodeURIComponent(TARGET_USER_ID)}/`,
+      { method:"GET", headers:{ "Content-Type":"application/json" } },
+      API_BASE
+    );
+    if (res.status === 404){
+      const msg = (await res.json().catch(()=>null))?.detail || "해당 사용자를 찾을 수 없습니다.";
       throw new Error(msg);
     }
-    if (!res.ok) throw new Error(`서버 응답 오류: ${res.status}`);
+    if (!res.ok) throw new Error(`서버 오류: ${res.status}`);
 
     const data = await res.json();
-    window.__REVIEW_RAW__ = data;
+    const displayName = data?.user_name
+      ? String(data.user_name)
+      : await fetchDisplayName(TARGET_USER_ID);
 
-    // 헤더(이름/합계) 갱신
-    renderHeaderCounts({
-      user_id: data.user_id,
+    renderHeader({
+      displayName,
       total_reviews: data.total_reviews,
       total_personality_selections: data.total_personality_selections,
     });
-
-    // 리스트 렌더
-    window.__REVIEW_ITEMS__ = normalizeReviews(data);
-    renderList(window.__REVIEW_ITEMS__);
-  } catch (err) {
-    console.error("리뷰 페이지 로드 실패:", err);
-    // 화면에도 간단히 표시
-    const listEl = document.getElementById("reviewList");
-    if (listEl) {
-      listEl.innerHTML = "";
+    renderList(normalizeItems(data));
+  }catch(err){
+    console.error("리뷰 데이터 로드 실패:", err);
+    const ul = document.getElementById("reviewList");
+    if (ul){
+      ul.innerHTML = "";
       const li = document.createElement("li");
       li.textContent = err?.message || "리뷰 데이터를 불러오지 못했습니다.";
-      listEl.appendChild(li);
+      ul.appendChild(li);
     }
   }
 });
