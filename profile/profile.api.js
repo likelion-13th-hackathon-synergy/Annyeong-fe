@@ -1,6 +1,6 @@
 import { BASE_URL } from "../common/config.js";
-import { httpJWT } from "../common/http-jwt.js"; // 앞서 만든 로그인용 유틸 재사용
-import { startStatusbarClock } from "../assets/js/statusbar-time.js";
+import { httpJWT } from "/Annyeong-fe/common/http-jwt.js"; // 앞서 만든 로그인용 유틸 재사용
+import { startStatusbarClock } from "/Annyeong-fe/assets/js/statusbar-time.js";
 
 // 상태바 시계 시작(있을 때만)
 if (typeof startStatusbarClock === "function") startStatusbarClock();
@@ -127,12 +127,23 @@ $submitBtn?.addEventListener("click", async () => {
 });
 
 // Google 계정 연결 (allauth 기준 예시)
-$googleBtn?.addEventListener("click", () => {
-  // 로그인 후 돌아올 곳(프론트 경로)은 서비스에 맞게 변경
-  const next = encodeURIComponent("/home/home.html");
-  // 백엔드가 /accounts/google/login/ 열려 있어야 함
-  location.href = `${BASE_URL}/accounts/google/login/?process=connect&next=${next}`;
-});
+$googleBtn?.addEventListener("click", async () => {
+    console.log("[google] connect click");
+    try {
+      // httpJWT는 Authorization: Bearer <access> 붙여 줌
+      const { redirect_url } = await api("/users/auth/google/", { method: "GET" });
+      console.log("[google] redirect to:", redirect_url);
+      window.location.href = redirect_url; // 구글 인증 페이지로 이동
+    } catch (e) {
+      console.error("[google] error:", e);
+      if (String(e).includes("401")) {
+        alert("로그인이 필요합니다. 먼저 로그인해 주세요.");
+        location.href = "../login/login.html";
+      } else {
+        alert("구글 연결 실패: " + (e.message || e));
+      }
+    }
+  });
 
 // --- 초기화 ---
 loadProfile();
