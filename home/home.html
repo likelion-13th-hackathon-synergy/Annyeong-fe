@@ -18,63 +18,66 @@
             </span>
            
             <ul class="main-menu">
-                <li class="dropdown">
-                    <span class="selected-menu-text">서포터즈 ▼</span>
+                <li class="dropdown-menu">
+                    <span class="dropdown">
+                        <span class="selected-text" data-i18n-key="supporters">서포터즈</span>
+                        <img src="../assets/images/home/dropdown-before.svg" class="dropdown-arrow">
+                    </span>
                     <ul class="sub-menu">
-                        <li><a href="#">구인구직</a></li>
-                        <li><a href="#">통역</a></li>
-                        <li><a href="#">언어교환</a></li>
-                        <li><a href="#">연애</a></li>
-                        <li><a href="#">서포터즈</a></li>
+                        <li><a href="#" data-i18n-key="job_search">구인구직</a></li>
+                        <li><a href="#" data-i18n-key="translation">통역</a></li>
+                        <li><a href="#" data-i18n-key="dating">연애/데이팅</a></li>
+                        <li><a href="#" data-i18n-key="buddy">버디</a></li>
+                        <li class="default-item"><a href="#" data-i18n-key="supporters_default">서포터즈</a></li>
                     </ul>
                 </li>
             </ul>
 
             <span class="profile">
-                <a href="">
-                    <img src="../assets/images/profile.png" class="profile-img">
+                <a href="../profile/profile.html">
+                    <img src="../assets/images/home/profile.png">
                 </a>
             </span>
 
             <span class="chat">
-                <a href="">
-                    <img src="../assets/images/chat.png" class="chat-img">
+                <a href="../chat-list/chat_list.html">
+                    <img src="../assets/images/home/chat.png">
                 </a>
             </span>
         </header>
 
         <main>
-            <div class="image-container">
-                <img src="../assets/images/type-1.svg" class="type">
-                <div class="card">
-                    <h1>🇷🇺 Sonya 24 <span class="badge"></span></h1>
-                    <p class="more-css">서울 | 한국어&middot;러시아어</p>
-                    <p class="description">연세대 교환학생이에요!<br>한국 친구들과 언어교환하며 공부하고 싶어요!...<br><span class="more-text">더보기</span></p>
-                    <span class="tag">
-                        <p id="interest">#독서 #스터디카페 #영화감상 #한국사</p>
-                    </span>
-                </div>
-                <a href=""><img src="../assets/images/review.svg" class="review"></a>
+            <div id="card-container">
+                <!-- 카드 단위로 추가될 곳 -->
+                <!-- 첫 번째 카드 예시 
+
+                    <div class="image-container">
+                        <img id="profile-image" src="../assets/images/home/type-1.svg" class="type">
+                        <div class="card">
+                            <h1 id="profile-name">🇷🇺 Sonya 24 <span class="badge"></span></h1>
+                            <p id="profile-location" class="more-css">서울 | 한국어&middot;러시아어</p>
+                            <p id="profile-description" class="description">연세대 교환학생이에요!<br>한국 친구들과 언어교환하며 공부하고 싶어요!...</p>
+                        </div>
+                        <a href="../review/review-view.html"><img src="../assets/images/home/review.svg" class="review"></a>
+                    </div>
+                -->
+
             </div>
         </main>
 
         <footer>
-            <span class="no-button">
-                <a href="./home-type-2.html">
-                    <img src="../assets/images/no.png">
-                </a>
-            </span>
+            <button class="no-button" id="no-button">
+                <img src="../assets/images/home/no.png">
+            </button>
 
-            <span class="yes-button">
-                <a href="">
-                    <img src="../assets/images/yes.png">
-                </a>
-            </span> 
+            <button class="yes-button" id="yes-button">
+                <img src="../assets/images/home/yes.png">
+            </button> 
         </footer>
 
     </div>
   </div>
 
-  <script src="./home.js"></script>
+  <script type="module" src="./home.js"></script>
 </body>
 </html>
