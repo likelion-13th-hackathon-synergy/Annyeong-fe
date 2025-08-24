@@ -2,6 +2,7 @@
 import { API_BASE_URL } from './config.js';
 // 실제 API 연결은 이걸로 
 // import { getRandomUser, likeUser, dislikeUser, getMatchPreference, setMatchPreference } from './api.js';
+
 import { getRandomUser, likeUser, dislikeUser, getMatchPreference, setMatchPreference } from './mockApi.js'; // 테스트용 
 
 let currentProfile = null;
@@ -223,14 +224,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
 
-    // ======================= ✅ 더보기 텍스트 제어 (수정 필요할지도 )
+    // ======================= ✅ 더보기 텍스트 제어
     function handleMoreText(profile, cardElement) {
         const descriptionElement = cardElement.querySelector('.profile-description');
         const fullDescription = profile.introduction || '';
         const maxCharacters = 50;   // short-text 글자 수
         const interval = 30;        // 줄바꿈 간격
 
-        // 글자 수마다 <br> 삽입
         function insertLineBreaks(text, interval) {
             if (!text) return '';
             return text.replace(new RegExp(`(.{1,${interval}})`, 'g'), '$1<br>').replace(/<br>$/, '');
@@ -241,9 +241,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const fullTextHTML = insertLineBreaks(fullDescription, interval);
 
             descriptionElement.innerHTML = `
-                <span class="short-text">${shortTextHTML}</span>
-                <span class="full-text" style="display:none; min-height: 100px; overflow-y:auto;">${fullTextHTML}</span>
-                <span class="more-text" style="cursor:pointer;">더보기</span>
+                <div class="short-text">${shortTextHTML}</div>
+                <div class="full-text" style="display:none; max-height:150px; overflow-y:auto;">${fullTextHTML}</div>
+                <div class="more-text" style="cursor:pointer; display:inline-block;">더보기</div>
             `;
 
             const moreBtn = descriptionElement.querySelector('.more-text');
@@ -257,12 +257,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 moreBtn.style.display = 'none';
             });
         } else {
-            // 짧은 글도 interval 적용
-            descriptionElement.innerHTML = insertLineBreaks(fullDescription, interval);
+            descriptionElement.innerHTML = `<div>${insertLineBreaks(fullDescription, interval)}</div>`;
         }
     }
 
-    // ======================= ✅ 드롭다운 기능 (좀 더 보완 필요할지도)
+
+    // ======================= ✅ 드롭다운 기능
     const MODE_MAP = { 
         "구인구직": 1,
         "통역": 2,
