@@ -46,13 +46,25 @@
           <div id="invite-banner" class="invite-banner" hidden>
             <div class="invite-text" data-i18n-key="new_interest">
               새로운 호감이 도착했어요!<br />
-              '<span id="invite-name" data-i18n-key="accept_chat_request">상대</span>'님의 대화요청을 수락할까요?
+              '<span id="invite-name" data-i18n-key="accept_chat_request"
+                >상대</span
+              >'님의 대화요청을 수락할까요?
             </div>
             <div class="invite-actions">
-              <button id="btn-decline" class="btn-decline" type="button" data-i18n-key="reject">
+              <button
+                id="btn-decline"
+                class="btn-decline"
+                type="button"
+                data-i18n-key="reject"
+              >
                 거절 ✕
               </button>
-              <button id="btn-accept" class="btn-accept" type="button" data-i18n-key="accept">
+              <button
+                id="btn-accept"
+                class="btn-accept"
+                type="button"
+                data-i18n-key="accept"
+              >
                 수락 ✔
                 <span class="dot-on"></span>
               </button>
@@ -70,16 +82,21 @@
           <!-- 입력 영역(나중에 JS로 제어) -->
           <footer class="chat-input">
             <div class="inputbar">
-              <button id="attach-btn" type="button" aria-label="첨부"disabled>
+              <button id="attach-btn" type="button" aria-label="첨부" disabled>
                 <img
                   src="../assets/images/chat/chat_plus.png"
                   alt="플러스버튼"
                 />
               </button>
-                  <input id="file-input" type="file" accept="image/*" hidden />
+              <input id="file-input" type="file" accept="image/*" hidden />
 
-
-              <input type="text" id="msg-input" data-i18n-key="enter_message" placeholder="메시지 입력" disabled/>
+              <input
+                type="text"
+                id="msg-input"
+                data-i18n-key="enter_message"
+                placeholder="메시지 입력"
+                disabled
+              />
 
               <button id="send-btn" type="button" aria-label="전송" disabled>
                 <img src="../assets/images/chat/chat_send.png" alt="전송버튼" />
@@ -92,6 +109,16 @@
 
     <script src="https://unpkg.com/mock-socket@9.3.0/dist/mock-socket.js"></script>
     <script type="module" src="../chat/chat-room.js"></script>
-    <script type="module" src="../assets/js/i18n.js"></script>
+    <script type="module">
+      import { initI18n, getLang, setLanguage } from "/assets/js/i18n.js";
+
+      initI18n();
+
+      window.addEventListener("storage", (e) => {
+        if (e.key === "preferredLang" && e.newValue) {
+          setLanguage(e.newValue, { persist: false });
+        }
+      });
+    </script>
   </body>
 </html>

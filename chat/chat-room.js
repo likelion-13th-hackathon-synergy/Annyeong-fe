@@ -699,7 +699,14 @@ function renderSystem(text) { renderMessage({ message: text, sender: "system", t
 window.addEventListener("beforeunload", () => {
   if (__roomPollTimer__) { clearInterval(__roomPollTimer__); __roomPollTimer__ = null; }
 });
-
+document.addEventListener("DOMContentLoaded", () => {
+  const backBtn = document.querySelector(".back-btn");
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      window.location.href = "../chat/chat-list.html";
+    });
+  }
+});
 // 탭 가시성에 따라 일시정지/재개
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
