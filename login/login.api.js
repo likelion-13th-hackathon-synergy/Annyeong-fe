@@ -1,95 +1,102 @@
-import { BASE_URL } from "../common/config.js";
+// login.api.js
+const BASE_URL = "http://localhost:8000"; // 장고 서버 주소
 
-// (선택) 상단 상태바 시간 표시 쓰는 경우
-import { startStatusbarClock } from "../assets/js/statusbar-time.js";
-if (typeof startStatusbarClock === "function") startStatusbarClock();
+// ----- CSRF 헬퍼들 -----
+function getCookie(name) {
+  const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
+  return m ? decodeURIComponent(m[2]) : null;
+}
 
-// ---- JWT 로그인: /api/token/ (djangorestframework-simplejwt) ----
-async function loginWithJWT({ email, password }) {
-  const res = await fetch(`${BASE_URL}/api/token/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify({ username: email, password }), // username으로 이메일 전달
+function setMetaCsrf(value) {
+  const meta = document.querySelector('meta[name="csrf-token"]');
+  if (meta) meta.setAttribute("content", value || "");
+}
+
+async function ensureCsrf() {
+  // 브라우저에 csrftoken 쿠키가 없으면 백엔드에서 받아오기
+  let token = getCookie("csrftoken");
+  if (!token) {
+    await fetch(`${BASE_URL}/api/csrf/`, {
+      method: "GET",
+      credentials: "include", // 쿠키 주고받기
+    });
+    token = getCookie("csrftoken");
+  }
+  setMetaCsrf(token);
+  return token;
+}
+
+function needsCSRF(method) {
+  return !["GET", "HEAD", "OPTIONS", "TRACE"].includes(String(method).toUpperCase());
+}
+
+async function httpSession(path, init = {}) {
+  const method = (init.method || "GET").toUpperCase();
+  const headers = new Headers(init.headers || {});
+  if (!headers.has("Accept")) headers.set("Accept", "application/json");
+
+  // POST/PUT/PATCH/DELETE => X-CSRFToken 헤더 넣기
+  if (needsCSRF(method)) {
+    const token = getCookie("csrftoken") || (await ensureCsrf());
+    headers.set("X-CSRFToken", token);
+    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  }
+
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...init,
+    method,
+    headers,
+    credentials: "include", // ★ 세션 쿠키 포함
   });
+
+  // JSON 응답 시도
+  let data = null;
   const text = await res.text();
+  try { data = text ? JSON.parse(text) : null; } catch { data = { raw: text }; }
+
   if (!res.ok) {
-    // 백엔드 메시지 있으면 그대로 보여주기
-    let msg = "이메일 또는 비밀번호가 올바르지 않습니다.";
-    try { msg = (JSON.parse(text).detail || msg); } catch (_) {}
+    const msg = (data && (data.error || data.detail)) || `HTTP ${res.status}`;
     throw new Error(msg);
   }
-  const data = JSON.parse(text);
-  localStorage.setItem("accessToken", data.access);
-  localStorage.setItem("refreshToken", data.refresh);
+  return data;
 }
 
-// (선택) 세션 방식일 경우를 위한 헬퍼 (백엔드가 /api/login/ 세션 로그인 제공 시)
-// 사용 안 할거면 무시해도 OK.
-async function loginWithSession({ email, password }) {
-  const res = await fetch(`${BASE_URL}/api/login/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    credentials: "include", // 세션 쿠키 주고받기
-    body: JSON.stringify({ username: email, password }),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    let msg = "로그인에 실패했어요.";
-    try { msg = (JSON.parse(text).error || msg); } catch (_) {}
-    throw new Error(msg);
-  }
-}
+// ----- 로그인 폼 바인딩 -----
+document.addEventListener("DOMContentLoaded", async () => {
+  // 1) 페이지 진입 시 CSRF 먼저 확보(쿠키+메타)
+  await ensureCsrf();
 
-function setLoading(btn, isLoading) {
-  if (!btn) return;
-  btn.disabled = isLoading;
-  btn.dataset.originalText ??= btn.textContent;
-  btn.textContent = isLoading ? "로그인 중..." : btn.dataset.originalText;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form.form");
+  const form = document.querySelector(".form");
   const emailEl = document.getElementById("email");
   const pwEl = document.getElementById("password");
-  const submitBtn = form?.querySelector('button[type="submit"]');
-  const googleBtn = document.querySelector(".btn-google");
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = emailEl.value.trim();
-    const password = pwEl.value;
+    const email = emailEl?.value.trim();
+    const password = pwEl?.value;
 
     if (!email || !password) {
-      alert("이메일과 비밀번호를 입력해주세요.");
+      alert("이메일/비밀번호를 입력해 주세요.");
       return;
     }
 
-    setLoading(submitBtn, true);
     try {
-      // 👉 기본: JWT 로그인
-      await loginWithJWT({ email, password });
+      // 2) 세션 로그인 호출 (JSON)
+      await httpSession("/api/session-login/", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
 
-      // (세션 방식을 쓰고 싶다면 위 줄을 주석 처리하고 아래 줄의 주석을 해제)
-      // await loginWithSession({ email, password });
+      // 3) 로그인 성공 → 상태 확인 후 원하는 페이지로 이동
+      const me = await httpSession("/api/me/");
+      console.log("Logged in as:", me);
 
-      // 성공 시 홈으로 이동
-      location.href = "../home/home.html";
+      // 프로필 화면 등으로 이동 (프로젝트 경로에 맞게 수정)
+      window.location.href = "/Annyeong-fe/profile/profile.html";
     } catch (err) {
-      alert(err.message || "로그인 중 오류가 발생했습니다.");
-    } finally {
-      setLoading(submitBtn, false);
+      console.error(err);
+      alert(`로그인 실패: ${err.message}`);
     }
   });
-
-  // Google 로그인 버튼 — 백엔드가 allauth/dj-rest-auth 등으로 설정되어 있을 때
-  googleBtn?.addEventListener("click", () => {
-    // (django-allauth 기준 예시) 백엔드 라우트에 맞게 변경
-    // next 파라미터로 로그인 후 돌아올 프론트 경로 지정 가능
-    const next = encodeURIComponent("/home/home.html");
-    location.href = `${BASE_URL}/accounts/google/login/?process=login&next=${next}`;
-    // 만약 REST 기반 소셜(OAuth Proxy)라면 백엔드 문서의 시작 URL로 교체해야 함
-  });
-
-  
 });

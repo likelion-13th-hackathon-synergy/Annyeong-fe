@@ -1,64 +1,100 @@
-import { BASE_URL } from "../common/config.js";
+// signup.api.js
+const BASE_URL = "http://localhost:8000"; // 장고 서버 주소로 바꿔도 됨
 
-// 1) 회원가입 요청
-async function register(payload) {
-  const res = await fetch(`${BASE_URL}/api/signup/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    const msg = await res.text().catch(() => res.statusText);
-    throw new Error(msg || `회원가입 실패 (HTTP ${res.status})`);
+// --- CSRF 유틸 ---
+function getCookie(name) {
+  const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
+  return m ? decodeURIComponent(m[2]) : null;
+}
+function setMetaCsrf(value) {
+  const meta = document.querySelector('meta[name="csrf-token"]');
+  if (meta) meta.setAttribute("content", value || "");
+}
+async function ensureCsrf() {
+  let token = getCookie("csrftoken");
+  if (!token) {
+    await fetch(`${BASE_URL}/api/csrf/`, { method: "GET", credentials: "include" });
+    token = getCookie("csrftoken");
   }
-  return res.json().catch(() => ({}));
+  setMetaCsrf(token);
+  return token;
+}
+function needsCSRF(method) {
+  return !["GET", "HEAD", "OPTIONS", "TRACE"].includes(String(method).toUpperCase());
+}
+async function httpSession(path, init = {}) {
+  const method = (init.method || "GET").toUpperCase();
+  const headers = new Headers(init.headers || {});
+  if (!headers.has("Accept")) headers.set("Accept", "application/json");
+  if (needsCSRF(method)) {
+    const token = getCookie("csrftoken") || (await ensureCsrf());
+    headers.set("X-CSRFToken", token);
+    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  }
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...init,
+    method,
+    headers,
+    credentials: "include", // ★ 세션 쿠키 포함
+  });
+
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch { data = { raw: text }; }
+
+  if (!res.ok) {
+    const msg = (data && (data.error || data.detail)) || `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+  return data;
 }
 
-// 2) 로그인 토큰 발급 (SimpleJWT)
-async function loginAndStore({ email, password }) {
-  // 백엔드에서 username 필드로 이메일을 받는 설정(아래 뷰 코드) 기준
-  const res = await fetch(`${BASE_URL}/api/token/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify({ username: email, password }),
-  });
-  if (!res.ok) {
-    const msg = await res.text().catch(() => res.statusText);
-    throw new Error(msg || `토큰 발급 실패 (HTTP ${res.status})`);
-  }
-  const data = await res.json();
-  localStorage.setItem("accessToken", data.access);
-  localStorage.setItem("refreshToken", data.refresh);
-}
+// --- 페이지 로직 ---
+document.addEventListener("DOMContentLoaded", async () => {
+  // 1) 최초 진입 시 CSRF 쿠키 확보 + 메타 채우기
+  await ensureCsrf();
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form.form");
+  const form = document.querySelector(".form");
   const nameEl = document.getElementById("name");
   const nationEl = document.getElementById("nation");
   const emailEl = document.getElementById("email");
   const pwEl = document.getElementById("pw");
-  const submitBtn = document.getElementById("submitBtn");
+  const pw2El = document.getElementById("pw2");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();                 // 기본 제출 막기 (페이지 이동 방지)
-    if (submitBtn.disabled) return;     // 유효성 통과 안 했으면 중단
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    const payload = {
-      name: nameEl.value.trim(),
-      nation: nationEl.value,           // "kr" | "foreigner"
-      email: emailEl.value.trim(),
-      password: pwEl.value,
-    };
+    const name = nameEl?.value.trim();
+    const nation = nationEl?.value; // 'kr' | 'foreigner'
+    const email = emailEl?.value.trim();
+    const password = pwEl?.value;
+    const password2 = pw2El?.value;
+
+    // 프론트 유효성(이미 하고 있지만 한번 더 방어)
+    if (!name || !email || !password || !password2) {
+      alert("모든 필드를 입력해 주세요.");
+      return;
+    }
+    if (password !== password2) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
 
     try {
-      await register(payload);                           // 1) 회원 생성
-      try {                                             // 2) 자동 로그인(토큰 저장)
-        await loginAndStore({ email: payload.email, password: payload.password });
-      } catch (_) { /* 토큰 발급 실패해도 가입은 됐으니 넘어가도 됨 */ }
+      // 2) 회원가입 (서버가 JSON 받도록 구현)
+      await httpSession("/api/session-signup/", {
+        method: "POST",
+        body: JSON.stringify({ name, nation, email, password }),
+      });
 
-      // 3) 프로필 페이지로 이동
-      location.href = "../profile/profile.html";
+      // 3) 바로 로그인된 상태로 me 확인(선택)
+      const me = await httpSession("/api/me/");
+      console.log("Signed up:", me);
+
+      // 4) 다음 화면으로 이동
+      window.location.href = "/Annyeong-fe/profile/profile.html";
     } catch (err) {
+      console.error(err);
       alert(`회원가입 실패: ${err.message}`);
     }
   });
