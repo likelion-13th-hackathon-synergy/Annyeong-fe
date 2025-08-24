@@ -20,9 +20,9 @@ const MAX = 5;
 const selected = new Set();
 
 function setDisplayName(name) {
-  const line = document.getElementById("review-w-title");
+  const line = document.querySelector("#review-w-title .strong-text");
   if (line) {
-    line.innerHTML = `<span class="strong-text">'${name}님'</span>님의 어떤 점이 좋았나요?`;
+    line.textContent = `‘ ${name}’ `;
   }
 }
 
