@@ -7,7 +7,6 @@ if (typeof startStatusbarClock === "function") {
 
 const BASE_URL = "http://localhost:8000";
 
-// CSRF helpers
 function getCookie(name){ const m=document.cookie.match(new RegExp("(^|; )"+name+"=([^;]*)")); return m?decodeURIComponent(m[2]):null; }
 function setMetaCsrf(v){ const meta=document.querySelector('meta[name="csrf-token"]'); if(meta) meta.setAttribute("content", v||""); }
 async function ensureCsrf(){
@@ -35,7 +34,6 @@ async function httpSession(path, init={}){
   return data;
 }
 
-// bind
 document.addEventListener("DOMContentLoaded", async () => {
   await ensureCsrf();
 
@@ -50,10 +48,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(!email||!password){ alert("이메일/비밀번호를 입력해 주세요."); return; }
 
     try{
-      // ★ 명세: POST /users/login/
+
       await httpSession("/users/login/", { method:"POST", body: JSON.stringify({ email, password }) });
 
-      // 세션 확인: GET /users/profile/
+
       await httpSession("/users/profile/");
 
       window.location.href="/Annyeong-fe/profile/profile.html";
