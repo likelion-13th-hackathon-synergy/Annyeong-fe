@@ -189,13 +189,49 @@ async function init() {
 }
 
 // 뒤로가기 버튼
+// - 항상 이 방의 채팅방으로 우선 이동
+// - referrer가 review-view였다면 루프 방지용으로 채팅방으로
+// - 마지막 실패시 채팅 리스트로
+
 document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.querySelector(".back-btn");
-  backBtn?.addEventListener("click", () => {
-    if (document.referrer) location.href = document.referrer;
-    else history.back();
+  if (!backBtn) return;
+
+  // 현재 쓰기 페이지의 안전한 복귀 지점(해당 채팅방)
+  const chatBackUrl =
+    `../chat/chat-room.html?roomId=${ROOM_ID}&name=${encodeURIComponent(PRESET_NAME || "")}`;
+
+  // 혹시 이후 리뷰보기에서 사용할 수도 있으니 저장해 둠(선택)
+  try { sessionStorage.setItem("REVIEW_BACK_URL", chatBackUrl); } catch {}
+
+  backBtn.addEventListener("click", () => {
+    // 1) 세션에 저장된 복귀 지점이 있으면 그리로
+    try {
+      const saved = sessionStorage.getItem("REVIEW_BACK_URL");
+      if (saved) {
+        sessionStorage.removeItem("REVIEW_BACK_URL");
+        location.href = saved;
+        return;
+      }
+    } catch {}
+
+    // 2) referrer가 review-view가 아니라면 그대로
+    if (document.referrer && !/review-view\.html/i.test(document.referrer)) {
+      location.href = document.referrer;
+      return;
+    }
+
+    // 3) 기본: 이 방의 채팅방
+    if (ROOM_ID) {
+      location.href = chatBackUrl;
+      return;
+    }
+
+    // 4) 최후: 채팅 리스트
+    location.href = "../chat/chat-list.html";
   });
 });
+
 
 // 시작
 document.addEventListener("DOMContentLoaded", init);

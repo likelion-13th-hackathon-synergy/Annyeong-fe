@@ -142,10 +142,44 @@ async function init() {
 // 뒤로가기
 document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.querySelector(".back-btn");
-  backBtn?.addEventListener("click", () => {
-    if (document.referrer) location.href = document.referrer;
-    else history.back();
+  if (!backBtn) return;
+
+  backBtn.addEventListener("click", () => {
+    const url = new URL(location.href);
+    const from   = url.searchParams.get("from");        // 'write' 면 리뷰쓰기 경유
+    const roomId = url.searchParams.get("roomId");      // fallback 용
+    const name   = url.searchParams.get("name") || "";
+    const backUrl = sessionStorage.getItem("REVIEW_BACK_URL");
+
+    // 1) 리뷰쓰기 경유거나, 저장해둔 복귀 URL이 있으면 → 채팅방으로
+    if (from === "write" && backUrl) {
+      sessionStorage.removeItem("REVIEW_BACK_URL");
+      location.href = backUrl;
+      return;
+    }
+    if (backUrl) {
+      sessionStorage.removeItem("REVIEW_BACK_URL");
+      location.href = backUrl;
+      return;
+    }
+
+    // 2) 일반 케이스: review-write가 아닌 referrer가 있으면 그리로
+    if (document.referrer && !/review-write\.html/i.test(document.referrer)) {
+      location.href = document.referrer;
+      return;
+    }
+
+    // 3) roomId만 있는 경우: 채팅방으로 구성해서 이동
+    if (roomId) {
+      location.href = `../chat/chat-room.html?roomId=${roomId}&name=${encodeURIComponent(name)}`;
+      return;
+    }
+
+    // 4) 마지막 fallback: 채팅 리스트
+    location.href = `../chat/chat-list.html`;
   });
 });
+
+
 
 document.addEventListener("DOMContentLoaded", init);
