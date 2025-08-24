@@ -22,14 +22,14 @@ body {
     width: 375px;
     height: 99vh;
     margin: 0 auto;
-    overflow-y: auto;
+    /* overflow-y: auto;*/
+    overflow: hidden;
     position: relative;
     background-color: var(--background-color);
-    background-image: url(../assets/images/BG.svg);
+    background-image: url(../assets/images/home/BG.svg);
 }
 
-.app-wrapper,
-.wrap {
+.app-wrapper, .wrap {
     width: 100%;
     height: 100%;
     position: relative;
@@ -43,76 +43,8 @@ button {
 /* === ✅ header 부분 === */
 header {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
     margin-top: 0px;
-}
-
-.main-menu {
-    color: #FAFAFA;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 700;
-    list-style: none;
-    margin-right: 5px;
-}
-
-.dropdown {
-    min-width: 130px;
-    /* padding보다 크게 설정해야 함 */
-    text-align: center;
-    padding: 10px 25px;
-    margin-right: 10px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.14);
-    background-blend-mode: plus-lighter;
-    box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.25) inset, -6px -5px 4px 0 rgba(0, 0, 0, 0.25) inset, 2px 2px 1px 0 rgba(255, 255, 255, 0.48) inset, 8px 8px 12px 0 rgba(0, 0, 0, 0.25) inset;
-}
-
-.main-menu>li {
-    position: relative;
-    /* 하위 메뉴의 위치 기준 */
-    display: inline-block;
-    /* 메뉴를 가로로 배치 */
-}
-
-.sub-menu {
-    display: none;
-    /* 하위 메뉴를 기본적으로 숨김 */
-    position: absolute;
-    /* 상위 메뉴 기준으로 위치 지정 */
-    list-style: none;
-    min-width: 160px;
-    margin-top: 20px;
-    left: 0;
-
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.14);
-    background-blend-mode: plus-lighter;
-    box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.25) inset, -6px -5px 4px 0 rgba(0, 0, 0, 0.25) inset, 2px 2px 1px 0 rgba(255, 255, 255, 0.48) inset, 8px 8px 12px 0 rgba(0, 0, 0, 0.25) inset;
-}
-
-.sub-menu>li {
-    margin: 10px 0;
-    text-align: center;
-    padding-right: 40px;
-}
-
-.main-menu a {
-    color: inherit;
-    text-decoration: none;
-    text-align: center;
-    padding: 0px;
-    margin: auto 0;
-}
-
-.main-menu>li:hover .sub-menu {
-    z-index: 1;
-}
-
-.main-menu>li.active .sub-menu {
-    display: block;
-    /* active 클래스가 있을 때 하위 메뉴를 표시 */
 }
 
 .logo {
@@ -125,25 +57,8 @@ header {
     margin-left: auto;
 }
 
-.badge {
-    display: inline-block;
-    position: relative;
-    width: 30px;
-    height: 30px;
-    margin-left: 3px;
-}
-
-.google-badge {
-    position: absolute;
-    top: 5px;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
 .chat {
-    margin-left: auto;
-    /* 오른쪽으로 밀어냄 */
+    margin-left: auto; /* 오른쪽으로 밀어냄 */
     margin-right: 10px;
 }
 
@@ -153,7 +68,121 @@ header {
     text-decoration: none;
 }
 
+.main-menu {
+    color: #FAFAFA;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    list-style: none;
+    margin-right: 5px;
+    margin-left: -20px;
+}
+
+.main-menu > li {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    min-width: 150px; /* padding보다 크게 설정해야 함 */
+    margin-right: 10px;
+    position: relative;
+}
+
+.dropdown {
+    display: block; /* 블록 요소로 변경하여 padding 적용 */
+    padding: 10px 25px;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+
+    border-radius: 12px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), #000;
+    background-blend-mode: normal, plus-lighter;
+    box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.54) inset, -6px -5px 4px 0 rgba(0, 0, 0, 0.25) inset, 2px 2px 1px 0 rgba(255, 255, 255, 0.48) inset, 8px 8px 14px 0 rgba(0, 0, 0, 0.33) inset;
+}
+
+.dropdown-arrow {
+    position: absolute; /* 절대 위치 지정 */
+    top: 50%; /* 수직 중앙 정렬 */
+    right: 15px; /* 오른쪽에서 15px 떨어진 위치에 고정 */
+    transform: translateY(-50%); /* 수직 중앙 정렬을 위해 */
+}
+
+.sub-menu {
+    display: none;
+    list-style: none;
+    min-width: 150px;
+
+    position: absolute;
+    top: calc(100% - 2px);
+    left: 0;
+
+    margin: 0;
+    padding: 0;
+
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), #000;
+    background-blend-mode: normal, plus-lighter;
+    box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.54) inset, -6px -5px 4px 0 rgba(0, 0, 0, 0.25) inset, 2px 2px 1px 0 rgba(255, 255, 255, 0.48) inset, 8px 8px 14px 0 rgba(0, 0, 0, 0.33) inset;
+    
+    z-index: 1; 
+
+}
+
+.sub-menu > li {
+    text-align: left;
+    padding: 10px 25px;
+}
+
+.sub-menu a {
+    color: inherit;
+    text-decoration: none;
+    display: block; /* 링크 전체 클릭 가능하게 */
+}
+
+.sub-menu .default-item {
+    display: block;
+}
+
+/* 활성화 상태 스타일 */
+.dropdown-menu.active .dropdown {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.dropdown-menu.active .sub-menu {
+    display: block;
+}
+
 /* === ✅ main 부분 === */
+#card-container {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    overflow: hidden; /* 좌우 드래그 시 스크롤 방지 */
+}
+
+.card-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+    display: flex;
+    justify-content: center;
+    cursor: grab;
+    user-select: none; /* 드래그 시 텍스트 선택 방지 */
+    touch-action: pan-y; /* 세로 스크롤만 허용, 좌우 드래그는 JS에서 처리 */
+}
+
+.card-wrapper:active {
+    cursor: grabbing;
+}
+
 .image-container {
     position: relative;
     width: 100%;
@@ -167,53 +196,64 @@ header {
     display: block;
     margin: 0 auto;
     mask-image: linear-gradient(to top, transparent, black 50%);
-}
-
-.image-container .review {
-    position: absolute;
-    right: 10%;
-    bottom: 10px;
-}
-
-#interest {
-    color: #46CCEA;
-    font-size: 12px;
-    font-weight: 700;
-    margin: 10px 0px;
-}
-
-.card .tag img {
-    width: 24px;
-    height: 24px;
-}
+} 
 
 .card {
     position: absolute;
     color: white;
     text-align: left;
-    top: 65%;
+    top: 70%;
     left: 10%;
 }
 
-.card h1 {
+.card .profile-name {
     font-size: 30px;
     font-weight: bold;
     padding: 0;
     margin-bottom: 0;
 }
 
-.card .description {
+.badge {
+    margin-left: 3px;
+    display: inline-block;
+    position: relative;
+    width: 30px; 
+    height: 30px;
+}
+
+.google-badge {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.card .profile-location {
+    font-size: 12px;
+    color: #DFDFDF;
+    font-weight: 700;
+}
+
+.card .profile-description {
     font-size: 12px;
     color: #DFDFDF;
     font-weight: 700;
     line-height: 1.5;
     margin-bottom: 0px;
+    white-space: normal;
 }
 
-.card .more-text {
+.card .more-text { /* 더보기 버튼 */
     font-size: 12px;
     color: #999;
-    margin-bottom: 0px;
+    white-space: nowrap;
+}
+
+.image-container .review {
+    position: absolute;
+    right: 10%;
+    bottom: 40px;
 }
 
 /* === ✅ footer 부분 === */
@@ -227,13 +267,20 @@ footer {
 .no-button {
     margin-left: 80px;
     padding: 0;
+    background: transparent; /* 배경 투명 */
+    border: none;            /* 테두리 제거 */
+    padding: 0;              /* 기본 여백 제거 */
+    cursor: pointer;         /* 포인터 커서 */
 
 }
 
 .yes-button {
     margin-right: 80px;
     padding: 0;
-
+    background: transparent; /* 배경 투명 */
+    border: none;            /* 테두리 제거 */
+    padding: 0;              /* 기본 여백 제거 */
+    cursor: pointer;         /* 포인터 커서 */
 }
 
 .yes-button::before {
@@ -241,17 +288,15 @@ footer {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0;
-    /* 초기 위치를 오른쪽 바깥으로 설정 */
-    width: 70px;
-    /* 불빛의 너비 */
+    right: 0; 
+    width: 70px; /* 불빛의 너비 */
     background-image: linear-gradient(to right, rgba(0, 255, 0, 0), rgba(0, 255, 0, 0.8));
 
     /* 평소에는 투명하게 숨기고, 마우스 이벤트를 통과시킴 */
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
-    z-index: 10;
+    transition: opacity 0.3s ease-in-out; 
+    z-index: 10; 
 }
 
 .yes-button:hover::before {
@@ -263,17 +308,14 @@ footer {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0px;
-    /* 초기 위치를 쪽 바깥으로 설정 */
-    width: 70px;
-    /* 불빛의 너비 */
+    left: 0px; 
+    width: 70px; /* 불빛의 너비 */
     background-image: linear-gradient(to left, rgba(0, 255, 0, 0), rgb(255, 0, 0, 0.8));
 
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
-    z-index: 10;
-    /* 다른 요소 위에 표시되도록 */
+    transition: opacity 0.3s ease-in-out; 
+    z-index: 10; /* 다른 요소 위에 표시되도록 */
 }
 
 .no-button:hover::before {
