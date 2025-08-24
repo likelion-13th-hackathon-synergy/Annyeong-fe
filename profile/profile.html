@@ -10,7 +10,7 @@
   <main class="phone">
     <!-- 상태바 -->
     <header class="statusbar" role="banner">
-      <span class="sb-time">9:41</span>
+      <span class="sb-time" aria-label="현재 시각"></span>
       <div class="sb-icons" aria-hidden="true">
         <img src="../assets/images/cellular.svg" alt="">
         <img src="../assets/images/wifi.svg" alt="">
@@ -20,16 +20,24 @@
 
     <!-- 상단 로고 / 역할 -->
     <div class="top">
-      <div class="brand">
-        <img src="../assets/icons/logo.svg" alt="안녕 로고">
+        <div class="brand">
+          <img src="../assets/icons/logo.svg" alt="안녕 로고">
+        </div>
+      
+        <div class="top-actions">
+          <button type="button" class="icon-btn" id="btnLang" aria-label="언어 설정">
+            <img src="../assets/icons/lang.svg" alt="" aria-hidden="true">
+          </button>
+          <button type="button" class="icon-btn" id="btnNotify" aria-label="알림">
+            <img src="../assets/icons/user.svg" alt="" aria-hidden="true">
+            <!-- 필요하면 알림 점 -->
+            <!-- <span class="dot" aria-hidden="true"></span> -->
+          </button>
+          <a href="../chat/chat-list.html" class="icon-btn" id="btnProfile" aria-label="내 프로필">
+            <img src="../assets/icons/message.svg" alt="" aria-hidden="true">
+          </a>
+        </div>
       </div>
-      <button type="button" class="role-select" aria-label="역할 선택">
-        서포터즈
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
 
     <!-- 전체 카드 -->
     <form class="profile-form" action="#" method="post" novalidate>
@@ -206,173 +214,11 @@
         </div>
       </section>
     </form>
-    <script type="module">
-    const BASE = "http://127.0.0.1:8000";   // 장고 서버 주소
-    const PROFILE_URL = `${BASE}/users/profile/`;
-    const CSRF_URL    = `${BASE}/users/csrf/`;
-    const optText = (sel) => (sel.options[sel.selectedIndex] || {}).text || '';
-    const GOOGLE_LOGIN_URL = `${BASE}/users/google/login/`;
-
-    document.getElementById("googleConnectBtn").addEventListener("click", async () => {
-  try {
-    await ensureCsrf();
-    const res = await fetch(GOOGLE_LOGIN_URL, { credentials: "include" });
-    if (res.status === 401) {
-      alert("로그인이 필요합니다. 먼저 로그인해 주세요.");
-      // window.location.href = "../login/login.html";
-      return;
-    }
-    const data = await res.json();
-    console.log("google login api:", data); // 디버깅
-    if (res.ok && data.redirect_url) {
-      window.location.href = data.redirect_url; // 구글 동의화면으로 이동
-    } else {
-      alert(data.detail || "구글 인증 URL 생성에 실패했습니다.");
-    }
-  } catch (e) {
-    console.error(e);
-    alert("구글 인증 처리 중 오류가 발생했습니다.");
-  }
-});
-
-  function getCookie(name) {
-    const v = `; ${document.cookie}`;
-    const p = v.split(`; ${name}=`);
-    if (p.length === 2) return p.pop().split(";").shift();
-  }
-
-  function collectPreviewData() {
-  const countrySel = document.getElementById('country');
-  const langSel    = document.getElementById('lang');
-  const transSel   = document.getElementById('trans');
-
-  return {
-    real_name: document.getElementById('real_name').value.trim(),
-    age: document.getElementById('age').value.trim(),
-    nationality: countrySel.value,
-    nationality_label: optText(countrySel),
-    city: document.getElementById('sido').value.trim(),
-    service_language: langSel.value,
-    service_language_label: optText(langSel),
-    translation_category: transSel.value,
-    translation_category_label: optText(transSel),
-    introduction: document.getElementById('bio').value.trim(),
-    google_verified:
-      (document.querySelector('.badge-img')?.style.display || '') !== 'none'
-  };
-}
-
-// ✅ 미리보기 버튼: 값 저장 → pre.html로 이동
-document.getElementById("previewBtn").addEventListener("click", () => {
-  const draft = collectPreviewData();
-  sessionStorage.setItem("preview_profile", JSON.stringify(draft));
-  window.location.href = "pre.html";
-});
-
-  async function ensureCsrf() {
-    if (!getCookie("csrftoken")) {
-      await fetch(CSRF_URL, { credentials: "include" });
-    }
-  }
-
-  // --- 불러오기 ---
-  async function loadProfile() {
-    const res = await fetch(PROFILE_URL, { credentials: "include" });
-    if (!res.ok) {
-      console.warn("프로필 불러오기 실패:", await res.text());
-      return;
-    }
-    const me = await res.json();
-
-    document.getElementById("real_name").value = me.real_name || "";
-    document.getElementById("age").value       = me.age || "";
-    document.getElementById("country").value   = me.nationality || "";
-    document.getElementById("sido").value      = me.city || "";
-    document.getElementById("lang").value      = me.service_language || "";
-    document.getElementById("trans").value     = me.translation_category || "";
-    document.getElementById("bio").value       = me.introduction || "";
-
-    document.querySelector(".badge-img").style.display = me.google_verified ? "block" : "none";
-
-    const nameSpan = document.getElementById("real_name");
-    if (nameSpan) nameSpan.textContent = me.real_name;
-  }
-
-  // --- 저장하기 ---
-  async function saveProfile() {
-    await ensureCsrf();
-    const body = {
-      real_name: document.getElementById("real_name").value || "",
-      age: String(document.getElementById("age").value || ""),
-      nationality: document.getElementById("country").value || null,
-      city: document.getElementById("sido").value || "",
-      service_language: document.getElementById("lang").value || null,
-      translation_category: document.getElementById("trans").value || null,
-      introduction: document.getElementById("bio").value || "",
-    };
-
-    const res = await fetch(PROFILE_URL, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCookie("csrftoken") || "",
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) {
-      alert("저장 실패: " + (await res.text()));
-      return;
-    }
-    alert("저장 완료!");
-    // 저장 후 home.html 이동
-    window.location.href = "../home/home.html";
-  }
-
-  // --- 버튼 연결 ---
-  document.getElementById("previewBtn").addEventListener("click", () => {
-    window.location.href = "pre.html";
-  });
-
-  document.getElementById("submitBtn").addEventListener("click", async () => {
-  await saveProfile();                        
-  window.location.href = "../home/home.html";  
-});
-
-// 구글 연결 버튼
-document.getElementById("googleConnectBtn").addEventListener("click", async () => {
-    try {
-      await ensureCsrf();
-      const res = await fetch(GOOGLE_LOGIN_URL, { credentials: "include" });
-      if (res.status === 401) {
-        alert("로그인이 필요합니다. 먼저 로그인해 주세요.");
-        // 필요시 로그인 페이지로 이동
-        // window.location.href = "../login/login.html";
-        return;
-      }
-      const data = await res.json();
-      if (res.ok && data.redirect_url) {
-        // 구글 동의화면으로 이동
-        window.location.href = data.redirect_url;
-      } else {
-        alert(data.detail || "구글 인증 URL 생성에 실패했습니다.");
-      }
-    } catch (e) {
-      console.error(e);
-      alert("구글 인증 처리 중 오류가 발생했습니다.");
-    }
-  });
 
 
-  // 페이지 진입 시 초기 데이터 불러오기, 초기화
-  await ensureCsrf();
-  await loadProfile();
+<script type="module" src="./profile.api.js"></script>
 
-    
-        
 
-    </script>
       
   </main>
   
