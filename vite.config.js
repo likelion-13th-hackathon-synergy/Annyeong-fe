@@ -21,6 +21,13 @@ export default defineConfig({
         home:      "home/home.html",
         chat:      "chat/chat-list.html",   // 파일명/경로 정확히!
         profile:   "profile/profile.html",
+        pre: "profile/pre.html",
+        login: "login/login.html",
+        signup: "login/signup.html",
+        chatroom: "chat/chat-room.html",
+        reviewView: "review/review-view.html",
+        reviewWrite: "review/review-write.html",
+
       },
     },
   },

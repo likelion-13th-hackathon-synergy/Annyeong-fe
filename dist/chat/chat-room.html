@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>Chat</title>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" crossorigin src="/assets/chatroom-DpPf7LWu.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+    <link rel="modulepreload" crossorigin href="/assets/auth-CgfX5zSn.js">
+    <link rel="modulepreload" crossorigin href="/assets/i18n-DcpoQoQT.js">
+    <link rel="stylesheet" crossorigin href="/assets/auth-CD3yKRmk.css">
+    <link rel="stylesheet" crossorigin href="/assets/chatroom-CaglYKcG.css">
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="app-wrapper">
+        <div class="chat-container">
+          <header class="chat-header">
+            <div class="back-icon">
+              <button
+                id="back-btn"
+                class="back-btn"
+                type="button"
+                aria-label="뒤로가기"
+              >
+                <img src="/assets/backIcon-L-_9GKkz.png" alt="뒤로가기" />
+              </button>
+            </div>
+
+            <div class="chat-person">
+              <p id="chat-title">Sonya</p>
+            </div>
+
+            <div class="header-logo">
+              <button
+                id="chat-menu-btn"
+                class="chat-btn"
+                type="button"
+                aria-label="메뉴"
+              >
+                <img src="/assets/star_btn-DzZoItvv.png" alt="채팅 메뉴" />
+              </button>
+            </div>
+          </header>
+
+          <!-- 메시지 리스트 위에 배너 -->
+          <div id="invite-banner" class="invite-banner" hidden>
+            <div class="invite-text" data-i18n-key="new_interest">
+              새로운 호감이 도착했어요!<br />
+              '<span id="invite-name" data-i18n-key="accept_chat_request"
+                >상대</span
+              >'님의 대화요청을 수락할까요?
+            </div>
+            <div class="invite-actions">
+              <button
+                id="btn-decline"
+                class="btn-decline"
+                type="button"
+                data-i18n-key="reject"
+              >
+                거절 ✕
+              </button>
+              <button
+                id="btn-accept"
+                class="btn-accept"
+                type="button"
+                data-i18n-key="accept"
+              >
+                수락 ✔
+                <span class="dot-on"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 메시지 영역 -->
+          <main class="chat-wrapper" id="chat-wrapper">
+            <ul
+              id="messages"
+              style="list-style: none; padding: 0; margin: 0"
+            ></ul>
+          </main>
+
+          <!-- 입력 영역(나중에 JS로 제어) -->
+          <footer class="chat-input">
+            <div class="inputbar">
+              <button id="attach-btn" type="button" aria-label="첨부" disabled>
+                <img
+                  src="data:image/png;base64,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"
+                  alt="플러스버튼"
+                />
+              </button>
+              <input id="file-input" type="file" accept="image/*" hidden />
+
+              <input
+                type="text"
+                id="msg-input"
+                data-i18n-key="enter_message"
+                placeholder="메시지 입력"
+                disabled
+              />
+
+              <button id="send-btn" type="button" aria-label="전송" disabled>
+                <img src="data:image/png;base64,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" alt="전송버튼" />
+              </button>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/mock-socket@9.3.0/dist/mock-socket.js"></script>
+  </body>
+</html>

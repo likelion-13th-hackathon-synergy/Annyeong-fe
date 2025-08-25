@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>프로필 설정</title>
+  <meta name="csrf-token" content="">
+  <script type="module" crossorigin src="/assets/profile-BmetgqTJ.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/assets/statusbar-time-3u5cukCV.js">
+  <link rel="modulepreload" crossorigin href="/assets/i18n-DcpoQoQT.js">
+  <link rel="stylesheet" crossorigin href="/assets/profile-DN7N-piC.css">
+</head>
+<body>
+  <main class="phone">
+    <!-- 상태바 -->
+    <header class="statusbar" role="banner">
+      <span class="sb-time" aria-label="현재 시각"></span>
+      <div class="sb-icons" aria-hidden="true">
+        <img src="data:image/svg+xml,%3csvg%20width='19'%20height='12'%20viewBox='0%200%2019%2012'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M18.1642%201.3956C18.1642%200.807467%2017.7205%200.330688%2017.1732%200.330688H16.1822C15.6348%200.330688%2015.1912%200.807467%2015.1912%201.3956V10.6249C15.1912%2011.213%2015.6348%2011.6898%2016.1822%2011.6898H17.1732C17.7205%2011.6898%2018.1642%2011.213%2018.1642%2010.6249V1.3956ZM11.2574%202.60251H12.2484C12.7957%202.60251%2013.2394%203.09073%2013.2394%203.69298V10.5993C13.2394%2011.2016%2012.7957%2011.6898%2012.2484%2011.6898H11.2574C10.7101%2011.6898%2010.2664%2011.2016%2010.2664%2010.5993V3.69298C10.2664%203.09073%2010.7101%202.60251%2011.2574%202.60251ZM7.23292%205.06364H6.24192C5.69461%205.06364%205.25092%205.55807%205.25092%206.16799V10.5854C5.25092%2011.1953%205.69461%2011.6898%206.24192%2011.6898H7.23292C7.78024%2011.6898%208.22392%2011.1953%208.22392%2010.5854V6.16799C8.22392%205.55807%207.78024%205.06364%207.23292%205.06364ZM2.30817%207.33546H1.31717C0.769857%207.33546%200.326172%207.82284%200.326172%208.42404V10.6012C0.326172%2011.2024%200.769857%2011.6898%201.31717%2011.6898H2.30817C2.85548%2011.6898%203.29917%2011.2024%203.29917%2010.6012V8.42404C3.29917%207.82284%202.85548%207.33546%202.30817%207.33546Z'%20fill='white'/%3e%3c/svg%3e" alt="">
+        <img src="data:image/svg+xml,%3csvg%20width='17'%20height='12'%20viewBox='0%200%2017%2012'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M8.63075%202.57465C10.9414%202.57475%2013.1638%203.43142%2014.8384%204.96761C14.9645%205.08621%2015.1661%205.08471%2015.2903%204.96425L16.4957%203.79041C16.5586%203.72932%2016.5937%203.64656%2016.5931%203.56046C16.5926%203.47435%2016.5566%203.39199%2016.4929%203.33161C12.0975%20-0.73277%205.16327%20-0.73277%200.767871%203.33161C0.704201%203.39195%200.668075%203.47428%200.667488%203.56039C0.666901%203.64649%200.701901%203.72927%200.764743%203.79041L1.97054%204.96425C2.09466%205.08489%202.29638%205.08639%202.42241%204.96761C4.09727%203.43132%206.31984%202.57465%208.63075%202.57465ZM8.62763%206.49555C9.88867%206.49547%2011.1047%206.97091%2012.0394%207.82948C12.1659%207.95133%2012.365%207.94869%2012.4883%207.82353L13.6842%206.59781C13.7472%206.53352%2013.7822%206.4463%2013.7813%206.35567C13.7804%206.26504%2013.7437%206.17856%2013.6794%206.11558C10.8329%203.4298%206.42476%203.4298%203.57828%206.11558C3.51398%206.17856%203.47729%206.26508%203.47645%206.35574C3.4756%206.4464%203.51067%206.53361%203.57379%206.59781L4.76941%207.82353C4.89265%207.94869%205.09181%207.95133%205.21824%207.82948C6.15237%206.97148%207.36743%206.49608%208.62763%206.49555ZM10.973%209.09093C10.9748%209.18881%2010.9403%209.28317%2010.8778%209.35174L8.85555%2011.6323C8.79627%2011.6994%208.71545%2011.7371%208.63112%2011.7371C8.54679%2011.7371%208.46597%2011.6994%208.40669%2011.6323L6.38409%209.35174C6.32161%209.28312%206.28724%209.18873%206.28909%209.09085C6.29095%208.99297%206.32886%208.90029%206.39388%208.83468C7.68537%207.61399%209.57687%207.61399%2010.8684%208.83468C10.9333%208.90034%2010.9712%208.99306%2010.973%209.09093Z'%20fill='white'/%3e%3c/svg%3e" alt="">
+        <img src="data:image/svg+xml,%3csvg%20width='26'%20height='14'%20viewBox='0%200%2026%2014'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20opacity='0.35'%20x='0.561211'%20y='1.43584'%20width='22.2975'%20height='11.1487'%20rx='3.53043'%20stroke='white'%20stroke-width='0.929062'/%3e%3cpath%20opacity='0.4'%20d='M24.252%205.41333V9.1997C24.9996%208.87901%2025.4858%208.13301%2025.4858%207.30651C25.4858%206.48001%2024.9996%205.73401%2024.252%205.41333'%20fill='white'/%3e%3crect%20x='1.95459'%20y='2.82947'%20width='19.5103'%20height='8.36156'%20rx='2.32265'%20fill='white'/%3e%3c/svg%3e" alt="">
+      </div>
+    </header>
+
+    <!-- 상단 로고 / 역할 -->
+    <div class="top">
+        <div class="brand">
+          <img src="/assets/logo-6-ZaX1Ow.svg" alt="안녕 로고">
+        </div>
+      
+        <div class="top-actions">
+          <button type="button" class="icon-btn" id="btnLang" aria-label="언어 설정">
+            <img src="data:image/png;base64,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" alt="" aria-hidden="true">
+          </button>
+          <button type="button" class="icon-btn" id="btnNotify" aria-label="알림">
+            <img src="data:image/png;base64,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" alt="" aria-hidden="true">
+            <!-- 필요하면 알림 점 -->
+            <!-- <span class="dot" aria-hidden="true"></span> -->
+          </button>
+          <a href="../chat/chat-list.html" class="icon-btn" id="btnProfile" aria-label="내 프로필">
+            <img src="data:image/png;base64,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" alt="" aria-hidden="true">
+          </a>
+        </div>
+      </div>
+
+    <!-- 전체 카드 -->
+    <form class="profile-form" action="#" method="post" novalidate>
+      <section class="profile-card" aria-label="프로필 카드">
+        
+
+        <!-- 인증 배너 -->
+        <!-- 인증 배너 (새 디자인) -->
+<div class="verify-banner" role="region" aria-label="프로필 인증 안내">
+    <button type="button" class="vb-close" aria-label="배너 닫기"></button>
+  
+    <div class="vb-left">
+      <img class="vb-g" src="data:image/svg+xml,%3csvg%20width='40'%20height='40'%20viewBox='0%200%2040%2040'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_561_2795)'%3e%3cpath%20d='M20%200.5C30.7696%200.5%2039.5%209.23045%2039.5%2020C39.5%2030.7696%2030.7696%2039.5%2020%2039.5C9.23045%2039.5%200.5%2030.7696%200.5%2020C0.5%209.23045%209.23045%200.5%2020%200.5Z'%20stroke='%23F5F5F5'/%3e%3cmask%20id='mask0_561_2795'%20style='mask-type:luminance'%20maskUnits='userSpaceOnUse'%20x='10'%20y='10'%20width='20'%20height='20'%3e%3cpath%20d='M30%2010H10V30H30V10Z'%20fill='white'/%3e%3c/mask%3e%3cg%20mask='url(%23mask0_561_2795)'%3e%3cpath%20d='M29.6%2020.2273C29.6%2019.5182%2029.5364%2018.8364%2029.4182%2018.1818H20V22.05H25.3818C25.15%2023.3%2024.4455%2024.3591%2023.3864%2025.0682V27.5773H26.6182C28.5091%2025.8364%2029.6%2023.2727%2029.6%2020.2273Z'%20fill='%234285F4'/%3e%3cpath%20d='M19.9999%2030C22.6999%2030%2024.9635%2029.1045%2026.618%2027.5773L23.3862%2025.0682C22.4908%2025.6682%2021.3453%2026.0227%2019.9999%2026.0227C17.3953%2026.0227%2015.1908%2024.2636%2014.4044%2021.9H11.0635V24.4909C12.709%2027.7591%2016.0908%2030%2019.9999%2030Z'%20fill='%2334A853'/%3e%3cpath%20d='M14.4045%2021.9001C14.2045%2021.3001%2014.0909%2020.6592%2014.0909%2020.0001C14.0909%2019.341%2014.2045%2018.7001%2014.4045%2018.1001V15.5092H11.0636C10.3864%2016.8592%2010%2018.3865%2010%2020.0001C10%2021.6137%2010.3864%2023.141%2011.0636%2024.491L14.4045%2021.9001Z'%20fill='%23FBBC04'/%3e%3cpath%20d='M19.9999%2013.9773C21.468%2013.9773%2022.7862%2014.4818%2023.8226%2015.4727L26.6908%2012.6045C24.959%2010.9909%2022.6953%2010%2019.9999%2010C16.0908%2010%2012.709%2012.2409%2011.0635%2015.5091L14.4044%2018.1C15.1908%2015.7364%2017.3953%2013.9773%2019.9999%2013.9773Z'%20fill='%23E94235'/%3e%3c/g%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_561_2795'%3e%3crect%20width='40'%20height='40'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e" alt="Google 로고" />
+      <div class="vb-texts">
+        <p class="vb-title">
+          프로필 인증뱃지
+          <span class="vb-badge" aria-label="인증됨" hidden>✔︎</span>
+        </p>
+        <p class="vb-sub">구글 계정 연동하면 인증뱃지를 받을 수 있어요!</p>
+      </div>
+    </div>
+  
+    <button type="button" id="googleConnectBtn" class="vb-action">
+      소셜 로그인 연결하기
+    </button>
+  </div>
+
+        <!-- 아바타 -->
+        <div class="avatar-wrap">
+          <div class="avatar">
+            <!-- 나중에 이미지 교체 -->
+            <img src="/assets/profile-sample-DCTRNNQk.png" alt="프로필 이미지">
+            <span class="tick">
+                <img class="badge-img" src="data:image/svg+xml,%3csvg%20width='28'%20height='28'%20viewBox='0%200%2028%2028'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M6.9043%2024.166C5.85742%2024.166%205.08398%2023.916%204.58398%2023.416C4.08398%2022.916%203.83398%2022.1426%203.83398%2021.0957V18.5645C3.83398%2018.3301%203.75586%2018.1309%203.59961%2017.9668L1.80664%2016.1621C1.06445%2015.4277%200.693359%2014.709%200.693359%2014.0059C0.693359%2013.3027%201.06445%2012.5801%201.80664%2011.8379L3.59961%2010.0332C3.75586%209.86914%203.83398%209.67383%203.83398%209.44726V6.9043C3.83398%205.84961%204.08398%205.07617%204.58398%204.58398C5.08398%204.08398%205.85742%203.83398%206.9043%203.83398H9.44727C9.68164%203.83398%209.87695%203.75586%2010.0332%203.59961L11.8379%201.80664C12.5801%201.06445%2013.3027%200.693358%2014.0059%200.693358C14.709%200.685546%2015.4277%201.05664%2016.1621%201.80664L17.9668%203.59961C18.1309%203.75586%2018.3301%203.83398%2018.5645%203.83398H21.0957C22.1504%203.83398%2022.9238%204.08789%2023.416%204.5957C23.916%205.0957%2024.166%205.86523%2024.166%206.9043V9.44726C24.166%209.67383%2024.248%209.86914%2024.4121%2010.0332L26.2051%2011.8379C26.9395%2012.5801%2027.3066%2013.3027%2027.3066%2014.0059C27.3145%2014.709%2026.9473%2015.4277%2026.2051%2016.1621L24.4121%2017.9668C24.248%2018.1309%2024.166%2018.3301%2024.166%2018.5645V21.0957C24.166%2022.1504%2023.916%2022.9238%2023.416%2023.416C22.916%2023.916%2022.1426%2024.166%2021.0957%2024.166H18.5645C18.3301%2024.166%2018.1309%2024.248%2017.9668%2024.4121L16.1621%2026.2051C15.4277%2026.9395%2014.709%2027.3066%2014.0059%2027.3066C13.3027%2027.3145%2012.5801%2026.9473%2011.8379%2026.2051L10.0332%2024.4121C9.87695%2024.248%209.68164%2024.166%209.44727%2024.166H6.9043ZM12.6934%2019.7246C12.8965%2019.7246%2013.0801%2019.6777%2013.2441%2019.584C13.4082%2019.4902%2013.5527%2019.3496%2013.6777%2019.1621L19.1855%2010.4785C19.2559%2010.3613%2019.3223%2010.2363%2019.3848%2010.1035C19.4473%209.9707%2019.4785%209.83789%2019.4785%209.70508C19.4785%209.43164%2019.377%209.2168%2019.1738%209.06055C18.9707%208.89648%2018.7441%208.81445%2018.4941%208.81445C18.1504%208.81445%2017.8691%208.99414%2017.6504%209.35351L12.6465%2017.3926L10.2676%2014.3223C10.1191%2014.127%209.97461%2013.9941%209.83398%2013.9238C9.70117%2013.8535%209.54883%2013.8184%209.37695%2013.8184C9.11133%2013.8184%208.88867%2013.916%208.70898%2014.1113C8.5293%2014.2988%208.43945%2014.5254%208.43945%2014.791C8.43945%2014.9238%208.46289%2015.0566%208.50977%2015.1895C8.56445%2015.3145%208.63477%2015.4355%208.7207%2015.5527L11.6621%2019.1621C11.8184%2019.3652%2011.9785%2019.5098%2012.1426%2019.5957C12.3066%2019.6816%2012.4902%2019.7246%2012.6934%2019.7246Z'%20fill='%2321ED13'/%3e%3cpath%20d='M12.6934%2019.7246C12.8965%2019.7246%2013.0801%2019.6777%2013.2441%2019.584C13.4082%2019.4902%2013.5527%2019.3496%2013.6777%2019.1621L19.1855%2010.4785C19.2559%2010.3613%2019.3223%2010.2363%2019.3848%2010.1035C19.4473%209.9707%2019.4785%209.83789%2019.4785%209.70508C19.4785%209.43164%2019.377%209.2168%2019.1738%209.06055C18.9707%208.89648%2018.7441%208.81445%2018.4941%208.81445C18.1504%208.81445%2017.8691%208.99414%2017.6504%209.35351L12.6465%2017.3926L10.2676%2014.3223C10.1191%2014.127%209.97461%2013.9941%209.83398%2013.9238C9.70117%2013.8535%209.54883%2013.8184%209.37695%2013.8184C9.11133%2013.8184%208.88867%2013.916%208.70898%2014.1113C8.5293%2014.2988%208.43945%2014.5254%208.43945%2014.791C8.43945%2014.9238%208.46289%2015.0566%208.50977%2015.1895C8.56445%2015.3145%208.63477%2015.4355%208.7207%2015.5527L11.6621%2019.1621C11.8184%2019.3652%2011.9785%2019.5098%2012.1426%2019.5957C12.3066%2019.6816%2012.4902%2019.7246%2012.6934%2019.7246Z'%20fill='white'/%3e%3c/svg%3e" alt="인증됨">
+              </span>
+          </div>
+          <a href="#" class="edit-photo">
+            <span data-i18n-key="image">사진 수정하기</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 21h6l12-12-6-6L3 15v6zM14 6l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <hr class="card-sep" aria-hidden="true" />
+
+        <!-- 입력 섹션 -->
+        <div class="card-body">
+          <!-- 이름(표시) -->
+          <div class="input-group">
+            <label for="real_name" class="input-label" data-i18n-key="name_profile">이름</label>
+            <div class="field">
+              <input id="real_name" type="text" data-i18n-key="name_form" placeholder="이름을 입력해주세요." />
+            </div>
+          </div>
+
+          <!-- 나이 -->
+          <div class="input-group">
+            <label for="age" class="input-label" data-i18n-key="age">나이</label>
+            <div class="field">
+              <input id="age" type="number" inputmode="numeric" data-i18n-key="age_form" placeholder="나이를 입력해주세요." min="1" />
+            </div>
+          </div>
+
+          <!-- 국가 -->
+          <div class="input-group">
+            <label for="country" class="input-label" data-i18n-key="nation">국가</label>
+            <div class="field select-field">
+              <select id="country">
+                <option value="" data-i18n-key="nation_form" selected>국가선택하기</option>
+                <option value="kr" data-i18n-key="korea">대한민국</option>
+                <option value="jp" data-i18n-key="japan">일본</option>
+                <option value="us" data-i18n-key="usa">미국</option>
+                <option value="cn" data-i18n-key="china">중국</option>
+                <option value="vn" data-i18n-key="vietnam">베트남</option>
+                <option value="th" data-i18n-key="thailand">태국</option>
+                <option value="ru" data-i18n-key="russia">러시아</option>
+                <option value="tw" data-i18n-key="taiwan">대만</option>
+              </select>
+              <span class="caret" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- 시/도 -->
+<div class="input-group">
+    <label for="sido" class="input-label" data-i18n-key="province">시/도</label>
+    <div class="field select-field">
+      <select id="sido">
+        <option value="" data-i18n-key="select_province" selected>시/도 선택하기</option>
+        <option value="서울특별시" data-i18n-key="seoul">서울특별시</option>
+        <option value="부산광역시" data-i18n-key="busan">부산광역시</option>
+        <option value="대구광역시" data-i18n-key="daegu">대구광역시</option>
+        <option value="인천광역시" data-i18n-key="incheon">인천광역시</option>
+        <option value="광주광역시" data-i18n-key="gwangju">광주광역시</option>
+        <option value="대전광역시" data-i18n-key="daejeon">대전광역시</option>
+        <option value="울산광역시" data-i18n-key="ulsan">울산광역시</option>
+        <option value="세종특별자치시" data-i18n-key="sejong">세종특별자치시</option>
+        <option value="경기도" data-i18n-key="gyeonggi_do">경기도</option>
+        <option value="강원특별자치도" data-i18n-key="gangwon_special_autonomous_province">강원특별자치도</option>
+        <option value="충청북도" data-i18n-key="chungcheongbuk_do">충청북도</option>
+        <option value="충청남도" data-i18n-key="chungcheongnam_do">충청남도</option>
+        <option value="전북특별자치도" data-i18n-key="jeonbuk_special_autonomous_province">전북특별자치도</option>
+        <option value="전라남도" data-i18n-key="jeollanam_do">전라남도</option>
+        <option value="경상북도" data-i18n-key="gyeongsangbuk_do">경상북도</option>
+        <option value="경상남도" data-i18n-key="gyeongsangnam_do">경상남도</option>
+        <option value="제주특별자치도" data-i18n-key="jeju_special_autonomous_province">제주특별자치도</option>
+      </select>
+      <span class="caret" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+  </div>
+  
+
+ 
+          <!-- 언어 -->
+          <div class="input-group">
+            <label for="lang" class="input-label" data-i18n-key="language">언어</label>
+            <div class="field select-field">
+              <select id="lang">
+                <option value="" data-i18n-key="choice_language" selected>언어선택하기</option>
+                <option value="ko" data-i18n-key="korean">한국어</option>
+                <option value="en" data-i18n-key="english">영어</option>
+                <option value="ja" data-i18n-key="japanese">일본어</option>
+                <option value="zh" data-i18n-key="chinese">중국어</option>
+                <option value="vi" data-i18n-key="vietnamese">베트남어</option>
+                <option value="th" data-i18n-key="thai">태국어</option>
+                <option value="ru" data-i18n-key="russian">러시아어</option>
+              </select>
+              <span class="caret" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- 번역 -->
+          <div class="input-group">
+            <label for="trans" class="input-label" data-i18n-key="translation">번역</label>
+            <div class="field select-field">
+              <select id="trans">
+                <option value="" data-i18n-key="choice_language" selected>언어선택하기</option>
+                <option value="ko" data-i18n-key="korean">한국어</option>
+                <option value="en" data-i18n-key="english">영어</option>
+                <option value="ja" data-i18n-key="japanese">일본어</option>
+                <option value="zh" data-i18n-key="chinese">중국어</option>
+                <option value="vi" data-i18n-key="vietnamese">베트남어</option>
+                <option value="th" data-i18n-key="thai">태국어</option>
+                <option value="ru" data-i18n-key="russian">러시아어</option>
+              </select>
+              <span class="caret" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- 소개글 -->
+          <div class="input-group">
+            <label for="bio" class="input-label" data-i18n-key="introduce">소개글</label>
+            <div class="textarea-field">
+              <textarea id="bio" rows="3" data-i18n-key="likelion" placeholder='"13기 아기사자예요. 친구들과 언어교환하며 공부하고 싶어요! 📚"'></textarea>
+            </div>
+          </div>
+
+          <!-- 버튼 -->
+          <div class="btn-row">
+            <button type="button" class="btn-primary" id="previewBtn" data-i18n-key="preview_profile">미리보기</button>
+            <button type="button" class="btn-primary" id="submitBtn" data-i18n-key="end_profile">완료</button>
+          </div>
+          
+        </div>
+      </section>
+    </form>
+
+    <script>
+        if (location.hostname === '127.0.0.1') {
+          const u = new URL(location.href); u.hostname = 'localhost'; location.replace(u);
+        }
+      </script>
+  
+
+
+      
+  </main>
+  
+</body>
+</html>

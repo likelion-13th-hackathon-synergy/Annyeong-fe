@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>ChatList</title>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" crossorigin src="/assets/chat-B6-8dB3j.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+    <link rel="modulepreload" crossorigin href="/assets/auth-CgfX5zSn.js">
+    <link rel="modulepreload" crossorigin href="/assets/i18n-DcpoQoQT.js">
+    <link rel="stylesheet" crossorigin href="/assets/auth-CD3yKRmk.css">
+    <link rel="stylesheet" crossorigin href="/assets/chat-C8uP4UNn.css">
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="app-wrapper">
+        <div class="chatli-container">
+          <div class="chatli-header">
+           
+            <div class="header-logo">
+              
+              <button
+                id="main-logo-btn"
+                class="main-logo-btn"
+                type="button"
+                aria-label="메인으로"
+                onclick="window.location.href='../home/home.html'">
+                <img src="/assets/logo-6-ZaX1Ow.svg" alt="헤더 로고" />
+              </button>
+
+            </div>
+
+            <ul class="mode-switch">
+              <li class="dropdown">
+                <div class="selected-space">
+                  <div class="selected-text-space">
+                    <span class="selected-menu-text">서포터즈</span>
+                  </div>
+                  <div class="selected-arrow">
+                    <img
+                      id="arrow"
+                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADcAAAAgCAYAAAC2COBlAAAACXBIWXMAACxLAAAsSwGlPZapAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIASURBVHgB7ZjRbcIwEIYvBt4ZoSOwQekEpa8gCNmATgBM0G4QAgPQToC6QbsBnaAMgKD3R4mEIjt2EjsEie8BQezY9+Vsx4bozp3G4aVf1uv1o+d5vdPptPd9/5NujDAMu51O5/l8Pj8IIVaj0eg3lttsNnO+uEgr8vdvlnwKguBANwCLQWjHyXlIr7HDzINxq9X6y95wK4IysYSD4I+u7CYMUdwEeWooiI1j3ErEQDceljzfkDmpRFMzmIghYz1FlT0yR+12e6BqpIkZNBA7cNkglhsOh1+coamqsSYJGor1x+Pxj0iv8PIf6QR54XmjK1JEDD/EZYlOkJny/AzpSvDD3eaIxct/KgZEtkJTBZM++6pyxIzYL695qspRFPn8lFakZjWZTAKqgURsqiqXiQGhugGVWW5BamrJYFkxoMxcSnZrJsFZBquIAWXmUniCLnUZ5CE8J8sYiC3yxIBWDugEUWZTEKOF9GJL0qAdltlO84aoaad19VFIznbnrtsuLOciCFdtlpKzHYyr0VBazlZQLod5JTlQJTjXC1RlOcDvJJwWZqpyWZB1rLxW5IDhSzcOtg4xYE0OmAjyeYw027l33s69kgWsygGdoAar+1TrcqCkoPUNuBM5UFDQycnCmRzghWPH86uvqebsyGR0KijL8Xh8wf+eOVU+XJ7m/wFXsaSwdO9ZKgAAAABJRU5ErkJggg=="
+                      alt="모드 다운"
+                    />
+                  </div>
+                </div>
+                <ul class="sub-menu">
+                  <li><a href="#">구인구직</a></li>
+                  <li><a href="#">통역</a></li>
+                  <li><a href="#">언어교환</a></li>
+                  <li><a href="#">연애/데이팅</a></li>
+                  <li><a href="#">서포터즈</a></li>
+                </ul>
+              </li>
+            </ul>
+
+            <div class="header-nav">
+              <div class="header-logo">
+                <button
+                  id="myPage-btn"
+                  class="myPage-btn"
+                  type="button"
+                  aria-label="마이페이지"
+                >
+                  <img
+                    src="/assets/profileIcon-P79YVuxc.png"
+                    alt="마이페이지 버튼"
+                  />
+                </button>
+              </div>
+
+              <div class="header-logo">
+                <button
+                  id="chat-btn"
+                  class="chat-btn"
+                  type="button"
+                  aria-label="채팅"
+                >
+                  <img
+                    src="/assets/chatIcon-o8f40Bdi.png"
+                    alt="채팅 버튼"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 리스트 아이템이 들어갈 영역 -->
+          <main class="chatli-wrapper" id="chat-list"></main>
+        </div>
+      </div>
+    </div>
+
+    <!-- 폴더 구조에 맞춰 경로 수정 -->
+  </body>
+</html>
