@@ -2,8 +2,9 @@
 const STORE_KEY = "preferredLang";
 const SUPPORTED = ["ko", "en"];
 // 사전 폴더를 모듈 기준으로 안전하게 계산 (페이지 경로와 무관)
-const DICT_BASE = new URL("../i18n/", import.meta.url).href;
-
+function dictUrl(lang) {
+  return new URL(`../i18n/${lang}.json`, import.meta.url).href;
+ }
 let current = null;
 const cache = {};  // 언어별 JSON 캐시
 
@@ -34,9 +35,9 @@ export async function setLanguage(lang, { persist = true } = {}) {
   current = lang;
 
   if (!cache[lang]) {
-    const res = await fetch(`${DICT_BASE}${lang}.json`, { cache: "no-store" });
-    cache[lang] = res.ok ? await res.json() : {};
-  }
+    const res = await fetch(dictUrl(lang), { cache: "no-store" });
+     cache[lang] = res.ok ? await res.json() : {};
+   }
   document.documentElement.lang = lang;
   applyTranslations(cache[lang]);
 }

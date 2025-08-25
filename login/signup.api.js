@@ -1,7 +1,8 @@
+import { startGoogleConnectFlow } from "./profile.google.js";
+
 // ===== 환경 =====
 const BASE_URL = "http://localhost:8000"; // 둘 다 localhost 또는 둘 다 127.0.0.1로 맞추기!
 
-<<<<<<< HEAD
 // ===== 공통 유틸 =====
 function getCookie(name) {
   const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
@@ -16,15 +17,6 @@ async function ensureCsrf() {
   if (!t) {
     await fetch(`${BASE_URL}/users/csrf/`, { method: "GET", credentials: "include" });
     t = getCookie("csrftoken");
-=======
-function getCookie(name){ const m=document.cookie.match(new RegExp("(^|; )"+name+"=([^;]*)")); return m?decodeURIComponent(m[2]):null; }
-function setMetaCsrf(v){ const meta=document.querySelector('meta[name="csrf-token"]'); if(meta) meta.setAttribute("content", v||""); }
-async function ensureCsrf(){
-  let t=getCookie("csrftoken");
-  if(!t){
-    await fetch(`${BASE_URL}/users/csrf/`, { method:"GET", credentials:"include" }); // ★
-    t=getCookie("csrftoken");
->>>>>>> 2ade0fe (회원가입 수정)
   }
   setMetaCsrf(t);
   return t;
@@ -62,6 +54,34 @@ async function httpSession(path, init = {}) {
   }
   return data;
 }
+// login.api.js 내에 추가 (Vite 프록시 전제: BASE_URL = "")
+async function startGoogleOAuth() {
+  // 서버가 state/next를 전달받아 콜백 후 이 페이지로 돌려보내도록
+  const nextAfter = "/login/social-complete.html";
+  const res = await fetch(`/users/auth/google/?next=${encodeURIComponent(nextAfter)}`, {
+    method: "GET",
+    credentials: "include",
+    headers: { "Accept": "application/json" }
+  });
+  const data = await res.json().catch(() => ({}));
+  // 서버 명세: { detail, redirect } 형태
+  if (data.redirect) {
+    location.href = data.redirect;       // 구글 인증 페이지로 이동
+  } else if (res.redirected) {
+    location.href = res.url;
+  } else {
+    alert("구글 인증 시작 URL을 받지 못했습니다.");
+  }
+}
+
+// 예) 버튼에 연결
+document.getElementById("googleLoginBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  startGoogleOAuth().catch(err => {
+    console.error(err);
+    alert("구글 인증을 시작할 수 없습니다.");
+  });
+});
 
 // ===== 페이지 로직 =====
 document.addEventListener("DOMContentLoaded", async () => {
@@ -93,7 +113,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-<<<<<<< HEAD
     try {
       // 1) 회원가입 (명세 준수)
       const signedUp = await httpSession("/users/signup/", {
@@ -108,21 +127,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           // email,
         }),
       });
-=======
-    try{
-  
-        await httpSession("/users/signup/", {
-            method: "POST",
-            body: JSON.stringify({
-                username: email,                                  
-                real_name: name,
-                user_type: nation === "kr" ? "korean" : "foreigner",
-                password1: password,
-                password2: password2
-                
-            }),
-          });
->>>>>>> 2ade0fe (회원가입 수정)
 
       // 2) 필요 시 로그인 (백엔드가 자동로그인 미지원일 때)
       // await httpSession("/users/login/", {
@@ -130,21 +134,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       //   body: JSON.stringify({ username: email, password: password1 }),
       // });
 
-<<<<<<< HEAD
       // 3) (옵션) 세션 확인용
       // await httpSession("/users/profile/");
 
       // 4) 이동
       window.location.href = "../profile/profile.html";
     } catch (err) {
-=======
-          const qs = new URLSearchParams(location.search);
-          const next = qs.get("next") || "/Annyeong-fe/profile/profile.html";
-          window.location.replace(next);
-    }catch(err){
->>>>>>> 2ade0fe (회원가입 수정)
       console.error(err);
       alert(`회원가입 실패:\n${err.message}`);
     }
+  });
+});
+
+
+document.getElementById("googleConnectBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  startGoogleConnectFlow({
+    onDone: (preview) => {
+      // 배지/화면 즉시 반영
+      const badge = document.querySelector(".badge-img");
+      if (badge) badge.style.display = preview?.google_verified ? "block" : "none";
+      // 필요 시 토스트/알림
+      alert("구글 인증이 완료되었습니다.");
+      // 또는 페이지 새로고침:
+      // location.reload();
+    },
   });
 });
