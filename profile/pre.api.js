@@ -1,36 +1,47 @@
 // pre.api.js
 
-import { httpJWT } from "../common/http-jwt.js";
-import { startStatusbarClock } from "../assets/js/statusbar-time.js";
+import { API_BASE } from "../common/config.js";
 
 // 상태바 시계
 if (typeof startStatusbarClock === "function") startStatusbarClock();
 
-// ---- JWT 토큰 리프레시 & API 래퍼 ----
-async function refreshToken() {
-  const refresh = localStorage.getItem("refreshToken");
-  if (!refresh) throw new Error("401");
-  const res = await fetch(`${API_BASE}/api/token/refresh/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify({ refresh }),
-  });
-  if (!res.ok) throw new Error("refresh failed");
-  const data = await res.json();
-  localStorage.setItem("accessToken", data.access);
-}
-
-async function api(path, init) {
-  try {
-    return await httpJWT(path, init);         // Authorization: Bearer 자동 처리
-  } catch (e) {
-    if (String(e.message || e).includes("401")) {
-      await refreshToken();
-      return await httpJWT(path, init);       // 1회 재시도
+function needsCSRF(method) {
+      return !["GET", "HEAD", "OPTIONS", "TRACE"].includes(String(method).toUpperCase());
     }
-    throw e;
-  }
-}
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
+      return m ? decodeURIComponent(m[2]) : null;
+    }
+    async function ensureCsrf() {
+      let t = getCookie("csrftoken");
+      if (!t) {
+        await fetch(`${API_BASE}/users/csrf/`, { credentials: "include" });
+        t = getCookie("csrftoken");
+      }
+      return t;
+    }
+    async function api(path, init = {}) {
+      const method  = (init.method || "GET").toUpperCase();
+      const headers = new Headers(init.headers || {});
+      if (!headers.has("Accept")) headers.set("Accept", "application/json");
+      const isForm = init.body instanceof FormData;
+      if (needsCSRF(method)) {
+        const token = getCookie("csrftoken") || (await ensureCsrf());
+        headers.set("X-CSRFToken", token);
+        if (!isForm && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+      }
+      const res  = await fetch(`${API_BASE}${path}`, { ...init, method, headers, credentials: "include" });
+      const txt  = await res.text();
+      let data = null; try { data = txt ? JSON.parse(txt) : null; } catch { data = { raw: txt }; }
+      if (!res.ok) {
+        const err = new Error(data?.detail || `HTTP ${res.status}`);
+        err.status = res.status; err.payload = data;
+        throw err;
+      }
+      return data;
+    }
+
+
 
 // ---- 상수/유틸 ----
 const PROFILE_URL = "/users/profile/";       // BASE_URL은 httpJWT 안에서 결합됨
