@@ -37,29 +37,21 @@ body{
 .sb-icons img{ height:12px; }
 
 .top{
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex; 
+  align-items:center; 
+  justify-content:space-between;
   padding-top:56px; /* 44 + 12 */
 }
 .top-right-icon{
   position:absolute;
-  top: 55px;               /* 필요에 맞게 조정 */
-  right: 16px;             /* 필요에 맞게 조정 */
-  width: 36px;
-  height: 36px;
+  top: 55px;               
+  right: 16px;             
+  width: 30px;
+  height: 30px;
   padding: 0;
   border: none;
   border-radius: 9999px;
-  background:
-    radial-gradient(circle at 30% 30%, #666 0%, #4a4a4a 55%, #262626 100%);
-  /* 입체감 + 테두리 */
-  box-shadow:
-    0 10px 18px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.20),
-    inset 0 -2px 8px rgba(0,0,0,.45);
-  border: 1px solid rgba(255,255,255,.18);
   outline: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
   backdrop-filter: blur(2px);
   display: grid;
   place-items: center;
@@ -77,35 +69,11 @@ body{
     width: 18px;
     height: 18px;
     filter: invert(1) brightness(1.1) grayscale(1); /* 회색/흰색 톤 */
-    opacity: .95;
-  }
-
-  .top-right-icon:hover{
-    box-shadow:
-      0 12px 22px rgba(0,0,0,.5),
-      inset 0 1px 0 rgba(255,255,255,.25),
-      inset 0 -2px 10px rgba(0,0,0,.5);
-  }
-  .top-right-icon:active{
-    transform: translateY(1px);
-    background: radial-gradient(circle at 35% 35%, #5a5a5a 0%, #3f3f3f 55%, #1e1e1e 100%);
+    opacity: .80;
   }
   .top-right-icon img{
     width:30px; height:30px; display:block;
   }
-
-/* 호버/프레스 인터랙션 */
-.top-right-icon:hover{
-  box-shadow:
-    0 12px 22px rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(255,255,255,.25),
-    inset 0 -2px 10px rgba(0,0,0,.5);
-}
-.top-right-icon:active{
-  transform: translateY(1px);
-  background: radial-gradient(circle at 35% 35%, #5a5a5a 0%, #3f3f3f 55%, #1e1e1e 100%);
-}
-
 
 .brand img{ height:28px; }
 

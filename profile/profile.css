@@ -1,6 +1,9 @@
 /* ===== 기본 ===== */
 * {
   box-sizing: border-box;
+  font-family: 'NPSfont-Bold';
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  color: #fff;
 }
 
 html,
@@ -33,7 +36,6 @@ body {
   font-family: "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, sans-serif;
   color: #F6F6F8;
   background: #0b0b12;
-
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -109,8 +111,8 @@ body {
 /* 동그란 아이콘 버튼 */
 .icon-btn {
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height:38px;
   border: none;
   border-radius: 999px;
   display: grid;
@@ -123,97 +125,10 @@ body {
     rgba(255, 255, 255, .07);
   backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
-
-  /* 외곽 라인 + 입체감 */
-  border: 1px solid rgba(255, 255, 255, .18);
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, .45),
-    /* 바깥 그림자 */
-    inset 0 0 0 1px rgba(255, 255, 255, .12),
-    /* 안쪽 라인 */
-    inset 0 -6px 12px rgba(0, 0, 0, .40);
-  /* 아래쪽 음영 */
-  transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
 }
 
-.icon-btn--bare {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  width: auto;
-  height: auto;
-  /* 고정 동그라미 없애기 */
-  padding: 6px;
-  /* 클릭 영역만 살짝 */
-  border-radius: 6px;
-  /* 필요 없으면 0 */
-}
 
-.icon-btn--bare::before {
-  display: none !important;
-}
 
-/* 하이라이트 제거 */
-
-.icon-btn--bare img {
-  width: 18px;
-  height: 18px;
-  display: block;
-  /* 아이콘 색이 어두우면 밝게 보정, 이미 흰색이면 이 줄 삭제 */
-  filter: invert(1) brightness(1.1);
-}
-
-/* (선택) 호버시만 아주 옅은 링 */
-.icon-btn--bare:hover {
-  background: rgba(255, 255, 255, .08);
-  border-radius: 999px;
-}
-
-.icon-btn::before {
-  content: "";
-  position: absolute;
-  inset: 3px 6px auto 6px;
-  height: 40%;
-  border-radius: 999px;
-  background: radial-gradient(75% 80% at 30% 20%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0));
-  pointer-events: none;
-  filter: blur(.3px);
-}
-
-.icon-btn:hover,
-.icon-btn:focus-visible {
-  box-shadow:
-    0 8px 16px rgba(0, 0, 0, .5),
-    inset 0 0 0 1px rgba(255, 255, 255, .28),
-    inset 0 -6px 12px rgba(0, 0, 0, .45),
-    0 0 0 2px rgba(255, 255, 255, .08);
-}
-
-.icon-btn:active {
-  transform: translateY(1px);
-}
-
-.icon-btn img {
-  width: 18px;
-  height: 18px;
-  display: block;
-  /* 아이콘이 회색/검정이라면 흰색 느낌으로 보정 */
-  filter: invert(1) brightness(1.2) contrast(1.1) drop-shadow(0 0 2px rgba(255, 255, 255, .25));
-  opacity: .95;
-}
-
-/* 알림 점 (옵션) */
-.icon-btn .dot {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: #7B4DFF;
-  box-shadow: 0 0 0 2px rgba(11, 11, 18, .8);
-}
 
 /* === Verify Banner (new) === */
 .verify-banner{
@@ -429,6 +344,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-left: 12px;
+  margin-right: 12px;
 }
 
 .display-row {
@@ -454,7 +371,7 @@ body {
 }
 
 .input-label {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--ink);
 }
@@ -591,7 +508,7 @@ body {
   flex-direction: row;
   align-items: center;
   gap: 12px;
-  padding: 10px 0;
+  padding: 5px 0;
   border-bottom: 1px solid var(--line);
 }
 
