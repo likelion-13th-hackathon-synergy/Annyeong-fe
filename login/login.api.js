@@ -5,7 +5,7 @@ if (typeof startStatusbarClock === "function") {
   startStatusbarClock({ selector: ".sb-time", hour12: false, locale: "ko-KR" });
 }
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "http://localhost:8000"; // 프론트도 http://localhost:5500 로 열어 쓰는 걸 권장
 
 function getCookie(name){ const m=document.cookie.match(new RegExp("(^|; )"+name+"=([^;]*)")); return m?decodeURIComponent(m[2]):null; }
 function setMetaCsrf(v){ const meta=document.querySelector('meta[name="csrf-token"]'); if(meta) meta.setAttribute("content", v||""); }
@@ -37,9 +37,9 @@ async function httpSession(path, init={}){
 document.addEventListener("DOMContentLoaded", async () => {
   await ensureCsrf();
 
-  const form=document.querySelector(".form");
-  const emailEl=document.getElementById("email");
-  const pwEl=document.getElementById("password");
+  const form = document.querySelector(".form");
+  const emailEl = document.getElementById("email");
+  const pwEl    = document.getElementById("password");
 
   form?.addEventListener("submit", async (e)=>{
     e.preventDefault();
