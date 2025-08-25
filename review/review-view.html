@@ -14,7 +14,6 @@
     <div id="root">
       <div class="app-wrapper">
         <div class="review-w-container">
-         
           <header class="review-w-header">
             <div class="back-icon">
               <button
@@ -37,7 +36,11 @@
             <div class="review-w-title">
               <!--‼️ 사용자 이름 부분도 번역이 되어버림 (수정 필요)-->
               <p>
-                <span class="strong-text" id="strong-text" data-i18n-exclude="true">상대방</span
+                <span
+                  class="strong-text"
+                  id="strong-text"
+                  data-i18n-exclude="true"
+                  >상대방</span
                 ><span data-i18n-key="i_liked_these_things"
                   >의 이런 점이 좋았어요</span
                 >
@@ -47,8 +50,11 @@
             <div class="selected-num">
               <!--‼️ '선택' 부분만 번역 안됨 (수정 필요)-->
               <p>
-                <span class="strong-text"
-                  >✔ 0 <span class="strong-text" data-i18n-key="times"> 회</span></span
+                <span class="strong-text times">
+                  0
+                  <span class="strong-text" data-i18n-key="times"
+                    >회</span
+                  ></span
                 >
                 <span class="gray-text">
                   0 <span data-i18n-key="participate">참여</span></span
@@ -57,20 +63,61 @@
             </div>
 
             <ul class="review-view-ul" id="reviewList">
-  <li><span class="emoji">👂</span> <span data-i18n-key="good_listener">"이야기를 잘 들어줘요"</span></li>
-  <li><span class="emoji">🤩</span> <span data-i18n-key="good_humor">"유머 감각이 뛰어나요"</span></li>
-  <li><span class="emoji">😆</span> <span data-i18n-key="fun_talk">"대화가 재미있어요"</span></li>
-  <li><span class="emoji">🌟</span> <span data-i18n-key="positive_mindset">"긍정적인 마인드예요"</span></li>
-  <li><span class="emoji">🤗</span> <span data-i18n-key="friendly_warm">"친근하고 따뜻해요"</span></li>
-  <li><span class="emoji">😇</span> <span data-i18n-key="thoughtful_caring">"배려심이 깊어요"</span></li>
-  <li><span class="emoji">🎓</span> <span data-i18n-key="knowledgeable">"지식이 풍부해요"</span></li>
-  <li><span class="emoji">🧐</span> <span data-i18n-key="curious">"호기심이 많아요"</span></li>
-  <li><span class="emoji">🤭</span> <span data-i18n-key="understanding">"이해심이 많아요"</span></li>
-  <li><span class="emoji">✅</span> <span data-i18n-key="honest_sincere">"정직하고 솔직해요"</span></li>
-  <li><span class="emoji">🏃</span> <span data-i18n-key="active_energetic">"적극적이고 활발해요"</span></li>
-  <li><span class="emoji">🔒</span> <span data-i18n-key="trustworthy">"신뢰할 수 있어요"</span></li>
-</ul>
-
+              <li>
+                <span class="emoji">👂</span>
+                <span data-i18n-key="good_listener"
+                  >"이야기를 잘 들어줘요"</span
+                >
+              </li>
+              <li>
+                <span class="emoji">🤩</span>
+                <span data-i18n-key="good_humor">"유머 감각이 뛰어나요"</span>
+              </li>
+              <li>
+                <span class="emoji">😆</span>
+                <span data-i18n-key="fun_talk">"대화가 재미있어요"</span>
+              </li>
+              <li>
+                <span class="emoji">🌟</span>
+                <span data-i18n-key="positive_mindset"
+                  >"긍정적인 마인드예요"</span
+                >
+              </li>
+              <li>
+                <span class="emoji">🤗</span>
+                <span data-i18n-key="friendly_warm">"친근하고 따뜻해요"</span>
+              </li>
+              <li>
+                <span class="emoji">😇</span>
+                <span data-i18n-key="thoughtful_caring">"배려심이 깊어요"</span>
+              </li>
+              <li>
+                <span class="emoji">🎓</span>
+                <span data-i18n-key="knowledgeable">"지식이 풍부해요"</span>
+              </li>
+              <li>
+                <span class="emoji">🧐</span>
+                <span data-i18n-key="curious">"호기심이 많아요"</span>
+              </li>
+              <li>
+                <span class="emoji">🤭</span>
+                <span data-i18n-key="understanding">"이해심이 많아요"</span>
+              </li>
+              <li>
+                <span class="emoji">✅</span>
+                <span data-i18n-key="honest_sincere">"정직하고 솔직해요"</span>
+              </li>
+              <li>
+                <span class="emoji">🏃</span>
+                <span data-i18n-key="active_energetic"
+                  >"적극적이고 활발해요"</span
+                >
+              </li>
+              <li>
+                <span class="emoji">🔒</span>
+                <span data-i18n-key="trustworthy">"신뢰할 수 있어요"</span>
+              </li>
+            </ul>
           </main>
         </div>
       </div>
@@ -78,16 +125,14 @@
 
     <script type="module" src="../review/review-view.js"></script>
     <script type="module">
-      import {
-        initI18n,
-        getLang,
-        setLanguage,
-      } from "/assets/js/i18n.js";
+      import { initI18n, getLang, setLanguage } from "/assets/js/i18n.js";
 
+      // 1) 페이지 로드 시 현재 선택 언어로 번역 적용
       initI18n();
 
       window.addEventListener("storage", (e) => {
         if (e.key === "preferredLang" && e.newValue) {
+          // 이미 캐시에 사전이 있으니 빠르게 재적용됨
           setLanguage(e.newValue, { persist: false });
         }
       });

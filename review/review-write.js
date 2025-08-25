@@ -1,31 +1,56 @@
-// review-write.js
-// - 페이지 진입 즉시 TEST_USER 자동 로그인
-// - 필수 쿼리: roomId. (없으면 안전하게 안내 후 뒤로가기/홈)
-// - can-write로 상대 정보/중복 여부 확인 -> 이미 작성 시 곧바로 리뷰보기로 이동
-// - 선택항목 최대 5개, 백엔드가 요구하는 "라벨 문자열 배열"로 POST
-// - 성공 후 상대 리뷰보기로 이동 (user_id, roomId, name 모두 전달)
+// review-write.js (세션 인증 버전, 자동로그인 제거)
+// - 필수 쿼리: roomId (없으면 안내 후 뒤로가기/홈)
+// - 세션 가드: /users/profile/ 로 체크 → 미로그인 시 로그인 페이지로 이동(?next=복귀)
+// - can-write로 상대 정보/중복 여부 확인 → 이미 작성 시 리뷰보기로 이동
+// - 선택항목 최대 5개 → 백엔드 요구 형식(라벨 문자열 배열)으로 POST
+// - 성공 후 상대 리뷰보기로 이동 (user_id, roomId, name 전달)
 
-import { API_BASE, TEST_USER } from "../common/config.js";
-import { loginWithSession, authedFetch } from "../common/auth.js";
+import { API_BASE } from "../common/config.js";
+import { authedFetch } from "../common/auth.js";
 
+/* ------------------ 쿼리 파라미터 ------------------ */
 const qs = new URLSearchParams(location.search);
-const ROOM_ID = Number(qs.get("roomId"));            // 필수
-const PRESET_USER_ID = qs.get("userId");             // 선택 (없어도 can-write에서 받음)
+const ROOM_ID = Number(qs.get("roomId"));     // ★ 필수
+const PRESET_USER_ID = qs.get("userId");      // 선택 (없어도 can-write에서 제공)
 const PRESET_NAME = decodeURIComponent(qs.get("name") || "");
 
+/* ------------------ DOM ------------------ */
 const $options = document.querySelectorAll("#options .opt");
 const $counter = document.querySelector(".selCounter");
 const $done = document.getElementById("review-send-btn");
 const MAX = 5;
 const selected = new Set();
 
-function setDisplayName(name) {
-  const line = document.querySelector("#review-w-title .strong-text");
-  if (line) {
-    line.textContent = `‘ ${name}’ `;
+/* ------------------ 세션 가드 ------------------ */
+async function getMe() {
+  const base = API_BASE || "";
+  const res = await fetch(`${base}/users/profile/`, {
+    method: "GET",
+    credentials: "include",
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) throw new Error(String(res.status));
+  return res.json();
+}
+async function assertLoggedInOrRedirect() {
+  try {
+    const me = await getMe();
+    window.__ME__ = me;
+    return true;
+  } catch {
+    const next = location.pathname + location.search;
+    location.replace(`/Annyeong-fe/login/login.html?next=${encodeURIComponent(next)}`);
+    return false;
   }
 }
 
+/* ------------------ 표시 이름 ------------------ */
+function setDisplayName(name) {
+  const line = document.querySelector("#review-w-title .strong-text");
+  if (line) line.textContent = `‘ ${name}’ `;
+}
+
+/* ------------------ 라벨 매핑 ------------------ */
 // 옵션 id -> 백엔드 라벨(따옴표/이모지 제거된 순수 한국어 문구)
 const LABEL_MAP = {
   1: "이야기를 잘 들어줘요",
@@ -42,11 +67,11 @@ const LABEL_MAP = {
   12: "신뢰할 수 있어요",
 };
 
+/* ------------------ UI 제어 ------------------ */
 function updateCounter() {
   if ($counter) $counter.textContent = String(selected.size);
   if ($done) $done.disabled = selected.size === 0;
 }
-
 $options.forEach((btn) => {
   btn.addEventListener("click", () => {
     const id = Number(btn.dataset.id);
@@ -76,6 +101,7 @@ $options.forEach((btn) => {
   });
 });
 
+/* ------------------ 네비 ------------------ */
 function goReviewView({ userId, roomId, name }) {
   const url = new URL("../review/review-view.html", location.href);
   url.searchParams.set("user_id", String(userId));
@@ -84,17 +110,19 @@ function goReviewView({ userId, roomId, name }) {
   location.href = url.toString();
 }
 
+/* ------------------ 초기화 ------------------ */
 async function init() {
   try {
-    // 0) roomId 필수 체크 (여기서 빠지면 이후 로직 전부 막힘)
+    // 0) 필수 파라미터
     if (!Number.isFinite(ROOM_ID) || ROOM_ID <= 0) {
       alert("유효하지 않은 접근입니다. (roomId 누락)");
-      history.length > 1 ? history.back() : (location.href = "../home/home");
+      history.length > 1 ? history.back() : (location.href = "../home/home.html");
       return;
     }
 
-    // 1) 자동 로그인
-    await loginWithSession(TEST_USER.username, TEST_USER.password, API_BASE);
+    // 1) 세션 체크 (미로그인 → 로그인으로 이동)
+    const ok = await assertLoggedInOrRedirect();
+    if (!ok) return;
 
     // 2) can-write 사전 조회 (상대정보/중복여부)
     const r = await authedFetch(
@@ -102,17 +130,26 @@ async function init() {
       { method: "GET" },
       API_BASE
     );
+
+    // 인증 만료/미로그인 방어
+    if (r.status === 401 || r.status === 403) {
+      const next = location.pathname + location.search;
+      location.replace(`/Annyeong-fe/login/login.html?next=${encodeURIComponent(next)}`);
+      return;
+    }
     if (!r.ok) {
       const msg = await r.text().catch(() => "");
       throw new Error(`사전 조회 실패: ${r.status} ${msg}`);
     }
-    const info = await r.json();
 
-    // 상대 표시 이름 결정: 쿼리 name > 서버 other_user_name > (없으면) "상대"
-    const displayName = (PRESET_NAME && PRESET_NAME.trim()) || info.other_user_name || "상대";
+    const info = await r.json(); // { other_user_id, other_user_name, already_reviewed, ... }
+
+    // 3) 대상 이름 표시
+    const displayName =
+      (PRESET_NAME && PRESET_NAME.trim()) || info.other_user_name || "상대";
     setDisplayName(displayName);
 
-    // 이미 작성했으면 바로 리뷰보기 이동
+    // 4) 이미 작성했으면 바로 리뷰보기
     if (info.already_reviewed) {
       alert("이미 후기를 작성했습니다. 리뷰보기로 이동합니다.");
       goReviewView({
@@ -123,19 +160,20 @@ async function init() {
       return;
     }
 
-    // 3) 저장 버튼 핸들러
+    // 5) 저장 버튼
     $done?.addEventListener("click", async () => {
       try {
         if (selected.size === 0) {
           alert("최소 1개 이상 선택해 주세요.");
           return;
         }
-        // 선택 id -> 라벨 문자열 배열
+
+        // 선택 id → 라벨 문자열 배열
         const labels = Array.from(selected)
           .filter((n) => LABEL_MAP[n])
           .map((n) => LABEL_MAP[n]);
 
-        // 백엔드가 라벨 배열을 받도록 구현되어 있음
+        // POST
         const res = await authedFetch(
           `/reviews/create/${ROOM_ID}/`,
           {
@@ -146,8 +184,14 @@ async function init() {
           API_BASE
         );
 
+        if (res.status === 401 || res.status === 403) {
+          const next = location.pathname + location.search;
+          location.replace(`/Annyeong-fe/login/login.html?next=${encodeURIComponent(next)}`);
+          return;
+        }
+
         if (res.status === 400) {
-          // 이미 작성한 경우 처리 (백엔드 already_reviewed 포함)
+          // 이미 작성한 케이스 등
           const j = await res.json().catch(() => ({}));
           if (j?.already_reviewed) {
             alert("이미 후기를 작성하셨습니다. 리뷰보기로 이동합니다.");
@@ -166,7 +210,7 @@ async function init() {
           throw new Error(`리뷰 저장 실패: ${res.status} ${t}`);
         }
 
-        // 성공 → 리뷰보기로
+        // 성공 → 리뷰보기 이동
         const saved = await res.json().catch(() => ({}));
         alert("후기가 저장되었습니다.");
         goReviewView({
@@ -188,24 +232,22 @@ async function init() {
   }
 }
 
-// 뒤로가기 버튼
-// - 항상 이 방의 채팅방으로 우선 이동
-// - referrer가 review-view였다면 루프 방지용으로 채팅방으로
-// - 마지막 실패시 채팅 리스트로
-
+/* ------------------ 뒤로가기 버튼 ------------------ */
+// - 기본: 이 방의 채팅방으로
+// - referrer가 review-view였다면 루프 방지로 채팅방으로
+// - 최후: 채팅 리스트
 document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.querySelector(".back-btn");
   if (!backBtn) return;
 
-  // 현재 쓰기 페이지의 안전한 복귀 지점(해당 채팅방)
   const chatBackUrl =
     `../chat/chat-room.html?roomId=${ROOM_ID}&name=${encodeURIComponent(PRESET_NAME || "")}`;
 
-  // 혹시 이후 리뷰보기에서 사용할 수도 있으니 저장해 둠(선택)
-  try { sessionStorage.setItem("REVIEW_BACK_URL", chatBackUrl); } catch {}
+  try {
+    sessionStorage.setItem("REVIEW_BACK_URL", chatBackUrl);
+  } catch {}
 
   backBtn.addEventListener("click", () => {
-    // 1) 세션에 저장된 복귀 지점이 있으면 그리로
     try {
       const saved = sessionStorage.getItem("REVIEW_BACK_URL");
       if (saved) {
@@ -215,23 +257,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch {}
 
-    // 2) referrer가 review-view가 아니라면 그대로
     if (document.referrer && !/review-view\.html/i.test(document.referrer)) {
       location.href = document.referrer;
       return;
     }
 
-    // 3) 기본: 이 방의 채팅방
     if (ROOM_ID) {
       location.href = chatBackUrl;
       return;
     }
 
-    // 4) 최후: 채팅 리스트
     location.href = "../chat/chat-list.html";
   });
 });
 
-
-// 시작
+/* ------------------ 시작 ------------------ */
 document.addEventListener("DOMContentLoaded", init);

@@ -180,7 +180,7 @@ function renderRooms(rooms) {
     t.addEventListener("click", () => {
       const id = t.dataset.id;
       const nm = t.dataset.name; // encodeURIComponent 적용됨
-      location.href = `../chat/chat-room.html?roomId=${id}&name=${nm}&as=${encodeURIComponent(TEST_AS)}`;
+      location.href = `../chat/chat-room.html?roomId=${id}&name=${nm}`;
     });
   });
 }
