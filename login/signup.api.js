@@ -1,6 +1,22 @@
-const BASE_URL = "http://localhost:8000";
+// ===== 환경 =====
+const BASE_URL = "http://localhost:8000"; // 둘 다 localhost 또는 둘 다 127.0.0.1로 맞추기!
 
-
+<<<<<<< HEAD
+// ===== 공통 유틸 =====
+function getCookie(name) {
+  const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
+  return m ? decodeURIComponent(m[2]) : null;
+}
+function setMetaCsrf(v) {
+  const meta = document.querySelector('meta[name="csrf-token"]');
+  if (meta) meta.setAttribute("content", v || "");
+}
+async function ensureCsrf() {
+  let t = getCookie("csrftoken");
+  if (!t) {
+    await fetch(`${BASE_URL}/users/csrf/`, { method: "GET", credentials: "include" });
+    t = getCookie("csrftoken");
+=======
 function getCookie(name){ const m=document.cookie.match(new RegExp("(^|; )"+name+"=([^;]*)")); return m?decodeURIComponent(m[2]):null; }
 function setMetaCsrf(v){ const meta=document.querySelector('meta[name="csrf-token"]'); if(meta) meta.setAttribute("content", v||""); }
 async function ensureCsrf(){
@@ -8,70 +24,127 @@ async function ensureCsrf(){
   if(!t){
     await fetch(`${BASE_URL}/users/csrf/`, { method:"GET", credentials:"include" }); // ★
     t=getCookie("csrftoken");
+>>>>>>> 2ade0fe (회원가입 수정)
   }
   setMetaCsrf(t);
   return t;
 }
-function needsCSRF(m){ return !["GET","HEAD","OPTIONS","TRACE"].includes(String(m).toUpperCase()); }
-async function httpSession(path, init={}){
-  const method=(init.method||"GET").toUpperCase();
-  const headers=new Headers(init.headers||{});
-  if(!headers.has("Accept")) headers.set("Accept","application/json");
-  if(needsCSRF(method)){
-    const token=getCookie("csrftoken")||(await ensureCsrf());
+function needsCSRF(m) {
+  return !["GET", "HEAD", "OPTIONS", "TRACE"].includes(String(m).toUpperCase());
+}
+async function httpSession(path, init = {}) {
+  const method = (init.method || "GET").toUpperCase();
+  const headers = new Headers(init.headers || {});
+  if (!headers.has("Accept")) headers.set("Accept", "application/json");
+  if (needsCSRF(method)) {
+    const token = getCookie("csrftoken") || (await ensureCsrf());
     headers.set("X-CSRFToken", token);
-    if(!headers.has("Content-Type")) headers.set("Content-Type","application/json");
+    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
   }
-  const res=await fetch(`${BASE_URL}${path}`, { ...init, method, headers, credentials:"include" });
-  const text=await res.text(); let data=null; try{ data=text?JSON.parse(text):null; }catch{ data={raw:text}; }
-  if(!res.ok) throw new Error((data&&(data.error||data.detail))||`HTTP ${res.status}`);
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...init,
+    method,
+    headers,
+    credentials: "include",
+  });
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch { data = { raw: text }; }
+
+  if (!res.ok) {
+    const message = typeof data === "string"
+      ? data
+      : data?.detail || JSON.stringify(data, null, 2) || `HTTP ${res.status}`;
+    const err = new Error(message);
+    err.status = res.status;
+    err.payload = data;
+    throw err;
+  }
   return data;
 }
 
-
-document.addEventListener("DOMContentLoaded", async ()=>{
+// ===== 페이지 로직 =====
+document.addEventListener("DOMContentLoaded", async () => {
   await ensureCsrf();
 
-  const form=document.querySelector(".form");
-  const nameEl=document.getElementById("name");
-  const nationEl=document.getElementById("nation");
-  const emailEl=document.getElementById("email");
-  const pwEl=document.getElementById("pw");
-  const pw2El=document.getElementById("pw2");
+  const form    = document.querySelector(".form");
+  const nameEl  = document.getElementById("name");
+  const nationEl= document.getElementById("nation");
+  const emailEl = document.getElementById("email");
+  const pwEl    = document.getElementById("pw");
+  const pw2El   = document.getElementById("pw2");
 
-  form?.addEventListener("submit", async (e)=>{
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name=nameEl?.value.trim();
-    const nation=nationEl?.value;
-    const email=emailEl?.value.trim();
-    const password=pwEl?.value;
-    const password2=pw2El?.value;
+    const name      = nameEl?.value.trim();
+    const nationVal = nationEl?.value; // 'kr' 또는 'foreigner'
+    const user_type = nationVal === "kr" ? "korean" : "foreigner";
+    const email     = emailEl?.value.trim();
+    const password1 = pwEl?.value;
+    const password2 = pw2El?.value;
 
-    if(!name||!email||!password||!password2){ alert("모든 필드를 입력해 주세요."); return; }
-    if(password!==password2){ alert("비밀번호가 일치하지 않습니다."); return; }
+    if (!name || !email || !password1 || !password2) {
+      alert("모든 필드를 입력해 주세요.");
+      return;
+    }
+    if (password1 !== password2) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
 
+<<<<<<< HEAD
+    try {
+      // 1) 회원가입 (명세 준수)
+      const signedUp = await httpSession("/users/signup/", {
+        method: "POST",
+        body: JSON.stringify({
+          username: email,     // 아이디로 이메일 사용
+          real_name: name,
+          user_type,
+          password1,
+          password2,
+          // 백엔드가 email 필드를 별도로 요구하면 아래 주석 해제
+          // email,
+        }),
+      });
+=======
     try{
   
         await httpSession("/users/signup/", {
             method: "POST",
             body: JSON.stringify({
-              username: email,                    
-              password,                           
-              real_name: name,                   
-              user_type: nation === "kr" ? "korean" : "foreigner", 
-              email,                           
-              
+                username: email,                                  
+                real_name: name,
+                user_type: nation === "kr" ? "korean" : "foreigner",
+                password1: password,
+                password2: password2
+                
             }),
           });
+>>>>>>> 2ade0fe (회원가입 수정)
 
+      // 2) 필요 시 로그인 (백엔드가 자동로그인 미지원일 때)
+      // await httpSession("/users/login/", {
+      //   method: "POST",
+      //   body: JSON.stringify({ username: email, password: password1 }),
+      // });
 
-      await httpSession("/users/profile/");
+<<<<<<< HEAD
+      // 3) (옵션) 세션 확인용
+      // await httpSession("/users/profile/");
 
-      window.location.href="/Annyeong-fe/profile/profile.html";
+      // 4) 이동
+      window.location.href = "../profile/profile.html";
+    } catch (err) {
+=======
+          const qs = new URLSearchParams(location.search);
+          const next = qs.get("next") || "/Annyeong-fe/profile/profile.html";
+          window.location.replace(next);
     }catch(err){
+>>>>>>> 2ade0fe (회원가입 수정)
       console.error(err);
-      alert(`회원가입 실패: ${err.message}`);
+      alert(`회원가입 실패:\n${err.message}`);
     }
   });
 });

@@ -95,7 +95,8 @@ async function loadProfile() {
   } catch (err) {
     if (String(err).includes("401")) {
 
-      location.href = "../login/login.html";
+        const next = encodeURIComponent(location.pathname);
+        location.href = `../login/login.html?next=${next}`;
       return;
     }
     console.warn("프로필 불러오기 실패:", err);
@@ -104,18 +105,18 @@ async function loadProfile() {
 
 
 async function saveProfile() {
-  const body = {
-    real_name: $name.value || "",
-    age: String($age.value || ""),
-    nationality: $country.value || null,
-    city: $sido.value || "",
-    service_language: $lang.value || null,
-    translation_category: $trans.value || null,
-    introduction: $bio.value || "",
-  };
+    const payload = {
+        real_name: $name.value || "",
+        age: String($age.value || ""),
+        nationality: $country.value || null,
+        city: $sido.value || "",
+        service_language: $lang.value || null,
+        translation_category: $trans.value || null,
+        introduction: $bio.value || "",
+      };
 
-  const res = await httpSession("/users/profile/edit", {
-    method: "POST",
+  const res = await httpSession("/users/profile/", {
+    method: "PUT",
     body: JSON.stringify(payload),
   });
 
@@ -142,32 +143,25 @@ $submitBtn?.addEventListener("click", async () => {
 });
 
 $googleBtn?.addEventListener("click", async () => {
-    // 1) 먼저 로그인 여부 확인
+    const next = encodeURIComponent(location.pathname);
     try {
-      await httpSession("/users/profile/"); // 세션 있으면 200, 없으면 throw(401)
-    } catch (e) {
-      // 미로그인 → 로그인 화면으로 (끝나면 다시 돌아오게 next 붙임)
-      const next = encodeURIComponent(location.pathname);
-      location.href = `../login/login.html?next=${next}`;
-      return;
-    }
-  
-    // 2) 로그인 상태면 구글 OAuth 시작 URL 받아서 이동
-    try {
-      const res = await fetch(`${BASE_URL}/users/auth/google/`, { credentials: "include" });
-      if (res.status === 401) {
-        const next = encodeURIComponent(location.pathname);
-        location.href = `../login/login.html?next=${next}`;
+      const res = await fetch(`${BASE_URL}/users/auth/google/?next=${next}`, {
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      });
+      if (res.status === 401 || res.status === 403) {
+        // 서버가 인증 필요하다고 하면 로그인 페이지로 보냄
+        location.href = `../login/login.html?next=${decodeURIComponent(next)}`;
         return;
       }
       const data = await res.json();
       if (data.redirect_url) {
-        window.location.href = data.redirect_url;
+        location.href = data.redirect_url; // 구글 인증 페이지로 이동
       } else {
         alert("구글 인증 시작 URL을 받지 못했습니다.");
       }
     } catch (e) {
-      alert("구글 인증을 시작할 수 없습니다. 네트워크/서버 상태를 확인해 주세요.");
+      alert("구글 인증 시작 중 오류가 발생했습니다.");
     }
   });
   
