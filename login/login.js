@@ -4,8 +4,12 @@ if (typeof startStatusbarClock === "function") {
   startStatusbarClock({ selector: ".sb-time", hour12: false, locale: "ko-KR" });
 }
 
+<<<<<<< HEAD
+const BASE_URL = "http://localhost:8000"; // 프론트도 http://localhost:5500 로 열어 쓰는 걸 권장
+=======
 const BASE_URL = "http://localhost:8000";
 const HOME = "/Annyeong-fe/home/home.html";
+>>>>>>> 2ade0fe (회원가입 수정)
 
 function getCookie(name) {
   const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
@@ -69,6 +73,11 @@ async function httpSession(path, init = {}) {
 document.addEventListener("DOMContentLoaded", async () => {
   await ensureCsrf();
 
+<<<<<<< HEAD
+  const form = document.querySelector(".form");
+  const emailEl = document.getElementById("email");
+  const pwEl    = document.getElementById("password");
+=======
   const qs = new URLSearchParams(location.search);                                   // ★ 추가
   const next = qs.get("next") || "/Annyeong-fe/home/home.html";                      // ★ 추가 (기본 이동 목적지)
   try {                                                                              // ★ 추가
@@ -80,6 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const form=document.querySelector(".form");
   const emailEl=document.getElementById("email");
   const pwEl=document.getElementById("password");
+>>>>>>> 2ade0fe (회원가입 수정)
 
   form?.addEventListener("submit", async (e)=>{
     e.preventDefault();
@@ -98,6 +108,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
       // (선택) user_id 활용 가능: loginResp.user_id
 
+<<<<<<< HEAD
+      // 세션 확인 용(선택): 자동로그인/세션이 정상이면 200, 아니면 403 가능
+      // await httpSession("/users/profile/");
+
+      window.location.href = "../profile/profile.html";
+=======
         await httpSession("/users/login/", {
             method:"POST",
             body: JSON.stringify({ username: email, password })                           // ★ 변경 (기존: { email, password })
@@ -108,6 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       history.replaceState(null, "", location.pathname);
 
       location.replace("/Annyeong-fe/home/home.html"); 
+>>>>>>> 2ade0fe (회원가입 수정)
     }catch(err){
       console.error(err);
       alert(`로그인 실패:\n${err.message}`);

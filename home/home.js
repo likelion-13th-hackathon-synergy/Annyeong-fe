@@ -1,12 +1,13 @@
 // home.js
 import { API_BASE_URL } from './config.js';
 // 실제 API 연결은 이걸로 
-// import { getRandomUser, likeUser, dislikeUser, getMatchPreference, setMatchPreference } from './api.js';
+import { getRandomUser, likeUser, dislikeUser, getMatchPreference, setMatchPreference } from './api.js';
 
-import { getRandomUser, likeUser, dislikeUser, getMatchPreference, setMatchPreference } from './mockApi.js'; // 테스트용 
+// import { getRandomUser, likeUser, dislikeUser, getMatchPreference, setMatchPreference } from './mockApi.js'; // 테스트용 
 
 let currentProfile = null;
 let currentUser = null;
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log("✅ DOMContentLoaded, 요소 연결 확인");
@@ -22,8 +23,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     yesButton.disabled = true;
     noButton.disabled = true;
 
+    // ======================= ✅ 세션 체크용 헬퍼
+    async function checkSessionOrRedirect() {
+        try {
+            await getRandomUser(); // 세션 체크용 API 호출
+        } catch (err) {
+            if (err.status === 401 || err.status === 403) {
+                console.warn("⚠️ 세션 없음, 로그인 페이지로 이동");
+                window.location.href = "../login/login.html"; // 로그인 페이지 경로
+            } else {
+                console.error("❌ 세션 체크 중 오류:", err);
+            }
+        }
+    }
+
+    await checkSessionOrRedirect();
+
     // ======================= ✅ 랜덤 추천 + 카드 생성 + 스와이프 + 업데이트 
     // ======================= ✅ 랜덤 사용자 추천 
+    
     async function loadNextProfile(){
         container.innerHTML = ''; // 기존 카드 제거
         try{
@@ -35,6 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             createProfileCard(user);
         } catch(err){ console.error("❌ loadNextProfile error:", err); }
     }
+
 
     // ======================= ✅ 프로필 카드 생성 
     function createProfileCard(profile){
@@ -178,23 +197,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ======================= ✅ 채팅방 생성 요청 
     async function createChatRoom(receiverId) {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/chat/chatrooms/`, {
+            return await fetchWithSession(`${API_BASE_URL}/api/chat/chatrooms/`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: "include",
                 body: JSON.stringify({ receiver_id: receiverId })
             });
-
-            if (!res.ok) {
-                const text = await res.text();
-                console.error(`❌ HTTP ${res.status} error for chatrooms:`, text);
-                return null;
-            }
-
-            const data = await res.json();
-            return data;
         } catch (err) {
-            console.error("❌ createChatRoom fetch 에러:", err);
+            console.error("❌ createChatRoom error:", err);
             return null;
         }
     }
@@ -260,7 +268,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             descriptionElement.innerHTML = `<div>${insertLineBreaks(fullDescription, interval)}</div>`;
         }
     }
-
 
     // ======================= ✅ 드롭다운 기능
     const MODE_MAP = { 
