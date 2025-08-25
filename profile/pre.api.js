@@ -98,25 +98,28 @@ const cacheGet = (raw) => { try { return JSON.parse(raw || "null"); } catch { re
 
 // 초기화: 세션 프리뷰 → 로컬 캐시 → 서버 최신
 (async function init() {
-  // 1) 방금 입력값(세션)
+
+    await ensureCsrf();
+  
   let d = cacheGet(sessionStorage.getItem("preview_profile"));
   if (d) { d = toPreviewShape(d); render(d); cacheSet(d); }
   else {
-    // 2) 로컬 캐시
+   
     d = cacheGet(localStorage.getItem("profile_cache"));
     if (d) render(d);
 
-    // 3) 서버 호출(JWT)
+   
     try {
       const me = await api(PROFILE_URL);           // GET /users/profile/
       const shaped = toPreviewShape(me);
       render(shaped);
       cacheSet(shaped);
     } catch (e) {
-      if (String(e.message || e).includes("401")) {
-        location.href = "../login/login.html";
-        return;
-      }
+             if (e.status === 401 || e.status === 403) {
+                const next = encodeURIComponent(location.pathname + location.search);
+                location.href = `../login/login.html?next=${next}`;
+                return;
+              }
       console.warn("profile fetch failed:", e);
     }
   }
