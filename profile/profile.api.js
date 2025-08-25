@@ -263,7 +263,7 @@ $previewBtn?.addEventListener("click", async () => {
   try {
     const data = await httpSession("/users/profile/preview/");
     sessionStorage.setItem("preview_profile", JSON.stringify(data));
-    location.href = "./pre.html";
+    location.href = "pre.html";
   } catch {
     alert("미리보기를 불러올 수 없습니다.");
   }
