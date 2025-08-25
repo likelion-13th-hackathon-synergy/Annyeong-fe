@@ -87,8 +87,9 @@ const $avatarImg = document.querySelector(".avatar img[alt='프로필 이미지'
 const $badgeImg  = document.querySelector(".badge-img");       // 아바타의 인증 뱃지
 const $editPhoto = document.querySelector(".edit-photo");
 
-const $verifyBanner = document.querySelector(".verify-banner"); // 배너
-const $bannerClose  = document.querySelector(".vc-close");      // HTML에 있는 닫기 버튼
+const $verifyBanner = document.querySelector(".verify-banner");
+const $bannerClose  = document.querySelector(".verify-banner .vb-close");
+const $badgeCheck   = document.querySelector(".verify-banner .vb-badge");
 
 const $previewBtn = $("#previewBtn");
 const $submitBtn  = $("#submitBtn");

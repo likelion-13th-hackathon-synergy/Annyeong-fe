@@ -43,26 +43,28 @@
     <!-- 전체 카드 -->
     <form class="profile-form" action="#" method="post" novalidate>
       <section class="profile-card" aria-label="프로필 카드">
-        <button class="vc-close" type="button" aria-label="닫기">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-        </button>
+        
 
         <!-- 인증 배너 -->
-        <div class="verify-banner">
-          <div class="vb-head">
-            <img class="g-logo" src="../assets/icons/google-g.svg" alt="">
-            <div class="vb-texts">
-                <p class="vb-title">
-                    <span data-i18n-key="badge">프로필 인증뱃지</span>
-                    <span class="badge" aria-label="인증됨">✔︎</span>
-                  </p>
-              <p class="vb-sub" data-i18n-key="google_badge">구글 계정 연동하면 인증뱃지를 받을 수 있어요!</p>
-            </div>
-          </div>
-          
-        </div>
+        <!-- 인증 배너 (새 디자인) -->
+<div class="verify-banner" role="region" aria-label="프로필 인증 안내">
+    <button type="button" class="vb-close" aria-label="배너 닫기"></button>
+  
+    <div class="vb-left">
+      <img class="vb-g" src="../assets/icons/google-g.svg" alt="Google 로고" />
+      <div class="vb-texts">
+        <p class="vb-title">
+          프로필 인증뱃지
+          <span class="vb-badge" aria-label="인증됨" hidden>✔︎</span>
+        </p>
+        <p class="vb-sub">구글 계정 연동하면 인증뱃지를 받을 수 있어요!</p>
+      </div>
+    </div>
+  
+    <button type="button" id="googleConnectBtn" class="vb-action">
+      소셜 로그인 연결하기
+    </button>
+  </div>
 
         <!-- 아바타 -->
         <div class="avatar-wrap">

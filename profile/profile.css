@@ -215,6 +215,66 @@ body {
   box-shadow: 0 0 0 2px rgba(11, 11, 18, .8);
 }
 
+/* === Verify Banner (new) === */
+.verify-banner{
+  position: relative;
+  display: flex;
+  flex-direction: column;       
+  align-items: center;  
+  width: 310px;          
+  gap: 10px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  margin-bottom: 14px;
+  text-align: center;              
+}
+
+.verify-banner[hidden]{ display:none !important; }
+
+.vb-left{ display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
+.vb-g{ width:24px; height:24px; flex:0 0 24px; }
+
+.vb-title{
+  display:flex; align-items:center; gap:8px;
+  font-weight: 800; letter-spacing:-.2px;
+}
+
+.vb-badge{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:2px 8px; border-radius:999px;
+  font-size:12px; font-weight:700;
+  color:#16a34a; background:#e8f5e9;
+}
+
+.vb-sub{ color:#666; font-size:.92rem; margin-top:2px; }
+
+.vb-action{
+  white-space:nowrap;
+  border:1px solid #e5e7eb;
+  background:#f3f4f6;
+  width: 296px;
+  color:#111;
+  border-radius:4px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight:700;
+  cursor:pointer;
+}
+.vb-action.is-disabled,
+.vb-action:disabled{
+  opacity:.7; cursor:default;
+}
+
+.vb-close{
+  position:absolute; right:10px; top:10px;
+  width:28px; height:28px;
+  border:0; background:transparent; cursor:pointer; border-radius:999px;
+}
+.vb-close::before{ content:"×"; display:block; line-height:28px; font-size:18px; color:#999; }
+.vb-close:hover::before{ color:#666; }
+
 .role-select {
   display: flex;
   align-items: center;
@@ -246,21 +306,7 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
 }
 
-.vc-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, .06);
-  color: #6b7280;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 
 /* 인증 배너 */
 .verify-banner {
