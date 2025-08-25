@@ -6,7 +6,9 @@ if (typeof startStatusbarClock === "function") {
   startStatusbarClock({ selector: ".sb-time", hour12: false, locale: "ko-KR" });
 }
 
-const BASE_URL = "";             // Vite 프록시 사용 시 빈 문자열 권장
+import { API_BASE, BASE_URL } from "../common/config.js";
+
+            // Vite 프록시 사용 시 빈 문자열 권장
 const LOGIN = "/login/login.html";
 const HOME  = "/home/home.html";
 
