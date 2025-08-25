@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const email = emailEl?.value.trim();
     const password = pwEl?.value;
-    if (!email || !password) {
+    if(!email || !password){
       alert("이메일/비밀번호를 입력해 주세요.");
       return;
     }
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await httpSession("/users/login/", {
         method: "POST",
-        body: JSON.stringify({ username: email, password }),
+        body: JSON.stringify({ username: email, password })
       });
       // (선택) user_id 활용 가능: loginResp.user_id
 
@@ -110,7 +110,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       location.replace("/Annyeong-fe/home/home.html"); 
     }catch(err){
       console.error(err);
-      alert(`로그인 실패:\n${err.message}`);
-    }
+      let msg = err.message || "";
+   if (msg.includes("No active account") || msg.includes("password")) {
+     msg = "비밀번호가 틀렸습니다.";
+   }
+   alert(`로그인 실패: ${msg}`);
+}
   });
 });
