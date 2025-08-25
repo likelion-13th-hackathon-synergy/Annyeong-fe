@@ -5,7 +5,8 @@ if (typeof startStatusbarClock === "function") {
 }
 
 const BASE_URL = "http://localhost:8000";
-const HOME = "/Annyeong-fe/home/home.html";
+const APP_ROOT = location.pathname.startsWith("/Annyeong-fe/") ? "/Annyeong-fe" : "";
+const HOME = `${APP_ROOT}/home/home.html`;
 
 function getCookie(name) {
   const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
@@ -45,19 +46,15 @@ async function httpSession(path, init = {}) {
     headers,
     credentials: "include",
   });
+
   const text = await res.text();
   let data = null;
-  try {
-    data = text ? JSON.parse(text) : null;
-  } catch {
-    data = { raw: text };
-  }
+  try { data = text && JSON.parse(text);} catch {} // JSON이면 파싱, 아니면 null 유지
   if (!res.ok) {
     const message =
-      (typeof data === "string" && data) ||
-      data?.detail ||
-      JSON.stringify(data, null, 2) ||
-      `HTTP ${res.status}`;
+     data?.detail || data?.message || data?.error ||
+         (Array.isArray(data?.non_field_errors) && data.non_field_errors.join(" ")) ||
+      text || `${res.status} ${res.statusText}`;
     const err = new Error(message);
     err.status = res.status;
     err.payload = data;
@@ -70,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await ensureCsrf();
 
   const qs = new URLSearchParams(location.search);                                   // ★ 추가
-  const next = qs.get("next") || "/Annyeong-fe/home/home.html";                      // ★ 추가 (기본 이동 목적지)
+  const next = qs.get("next") || HOME;                     // ★ 추가 (기본 이동 목적지)
   try {                                                                              // ★ 추가
     await httpSession("/users/profile/");                                            // ★ 추가 (이미 로그인?)
     location.replace(next);                                                          // ★ 추가 (바로 이동)
@@ -96,18 +93,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: "POST",
         body: JSON.stringify({ username: email, password })
       });
-      // (선택) user_id 활용 가능: loginResp.user_id
 
-        await httpSession("/users/login/", {
-            method:"POST",
-            body: JSON.stringify({ username: email, password })                           // ★ 변경 (기존: { email, password })
-          });
-
-
-      
       history.replaceState(null, "", location.pathname);
 
-      location.replace("/Annyeong-fe/home/home.html"); 
+      location.replace(next || HOME);
     }catch(err){
       console.error(err);
       let msg = err.message || "";
