@@ -46,8 +46,8 @@ body{
   position:absolute;
   top: 55px;               
   right: 16px;             
-  width: 30px;
-  height: 30px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   border: none;
   border-radius: 9999px;
@@ -57,22 +57,9 @@ body{
   place-items: center;
   }
 
-  .top-right-icon::after{
-    content:"";
-    position: absolute;
-    inset: -6px;                     /* 버튼보다 약간 크게 */
-    border-radius: inherit;
-    background: radial-gradient(circle, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 60%);
-    pointer-events: none;
-  }
-  .top-right-icon > img{
-    width: 18px;
-    height: 18px;
-    filter: invert(1) brightness(1.1) grayscale(1); /* 회색/흰색 톤 */
-    opacity: .80;
-  }
   .top-right-icon img{
-    width:30px; height:30px; display:block;
+    width:38px; 
+    height:38px; display:block;
   }
 
 .brand img{ height:28px; }
