@@ -6,9 +6,7 @@ if (typeof startStatusbarClock === "function") {
   startStatusbarClock({ selector: ".sb-time", hour12: false, locale: "ko-KR" });
 }
 
-import { API_BASE, BASE_URL } from "../common/config.js";
-
-            // Vite 프록시 사용 시 빈 문자열 권장
+import { API_BASE, BASE_URL } from "../common/config.js";        // Vite 프록시 사용 시 빈 문자열 권장
 const LOGIN = "/login/login.html";
 const HOME  = "/home/home.html";
 
@@ -29,7 +27,7 @@ function setMetaCsrf(v) {
 async function ensureCsrf() {
   let token = getCookie("csrftoken");
   if (!token) {
-    await fetch(`/users/csrf/`, { credentials: "include" });
+    await fetch(`${API_BASE}/users/csrf/`, { credentials: "include" });
     token = getCookie("csrftoken");
   }
   setMetaCsrf(token);
@@ -49,7 +47,7 @@ async function httpSession(path, init = {}) {
     }
   }
 
-  const res  = await fetch(`${BASE_URL}${path}`, { ...init, method, headers, credentials: "include" });
+  const res  = await fetch(`${API_BASE}${path}`, { ...init, method, headers, credentials: "include" });
   const text = await res.text();
   let data = null;
   try { data = text ? JSON.parse(text) : null; } catch { data = { raw: text }; }
