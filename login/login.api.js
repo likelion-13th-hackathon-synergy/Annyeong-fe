@@ -1,11 +1,12 @@
 import { startStatusbarClock } from "../assets/js/statusbar-time.js";
+import { API_BASE, BASE_URL } from "../common/config.js";
 
 if (typeof startStatusbarClock === "function") {
   startStatusbarClock({ selector: ".sb-time", hour12: false, locale: "ko-KR" });
 }
 
-const BASE_URL = "";
-const HOME = "../home/home.html";  // 홈 경로 고정
+
+const HOME = `${BASE_URL}/home/home.html`;  // 홈 경로 고정
 
 function getCookie(name) {
   const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
@@ -18,7 +19,7 @@ function setMetaCsrf(v) {
 async function ensureCsrf() {
   let t = getCookie("csrftoken");
   if (!t) {
-    await fetch(`${BASE_URL}/users/csrf/`, { method: "GET", credentials: "include" });
+    await fetch(`${API_BASE}/users/csrf/`, { method: "GET", credentials: "include" });
     t = getCookie("csrftoken");
   }
   setMetaCsrf(t);
@@ -39,7 +40,7 @@ async function httpSession(path, init = {}) {
       headers.set("Content-Type", "application/json");
     }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${API_BASE}${path}`, {
     ...init,
     method,
     headers,
