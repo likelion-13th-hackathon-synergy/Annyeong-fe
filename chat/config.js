@@ -1,4 +1,4 @@
-export const BASE_HTTP = "http://127.0.0.1:8000";      // REST API 베이스
+export const BASE_HTTP = "";      // REST API 베이스
 export function buildWsUrl(roomId, token) {
   const http = new URL(BASE_HTTP);
   const proto = http.protocol === "https:" ? "wss:" : "ws:";

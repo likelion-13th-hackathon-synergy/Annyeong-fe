@@ -4,9 +4,8 @@ if (typeof startStatusbarClock === "function") {
   startStatusbarClock({ selector: ".sb-time", hour12: false, locale: "ko-KR" });
 }
 
-const BASE_URL = "http://localhost:8000";
-const APP_ROOT = location.pathname.startsWith("/Annyeong-fe/") ? "/Annyeong-fe" : "";
-const HOME = `${APP_ROOT}/home/home.html`;
+const BASE_URL = "";
+const HOME = "../home/home.html";  // 홈 경로 고정
 
 function getCookie(name) {
   const m = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
@@ -46,15 +45,19 @@ async function httpSession(path, init = {}) {
     headers,
     credentials: "include",
   });
-
   const text = await res.text();
   let data = null;
-  try { data = text && JSON.parse(text);} catch {} // JSON이면 파싱, 아니면 null 유지
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = { raw: text };
+  }
   if (!res.ok) {
     const message =
-     data?.detail || data?.message || data?.error ||
-         (Array.isArray(data?.non_field_errors) && data.non_field_errors.join(" ")) ||
-      text || `${res.status} ${res.statusText}`;
+      (typeof data === "string" && data) ||
+      data?.detail ||
+      JSON.stringify(data, null, 2) ||
+      `HTTP ${res.status}`;
     const err = new Error(message);
     err.status = res.status;
     err.payload = data;
@@ -66,24 +69,28 @@ async function httpSession(path, init = {}) {
 document.addEventListener("DOMContentLoaded", async () => {
   await ensureCsrf();
 
-  const qs = new URLSearchParams(location.search);                                   // ★ 추가
-  const next = qs.get("next") || HOME;                     // ★ 추가 (기본 이동 목적지)
-  try {                                                                              // ★ 추가
-    await httpSession("/users/profile/");                                            // ★ 추가 (이미 로그인?)
-    location.replace(next);                                                          // ★ 추가 (바로 이동)
-    return;                                                                          // ★ 추가
-  } catch (_) { /* 미로그인 -> 폼 계속 보여줌 */ } 
+  const qs = new URLSearchParams(location.search);
+  const next = qs.get("next") || HOME;
 
-  const form=document.querySelector(".form");
-  const emailEl=document.getElementById("email");
-  const pwEl=document.getElementById("password");
+  try {
+    // 이미 로그인된 세션이면 바로 홈으로
+    await httpSession("/users/profile/");
+    location.replace(next);
+    return;
+  } catch (_) {
+    /* 미로그인 → 폼 표시 */
+  }
 
-  form?.addEventListener("submit", async (e)=>{
+  const form = document.querySelector(".form");
+  const emailEl = document.getElementById("email");
+  const pwEl = document.getElementById("password");
+
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = emailEl?.value.trim();
     const password = pwEl?.value;
-    if(!email || !password){
+    if (!email || !password) {
       alert("이메일/비밀번호를 입력해 주세요.");
       return;
     }
@@ -91,19 +98,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await httpSession("/users/login/", {
         method: "POST",
-        body: JSON.stringify({ username: email, password })
+        body: JSON.stringify({ username: email, password }),
       });
 
       history.replaceState(null, "", location.pathname);
 
-      location.replace(next || HOME);
-    }catch(err){
+      // 로그인 성공 시 홈으로 이동
+      location.replace(HOME);
+    } catch (err) {
       console.error(err);
-      let msg = err.message || "";
-   if (msg.includes("No active account") || msg.includes("password")) {
-     msg = "비밀번호가 틀렸습니다.";
-   }
-   alert(`로그인 실패: ${msg}`);
-}
+      alert(`로그인 실패:\n${err.message}`);
+    }
   });
 });
