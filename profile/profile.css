@@ -1,11 +1,6 @@
 /* ===== 기본 ===== */
 * {
   box-sizing: border-box;
-<<<<<<< HEAD
-=======
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, sans-serif;
-  color: #fff;
->>>>>>> 3767dfd (채팅리스트 홈으로가기)
 }
 
 html,
@@ -51,14 +46,21 @@ body {
   width: 375px;
   height: 812px;
   padding: 0 20px 28px;
-  overflow-y: auto;
   background:
     radial-gradient(65% 45% at 18% 22%, var(--vio1), transparent 62%),
     radial-gradient(55% 45% at 88% 68%, var(--vio2), transparent 60%),
     linear-gradient(180deg, var(--bg2) 0%, #0c0a14 75%, #08070d 100%);
   border-left: 1px solid rgba(255, 255, 255, .08);
   border-right: 1px solid rgba(255, 255, 255, .08);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
+.phone::-webkit-scrollbar {
+  display: none;
+}
+
 
 /* ===== 상단 ===== */
 .statusbar {
@@ -221,66 +223,109 @@ body {
 }
 
 /* === Verify Banner (new) === */
-.verify-banner{
+.verify-banner {
   position: relative;
   display: flex;
-  flex-direction: column;       
-  align-items: center;  
-  width: 310px;          
+  flex-direction: column;
+  align-items: center;
+  width: 310px;
   gap: 10px;
   background: #fff;
   border-radius: 18px;
   padding: 16px 18px 18px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .08);
   margin-bottom: 14px;
-  text-align: center; 
+  text-align: center;
   right: 10px;
-  top: -10px             
+  top: -10px
 }
 
-.verify-banner[hidden]{ display:none !important; }
-
-.vb-left{ display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
-.vb-g{ width:24px; height:24px; flex:0 0 24px; }
-
-.vb-title{
-  display:flex; align-items:center; gap:8px;
-  font-weight: 800; letter-spacing:-.2px;
+.verify-banner[hidden] {
+  display: none !important;
 }
 
-.vb-badge{
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:2px 8px; border-radius:999px;
-  font-size:12px; font-weight:700;
-  color:#16a34a; background:#e8f5e9;
+.vb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
-.vb-sub{ color:#666; font-size:.92rem; margin-top:2px; }
+.vb-g {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 24px;
+}
 
-.vb-action{
-  white-space:nowrap;
-  border:1px solid #e5e7eb;
-  background:#f3f4f6;
+.vb-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  letter-spacing: -.2px;
+}
+
+.vb-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #16a34a;
+  background: #e8f5e9;
+}
+
+.vb-sub {
+  color: #666;
+  font-size: .92rem;
+  margin-top: 2px;
+}
+
+.vb-action {
+  white-space: nowrap;
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
   width: 296px;
-  color:#111;
-  border-radius:4px;
+  color: #111;
+  border-radius: 4px;
   padding-top: 8px;
   padding-bottom: 8px;
-  font-weight:700;
-  cursor:pointer;
-}
-.vb-action.is-disabled,
-.vb-action:disabled{
-  opacity:.7; cursor:default;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.vb-close{
-  position:absolute; right:10px; top:10px;
-  width:28px; height:28px;
-  border:0; background:transparent; cursor:pointer; border-radius:999px;
+.vb-action.is-disabled,
+.vb-action:disabled {
+  opacity: .7;
+  cursor: default;
 }
-.vb-close::before{ content:"×"; display:block; line-height:28px; font-size:18px; color:#999; }
-.vb-close:hover::before{ color:#666; }
+
+.vb-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.vb-close::before {
+  content: "×";
+  display: block;
+  line-height: 28px;
+  font-size: 18px;
+  color: #999;
+}
+
+.vb-close:hover::before {
+  color: #666;
+}
 
 .role-select {
   display: flex;
@@ -549,7 +594,7 @@ body {
   width: 100%;
   min-height: 74px;
   border: none;
-  border-radius: 8px;        
+  border-radius: 8px;
   background-color: #f5f5f5;
   outline: none;
   resize: vertical;
@@ -657,4 +702,3 @@ body {
 .card-body .input-group input[type="number"] {
   -moz-appearance: textfield;
 }
-

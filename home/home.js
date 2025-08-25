@@ -340,12 +340,12 @@ async function initDropdown() {
 async function loadNextProfile() {
   const container = req("#card-container", "카드 컨테이너");
   if (!container) return;
-  container.innerHTML = `<div style="padding:16px">불러오는 중...</div>`;
+  container.innerHTML = `<div style="padding:16px">...</div>`;
 
   try {
     const user = await getRandomUser();
     if (!user) {
-      info("추천할 사용자가 없습니다.");
+      info("-");
       currentUser = null;
       disableYN(true);
       return;
