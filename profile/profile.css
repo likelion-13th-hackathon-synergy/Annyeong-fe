@@ -1,6 +1,11 @@
 /* ===== 기본 ===== */
 * {
   box-sizing: border-box;
+<<<<<<< HEAD
+=======
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  color: #fff;
+>>>>>>> 3767dfd (채팅리스트 홈으로가기)
 }
 
 html,
