@@ -1,5 +1,5 @@
 // pre.api.js
-import { BASE_URL } from "../common/config.js";
+
 import { httpJWT } from "../common/http-jwt.js";
 import { startStatusbarClock } from "../assets/js/statusbar-time.js";
 
@@ -10,7 +10,7 @@ if (typeof startStatusbarClock === "function") startStatusbarClock();
 async function refreshToken() {
   const refresh = localStorage.getItem("refreshToken");
   if (!refresh) throw new Error("401");
-  const res = await fetch(`${BASE_URL}/api/token/refresh/`, {
+  const res = await fetch(`${API_BASE}/api/token/refresh/`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "Accept": "application/json" },
     body: JSON.stringify({ refresh }),
