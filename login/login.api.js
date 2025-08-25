@@ -99,6 +99,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await httpSession("/users/login/", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        credentials: "include",
         body: JSON.stringify({ username: email, password }),
       });
 
