@@ -1,6 +1,5 @@
 // 백엔드 주소 (로컬/배포 중 하나로 설정)
 export const API_BASE = "https://annyeong-be.onrender.com";
-// export const API_BASE = "https://annyeong-be.onrender.com";
 export const BASE_URL = "https://annyeong-fe.onrender.com";
 
 // 테스트 계정 (자동 로그인용)
