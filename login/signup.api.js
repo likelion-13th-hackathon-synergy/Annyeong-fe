@@ -7,7 +7,7 @@ import { startGoogleConnectFlow } from "./profile.google.js";
  * - 직접 백엔드 호출 시: const BASE_URL = "http://localhost:8000";
  *   (프론트/백엔드 모두 localhost 또는 모두 127.0.0.1로 통일!)
  */
-const BASE_URL = ""; // ← 필요에 따라 "" 또는 "http://localhost:8000"로 변경
+import { API_BASE, BASE_URL } from "../common/config.js"; // ← 필요에 따라 "" 또는 "http://localhost:8000"로 변경
 const PROFILE_PAGE = "../profile/profile.html";
 
 /* ===== 공통 유틸 ===== */
